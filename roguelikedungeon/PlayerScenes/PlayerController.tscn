@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://xhvsoi8u2qop"]
+
+[ext_resource type="PackedScene" uid="uid://88bx8jn8aa2k" path="res://PlayerScenes/base_player.tscn" id="1_4052i"]
+[ext_resource type="Script" path="res://PlayerScenes/player_controller.gd" id="1_p034w"]
+[ext_resource type="PackedScene" uid="uid://1n70ubct7d8g" path="res://PlayerScenes/Camera.tscn" id="1_v34qf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4bjow"]
+bg_color = Color(0.6, 0.6, 0.6, 0.333333)
+
+[node name="Player" type="Node2D"]
+script = ExtResource("1_p034w")
+
+[node name="Heroes" type="Node" parent="."]
+
+[node name="BasePlayer" parent="Heroes" instance=ExtResource("1_4052i")]
+position = Vector2(187, 96)
+
+[node name="BasePlayer2" parent="Heroes" instance=ExtResource("1_4052i")]
+
+[node name="BasePlayer3" parent="Heroes" instance=ExtResource("1_4052i")]
+position = Vector2(140, -61)
+
+[node name="BasePlayer4" parent="Heroes" instance=ExtResource("1_4052i")]
+position = Vector2(-233, 24)
+
+[node name="Camera" parent="." instance=ExtResource("1_v34qf")]
+position = Vector2(91, 48)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="UI"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_4bjow")

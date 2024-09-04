@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://88bx8jn8aa2k"]
+
+[ext_resource type="Script" path="res://PlayerScenes/base_player.gd" id="1_nwebq"]
+[ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_x6wyl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xc1vb"]
+size = Vector2(64, 64)
+
+[sub_resource type="Gradient" id="Gradient_1n7lm"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ewep7"]
+gradient = SubResource("Gradient_1n7lm")
+width = 100
+
+[node name="BasePlayer" type="RigidBody2D" groups=["unit"]]
+input_pickable = true
+script = ExtResource("1_nwebq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_x6wyl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_xc1vb")
+
+[node name="SelectIndicator" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("1_x6wyl")
+
+[node name="MouseHover" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, 43)
+scale = Vector2(1, 20)
+texture = SubResource("GradientTexture1D_ewep7")
+
+[node name="NavAgent" type="NavigationAgent2D" parent="."]
+
+[connection signal="mouse_shape_entered" from="." to="." method="_on_mouse_shape_entered"]
+[connection signal="mouse_shape_exited" from="." to="." method="_on_mouse_shape_exited"]

@@ -17,7 +17,7 @@ var velocity = Vector2.ZERO
 func _ready():
 	navigation_agent.simplify_path = true
 	navigation_agent.path_desired_distance = 5.0
-	navigation_agent.target_desired_distance = 20.0
+	navigation_agent.target_desired_distance = 30.0
 	navigation_agent.debug_enabled = true
 	navigation_agent.set_path_max_distance(2.0)
 
@@ -30,13 +30,13 @@ func path_to(loc : Vector2):
 
 func _physics_process(_delta: float):
 	if !navigation_agent.is_navigation_finished():
-		set_linear_damp(0.75)
+		set_linear_damp(1.5)
 		var current_agent_position: Vector2 = global_position
 		var next_path_position: Vector2 = navigation_agent.get_next_path_position()
 		if current_agent_position.direction_to(next_path_position):
 			pass
 		print(current_agent_position.direction_to(next_path_position))
-		velocity = current_agent_position.direction_to(next_path_position) * defaultSpeed * 2
+		velocity = current_agent_position.direction_to(next_path_position) * defaultSpeed * 4
 		
 		apply_force(velocity)
 	else:

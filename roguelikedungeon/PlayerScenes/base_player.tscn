@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://88bx8jn8aa2k"]
+[gd_scene load_steps=6 format=3 uid="uid://88bx8jn8aa2k"]
 
 [ext_resource type="Script" path="res://PlayerScenes/base_player.gd" id="1_nwebq"]
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_x6wyl"]
@@ -13,6 +13,9 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(3.27289e-06, 0.689649, 0.926731, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7sg7l"]
+radius = 60.0
 
 [node name="BasePlayer" type="RigidBody2D" groups=["unit"]]
 input_pickable = true
@@ -48,5 +51,10 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wrxsr")
 
-[connection signal="mouse_shape_entered" from="." to="." method="_on_mouse_shape_entered"]
-[connection signal="mouse_shape_exited" from="." to="." method="_on_mouse_shape_exited"]
+[node name="MouseHitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseHitbox"]
+shape = SubResource("CircleShape2D_7sg7l")
+
+[connection signal="mouse_shape_entered" from="MouseHitbox" to="." method="_on_mouse_shape_entered"]
+[connection signal="mouse_shape_exited" from="MouseHitbox" to="." method="_on_mouse_shape_exited"]

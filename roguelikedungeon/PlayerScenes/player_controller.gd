@@ -25,9 +25,23 @@ func _process(_delta):
 	if Input.is_action_just_pressed("esc"):
 		get_tree().quit()
 	if Input.is_action_just_pressed("rmb"):
+		var center = calculate_center()
+		var clickLocation = get_global_mouse_position()
 		for hero in $Heroes.get_children():
 			if hero._isBodySelected():
-				hero.path_to(get_global_mouse_position())
+				var offsetLocation : Vector2
+				offsetLocation = clickLocation + (hero.position - center) * 0.5
+				hero.path_to(offsetLocation)
+
+func calculate_center() -> Vector2:
+	var c = Vector2.ZERO
+	var count = 0
+	for hero in $Heroes.get_children():
+		if hero._isBodySelected():
+			c += hero.position
+			count += 1
+	c /= count
+	return c
 
 func dragSelectBoxLogic():
 	if Input.is_action_just_pressed("lmb"):

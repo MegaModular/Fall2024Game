@@ -15,7 +15,7 @@ const SCREENSIZE = Vector2(1920, 1080)
 
 func _process(delta: float) -> void:
 	mousePos = get_local_mouse_position()
-	print(mousePos)
+	#print(mousePos)
 	dir = Vector2.ZERO
 	if Input.is_action_pressed("up") or mousePos.y < -SCREENSIZE.y / 2 + cursorMovementSize:
 		dir += Vector2(0, -1)

@@ -14,15 +14,26 @@ script = ExtResource("1_p034w")
 
 [node name="BasePlayer" parent="Heroes" instance=ExtResource("1_4052i")]
 position = Vector2(187, 96)
+defaultSpeed = null
+pathHardness = null
+isSelected = null
 
 [node name="BasePlayer2" parent="Heroes" instance=ExtResource("1_4052i")]
-position = Vector2(-86, -49)
+defaultSpeed = null
+pathHardness = null
+isSelected = null
 
 [node name="BasePlayer3" parent="Heroes" instance=ExtResource("1_4052i")]
 position = Vector2(140, -61)
+defaultSpeed = null
+pathHardness = null
+isSelected = null
 
 [node name="BasePlayer4" parent="Heroes" instance=ExtResource("1_4052i")]
 position = Vector2(-233, 24)
+defaultSpeed = null
+pathHardness = null
+isSelected = null
 
 [node name="Camera" parent="." instance=ExtResource("1_v34qf")]
 position = Vector2(91, 48)
@@ -31,4 +42,3 @@ position = Vector2(91, 48)
 
 [node name="Panel" type="Panel" parent="UI"]
 theme_override_styles/panel = SubResource("StyleBoxFlat_4bjow")
-metadata/_edit_use_anchors_ = true

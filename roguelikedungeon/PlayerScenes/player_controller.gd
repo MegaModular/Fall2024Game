@@ -24,6 +24,10 @@ func _process(_delta):
 	dragSelectBoxLogic()
 	if Input.is_action_just_pressed("esc"):
 		get_tree().quit()
+	if Input.is_action_just_pressed("rmb"):
+		for hero in $Heroes.get_children():
+			if hero._isBodySelected():
+				hero.path_to(get_global_mouse_position())
 
 func dragSelectBoxLogic():
 	if Input.is_action_just_pressed("lmb"):

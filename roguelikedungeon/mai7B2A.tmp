@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6usa6m2uqkk8"]
+
+[ext_resource type="PackedScene" uid="uid://xhvsoi8u2qop" path="res://PlayerScenes/PlayerController.tscn" id="1_3tqey"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_behh2"]
+vertices = PackedVector2Array(640.219, 95.9766, 686.07, -179.406, 691.953, 410.359, 502.008, 413.961, 444.344, 617.188, 170.727, 254.883, 30.3516, 0, 26.2891, -15.1797, 189.93, -96.4219, 263.219, -7.28125, 328.313, 97.6719, 274.828, 321.383, 446.117, -59.7109, 215.602, -312.711, 186.141, -165.328, 191.82, 466.172, -450.492, 424.242, -376.313, 349.68, -341.32, -201.531, -321.977, 139.141, 386.438, 29.2188, -11.3203, -132.422, -10.6719, -114.852, 15.1797, -26.2891, 0, -30.3516, -147.883, 267.859, -26.2891, -15.1797, -30.3516, 0, 419.492, 185.883, -15.1797, -26.2891, 26.2891, 15.1797, 15.1797, 26.2891, 0, 30.3516, -15.1797, 26.2891, -26.2891, 15.1797)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2), PackedInt32Array(3, 0, 2, 4), PackedInt32Array(5, 6, 7, 8, 9, 10, 11), PackedInt32Array(1, 0, 12, 13), PackedInt32Array(13, 12, 14), PackedInt32Array(15, 3, 4), PackedInt32Array(15, 4, 16, 17), PackedInt32Array(17, 16, 18, 19), PackedInt32Array(9, 20, 10), PackedInt32Array(18, 13, 14, 21), PackedInt32Array(22, 8, 7, 23), PackedInt32Array(22, 23, 24), PackedInt32Array(25, 19, 18, 21, 22, 26, 27), PackedInt32Array(10, 28, 11), PackedInt32Array(22, 24, 29), PackedInt32Array(30, 6, 5), PackedInt32Array(30, 5, 25, 31), PackedInt32Array(32, 31, 25), PackedInt32Array(33, 32, 25), PackedInt32Array(34, 33, 25), PackedInt32Array(22, 29, 26), PackedInt32Array(25, 27, 34)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-350, -210, -462, 432, 447, 628, 702, 415, 696, -187, 216, -323)])
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_3tqey")]
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_behh2")
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="NavigationRegion2D"]
+radius = 20.0
+vertices = PackedVector2Array(-1, -124, 195, -106, 269, -16, 404, 24, 342, 97, 434, 186, 276, 334, 168, 265, -151, 278, -316, 156, -364, 342, 192, 456, 495, 405, 628, 99, 441, -51, 185, -155)
+affect_navigation_mesh = true

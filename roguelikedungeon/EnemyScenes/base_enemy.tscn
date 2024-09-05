@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkvup5cg1gfm6"]
+
+[ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_m6vlh"]
+[ext_resource type="Script" path="res://EnemyScenes/base_enemy.gd" id="1_ylkj4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j7qsb"]
+size = Vector2(64, 64)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ykwv8"]
+radius = 50.0
+
+[node name="Enemy" type="RigidBody2D" groups=["enemy"]]
+mass = 5.0
+lock_rotation = true
+linear_damp = 2.0
+script = ExtResource("1_ylkj4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_j7qsb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.955793, 0.732945, 0.196415, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_m6vlh")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="MouseDetection" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseDetection"]
+shape = SubResource("CircleShape2D_ykwv8")
+
+[connection signal="mouse_shape_entered" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_entered"]
+[connection signal="mouse_shape_exited" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_exited"]

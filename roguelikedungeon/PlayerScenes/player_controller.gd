@@ -13,6 +13,7 @@ signal start_move_selection
 
 var units = []
 
+@onready var moveParticles = preload("res://Particles/move_particles.tscn")
 @onready var panel = $"UI/Panel"
 
 func _ready():
@@ -27,11 +28,20 @@ func _process(_delta):
 	if Input.is_action_just_pressed("rmb"):
 		var center = calculate_center()
 		var clickLocation = get_global_mouse_position()
-		for hero in $Heroes.get_children():
-			if hero._isBodySelected():
-				var offsetLocation : Vector2
-				offsetLocation = clickLocation + (hero.position - center) * 0.5
-				hero.path_to(offsetLocation)
+		
+		#checks to see if there is an enemy under the cursor. If not, issues a movement command.
+		if !Globals.mouseInEnemyArea:
+			for hero in $Heroes.get_children():
+				if hero._isBodySelected():
+					var offsetLocation : Vector2
+					if (hero.position.distance_to(center)) > 200.0:
+						offsetLocation = clickLocation + (hero.position - center) * 0.3
+					else: offsetLocation = clickLocation + (hero.position - center) * 0.5
+					hero.path_to(offsetLocation)
+					hero.attackTarget = null
+					var particles = moveParticles.instantiate()
+					add_child(particles)
+					particles.position = offsetLocation
 
 func calculate_center() -> Vector2:
 	var c = Vector2.ZERO

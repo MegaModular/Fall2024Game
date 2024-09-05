@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://coh31jqifs0hg"]
+
+[ext_resource type="Script" path="res://Particles/particles.gd" id="1_m5rgk"]
+
+[sub_resource type="Gradient" id="Gradient_btlnx"]
+colors = PackedColorArray(0.15231, 0.482163, 1, 1, 0.125216, 0.307163, 0.775984, 0)
+
+[node name="MoveParticles" type="CPUParticles2D"]
+emitting = false
+amount = 1000
+lifetime = 0.25
+one_shot = true
+explosiveness = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 200.0
+scale_amount_min = 5.0
+scale_amount_max = 5.0
+color_ramp = SubResource("Gradient_btlnx")
+script = ExtResource("1_m5rgk")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

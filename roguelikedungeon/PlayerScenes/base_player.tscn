@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://88bx8jn8aa2k"]
+[gd_scene load_steps=7 format=3 uid="uid://88bx8jn8aa2k"]
 
 [ext_resource type="Script" path="res://PlayerScenes/base_player.gd" id="1_nwebq"]
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_x6wyl"]
@@ -16,6 +16,9 @@ border_color = Color(3.27289e-06, 0.689649, 0.926731, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7sg7l"]
 radius = 60.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u3oda"]
+radius = 500.0
 
 [node name="BasePlayer" type="RigidBody2D" groups=["unit"]]
 input_pickable = true
@@ -56,5 +59,24 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_wrxsr")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MouseHitbox"]
 shape = SubResource("CircleShape2D_7sg7l")
 
+[node name="Label" type="Label" parent="."]
+offset_left = -24.0
+offset_top = -69.0
+offset_right = 16.0
+offset_bottom = -46.0
+
+[node name="State" type="Label" parent="."]
+offset_left = -22.0
+offset_top = 54.0
+offset_right = 18.0
+offset_bottom = 77.0
+
+[node name="DetectArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea"]
+shape = SubResource("CircleShape2D_u3oda")
+
 [connection signal="mouse_shape_entered" from="MouseHitbox" to="." method="_on_mouse_shape_entered"]
 [connection signal="mouse_shape_exited" from="MouseHitbox" to="." method="_on_mouse_shape_exited"]
+[connection signal="body_entered" from="DetectArea" to="." method="_on_enemy_detected"]
+[connection signal="body_exited" from="DetectArea" to="." method="_on_enemy_left"]

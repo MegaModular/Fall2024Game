@@ -3,7 +3,7 @@ extends Camera2D
 #Touchables
 var camMoveSpeed = 50.0
 #border around camera that can be used for the mouse to move the camera
-var cursorMovementSize = 50
+var cursorMovementSize = 100
 
 #Untouchables
 var dir = Vector2.ZERO

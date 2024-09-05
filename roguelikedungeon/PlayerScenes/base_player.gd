@@ -36,6 +36,9 @@ func _process(_delta):
 func tryToTarget(enemy):
 	if isSelected:
 		attackTarget = enemy
+		if !potentialTargets.has(enemy):
+			path_to(enemy.position)
+			return
 		state = "attacking"
 
 func path_to(loc : Vector2):
@@ -43,38 +46,41 @@ func path_to(loc : Vector2):
 	navigation_agent.target_position = location
 
 func _physics_process(_delta: float):
-	$"State".text = str(potentialTargets) + state
-	#do base movement if target doesnt exist
-	if attackTarget == null:
-		if !navigation_agent.is_navigation_finished():
-			state = "moving"
-			set_linear_damp(1.5)
-			var current_agent_position: Vector2 = global_position
-			var next_path_position: Vector2 = navigation_agent.get_next_path_position()
-			if current_agent_position.direction_to(next_path_position):
-				pass
-			#print(current_agent_position.direction_to(next_path_position))
-			velocity = current_agent_position.direction_to(next_path_position) * defaultSpeed * 4
-			
-			apply_force(velocity)
-		else:
-			state = "alert"
-			set_linear_damp(slowDownDamping)
-			if !potentialTargets.is_empty():
-				attackTarget = get_closest_unit(potentialTargets)
-				state = "attacking"
-	else:
-		#state = "alert"
-		path_to(position)
+	$"State".text = state + " " + str(potentialTargets)
+	#do base movement if path exists
+	#if attackTarget == null || (attackTarget != null && !potentialTargets.has(attackTarget)):
+	if !navigation_agent.is_navigation_finished():
+		state = "moving"
+		set_linear_damp(1.5)
+		var current_agent_position: Vector2 = global_position
+		var next_path_position: Vector2 = navigation_agent.get_next_path_position()
+		if current_agent_position.direction_to(next_path_position):
+			pass
+		#print(current_agent_position.direction_to(next_path_position))
+		velocity = current_agent_position.direction_to(next_path_position) * defaultSpeed * 4
 		
+		apply_force(velocity)
+	#stop at the end of path, and if there is an available target in range then automatically start attacking.
+	else:
+		state = "alert"
+		set_linear_damp(slowDownDamping)
+		if !potentialTargets.is_empty():
+			attackTarget = get_closest_unit(potentialTargets)
+			state = "attacking"
+	#if target exists and is in range, stop and start attacking
+	if potentialTargets.has(attackTarget):
+		path_to(position)
+		state = "attacking"
 
 func get_closest_unit(arr):
 	var closest = arr[0]
+	var closestDistance = closest.position.distance_to(position)
 	for x in arr:
-		var distance = x.position - position
-		print(distance)
-		if distance < (closest.position - position):
+		var distance = x.position.distance_to(position)
+		#print(distance)
+		if distance < closestDistance:
 			closest = x
+			closestDistance = closest.position.distance_to(position)
 	return closest
 
 func _isBodySelected():

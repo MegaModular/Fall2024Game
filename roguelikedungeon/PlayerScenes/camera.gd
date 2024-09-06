@@ -51,3 +51,7 @@ func calculate_center():
 	if num > 0:
 		return storedPosition / num 
 	return position
+
+
+func focusOn(position):
+	desiredPos = position

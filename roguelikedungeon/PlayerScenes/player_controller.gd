@@ -1,5 +1,9 @@
 extends Node2D
 
+#touchable
+const FULLTAPTIME = 0.5
+var doubleTapTime = 0.5
+
 var mousePos = Vector2()
 
 var mousePosGlobal = Vector2()
@@ -21,15 +25,21 @@ func _ready():
 	units = get_tree().get_nodes_in_group("unit")
 	#print(units)
 
-func _process(_delta):
+#Contains drag unit selection, and movement input handling.
+func _process(delta):
 	dragSelectBoxLogic()
+	
+	if doubleTapTime >= 0:
+		doubleTapTime -= delta
+	
 	if Input.is_action_just_pressed("esc"):
 		get_tree().quit()
+	#Logic to determine the location of a click and to tell heroes to move while keeping mind of their offset.
 	if Input.is_action_just_pressed("rmb"):
 		var center = calculate_center()
 		var clickLocation = get_global_mouse_position()
 		
-		#checks to see if there is an enemy under the cursor. If not, issues a movement command.
+		#checks to see if there is an enemy under the cursor. If not, issues a movement command to selected units
 		if !Globals.mouseInEnemyArea:
 			for hero in $Heroes.get_children():
 				if hero._isBodySelected():
@@ -43,6 +53,57 @@ func _process(_delta):
 					add_child(particles)
 					particles.position = offsetLocation
 
+#Logic for number keys 1-4 to select heroes. 5 to select all, double tap to focus camera on them too.
+func keySelectionLogic():
+	var heroes = $Heroes.get_children()
+	var cam = $Camera
+	if Input.is_action_just_pressed("1"):
+		if heroes.size() >= 1:
+			deselectHeroes()
+			heroes[0].Select()
+			if doubleTapTime > 0:
+				cam.focusOn(heroes[0].position)
+				return
+			doubleTapTime = FULLTAPTIME
+	if Input.is_action_just_pressed("2"):
+		if heroes.size() >= 2:
+			deselectHeroes()
+			heroes[1].Select()
+			if doubleTapTime > 0:
+				cam.focusOn(heroes[1].position)
+				return
+			doubleTapTime = FULLTAPTIME
+	if Input.is_action_just_pressed("3"):
+		if heroes.size() >= 3:
+			deselectHeroes()
+			heroes[2].Select()
+			if doubleTapTime > 0:
+				cam.focusOn(heroes[2].position)
+				return
+			doubleTapTime = FULLTAPTIME
+	if Input.is_action_just_pressed("4"):
+		if heroes.size() >= 4:
+			deselectHeroes()
+			heroes[3].Select()
+			if doubleTapTime > 0:
+				cam.focusOn(heroes[3].position)
+				return
+			doubleTapTime = FULLTAPTIME
+	if Input.is_action_just_pressed("5"):
+		for hero in heroes:
+			hero.Select()
+		if doubleTapTime > 0:
+			cam.focusOn(cam.calculate_center())
+			return
+		doubleTapTime = FULLTAPTIME
+
+#Deselects all heroes.
+func deselectHeroes():
+	var heroes = $Heroes.get_children()
+	for hero in heroes:
+		hero.deSelect()
+
+#returns the average location of all the selected heroes.
 func calculate_center() -> Vector2:
 	var c = Vector2.ZERO
 	var count = 0
@@ -77,10 +138,12 @@ func dragSelectBoxLogic():
 			draw_area(0)
 
 func _input(event):
+	keySelectionLogic()
 	if event is InputEventMouse:
 		mousePos = event.position
 		mousePosGlobal = get_global_mouse_position()
 
+#Honestly dont know what it does. Don't touch this
 func draw_area(s=true):
 	panel.size = Vector2(abs(startV.x - endV.x), abs(startV.y - endV.y))
 	var pos = Vector2()
@@ -89,6 +152,7 @@ func draw_area(s=true):
 	panel.position = pos
 	panel.size *= int(s)
 
+#Selects units in area. Don't touch this or call it anywhere else
 func get_units_in_area(area):
 	#print(area)
 	var u = []
@@ -100,6 +164,7 @@ func get_units_in_area(area):
 	#print(u)
 	return u
 
+#Again, no clue what this does. Dont call it.
 func _on_area_selected(object):
 	#print(object)
 	var area = []

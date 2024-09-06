@@ -1,5 +1,37 @@
 extends RigidBody2D
 
+@export var level = 1
+
+#Game Variables
+#damage applied on every attack, physical. 
+@export var base_attack_damage = 20.0
+#ability damage multiplier
+@export var base_ability_damage = 100.0
+#basic attack speed in attacks per second
+@export var base_attack_speed = 0.5
+#base max health
+@export var base_health = 100.0
+#base armor. Armor reduces a % of physical damage. Max is 75
+@export var base_armor = 0.0
+#base magic resist. Magic resist reduces a % of magic damage. Max is 75
+@export var base_magic_resist = 0.0
+#base chance to dodge. Max 50.
+@export var base_dodge_chance = 0.0
+#health regen per 5 seconds.
+@export var base_health_regen = 2.5
+#base cooldown reduction for ability. Max 50 (0.5)
+@export var base_cooldown_reduction = 0.0
+
+var health
+var armor
+var magic_resist
+var dodge_chance
+var attack_damage
+var ability_damage
+var attack_speed
+var cooldown_reduction
+var health_regen
+var walk_speed
 
 var state = "alert" #"moving", "attacking"
 
@@ -20,8 +52,10 @@ var velocity = Vector2.ZERO
 
 var attackTarget = null
 var potentialTargets = []
+var attackMoveLocation = Vector2.ZERO
 
 func _ready():
+	update_stats()
 	$State.text = state
 	navigation_agent.simplify_path = true
 	navigation_agent.path_desired_distance = 5.0
@@ -33,6 +67,13 @@ func _process(_delta):
 	selectionLogic()
 	$Label.set_text("Target = " +  str(attackTarget))
 
+func update_stats() -> void:
+	health = base_health
+	armor = base_armor
+	magic_resist = base_magic_resist
+	dodge_chance = base_dodge_chance
+	health_regen = base_health_regen
+
 func tryToTarget(enemy):
 	if isSelected:
 		attackTarget = enemy
@@ -41,21 +82,36 @@ func tryToTarget(enemy):
 			return
 		state = "attacking"
 
+#updates navAgent to path to this new position
 func path_to(loc : Vector2):
 	location = loc
 	navigation_agent.target_position = location
 
+#when attackMoveLocation is set to Vector2.ZERO, then hero is not attackMoving.
+func attack_move_to(loc: Vector2):
+	attackMoveLocation = loc
+	path_to(attackMoveLocation)
+
 func _physics_process(_delta: float):
-	$"State".text = state + " " + str(potentialTargets)
-	#do base movement if path exists
-	#if attackTarget == null || (attackTarget != null && !potentialTargets.has(attackTarget)):
+	#Debug
+	$"State".text = state + " Potential Targets : " + str(potentialTargets.size()) + " attackMoveLoc = " + str(attackMoveLocation)
+	
+	#if attack-moving, attack Enemy as they enter range.
+	if attackMoveLocation != Vector2.ZERO:
+		if !potentialTargets.is_empty():
+			attackTarget = get_closest_unit(potentialTargets)
+			state = "attacking"
+			path_to(position)
+			return
+		else:
+			path_to(attackMoveLocation)
+	
+	#do base movement if path exists and no current target to attackMove to.
 	if !navigation_agent.is_navigation_finished():
 		state = "moving"
 		set_linear_damp(1.5)
 		var current_agent_position: Vector2 = global_position
 		var next_path_position: Vector2 = navigation_agent.get_next_path_position()
-		if current_agent_position.direction_to(next_path_position):
-			pass
 		#print(current_agent_position.direction_to(next_path_position))
 		velocity = current_agent_position.direction_to(next_path_position) * defaultSpeed * 4
 		
@@ -68,7 +124,8 @@ func _physics_process(_delta: float):
 			attackTarget = get_closest_unit(potentialTargets)
 			state = "attacking"
 	#if target exists and is in range, stop and start attacking
-	if potentialTargets.has(attackTarget):
+	if potentialTargets.has(attackTarget) && attackMoveLocation == Vector2.ZERO:
+		#stop
 		path_to(position)
 		state = "attacking"
 
@@ -131,9 +188,12 @@ func _on_enemy_detected(body: Node2D) -> void:
 		potentialTargets = cleanArray(potentialTargets)
 		potentialTargets.append(body)
 
+func onEnemyKilled(enemy):
+	if enemy == attackTarget:
+		attackTarget = null
 
 func _on_enemy_left(body: Node2D) -> void:
 	if potentialTargets.has(body):
 		potentialTargets = cleanArray(potentialTargets)
 		potentialTargets.erase(body)
-		
+		print("Left")

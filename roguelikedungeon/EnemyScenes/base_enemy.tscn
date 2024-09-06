@@ -30,5 +30,11 @@ texture = ExtResource("1_m6vlh")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MouseDetection"]
 shape = SubResource("CircleShape2D_ykwv8")
 
+[node name="DebugDeathTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [connection signal="mouse_shape_entered" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_entered"]
 [connection signal="mouse_shape_exited" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_exited"]
+[connection signal="timeout" from="DebugDeathTimer" to="." method="_on_debug_death_timer_timeout"]

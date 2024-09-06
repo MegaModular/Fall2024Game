@@ -1,8 +1,10 @@
+#Script contains logic for player controls of moving / manipulating the heros.
+
 extends Node2D
 
 #touchable
-const FULLTAPTIME = 0.5
-var doubleTapTime = 0.5
+const FULLTAPTIME = 0.25
+var doubleTapTime = 0.25
 
 var mousePos = Vector2()
 
@@ -35,7 +37,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("esc"):
 		get_tree().quit()
 	#Logic to determine the location of a click and to tell heroes to move while keeping mind of their offset.
-	if Input.is_action_just_pressed("rmb"):
+	if Input.is_action_just_pressed("rmb") || Input.is_action_just_pressed("a"):
 		var center = calculate_center()
 		var clickLocation = get_global_mouse_position()
 		
@@ -47,11 +49,21 @@ func _process(delta):
 					if (hero.position.distance_to(center)) > 200.0:
 						offsetLocation = clickLocation + (hero.position - center) * 0.3
 					else: offsetLocation = clickLocation + (hero.position - center) * 0.5
-					hero.path_to(offsetLocation)
-					hero.attackTarget = null
 					var particles = moveParticles.instantiate()
 					add_child(particles)
-					particles.position = offsetLocation
+					hero.attackTarget = null
+					#attackMove
+					if Input.is_action_just_pressed("a"):
+						#print("AttackMoved")
+						hero.attack_move_to(offsetLocation)
+						hero.attackTarget = null
+						particles.position = offsetLocation
+					#regular Move
+					else:
+						particles.position = offsetLocation
+						hero.attack_move_to(Vector2.ZERO)
+						hero.path_to(offsetLocation)
+
 
 #Logic for number keys 1-4 to select heroes. 5 to select all, double tap to focus camera on them too.
 func keySelectionLogic():

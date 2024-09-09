@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://88bx8jn8aa2k"]
+[gd_scene load_steps=9 format=3 uid="uid://88bx8jn8aa2k"]
 
 [ext_resource type="Script" path="res://PlayerScenes/base_player.gd" id="1_nwebq"]
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_x6wyl"]
@@ -13,6 +13,22 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(3.27289e-06, 0.689649, 0.926731, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sr7cs"]
+bg_color = Color(0.6, 0.6, 0.6, 0.235294)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y0qwh"]
+bg_color = Color(0.607843, 0.560784, 0, 1)
+border_width_right = 10
+border_color = Color(0.6, 0.6, 0.6, 0.235294)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_bottom_left = 3
+anti_aliasing_size = 0.01
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1o4w2"]
 size = Vector2(80, 80)
@@ -30,6 +46,7 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_x6wyl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_scsb1")
 
 [node name="MouseHover" type="Sprite2D" parent="."]
@@ -54,16 +71,28 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wrxsr")
 
+[node name="HealthBar" type="ProgressBar" parent="Control"]
+offset_left = -46.0
+offset_top = -64.0
+offset_right = 46.0
+offset_bottom = -47.0
+theme_override_constants/outline_size = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_sr7cs")
+theme_override_styles/fill = SubResource("StyleBoxFlat_y0qwh")
+value = 50.0
+show_percentage = false
+
 [node name="MouseHitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MouseHitbox"]
+visible = false
 shape = SubResource("RectangleShape2D_1o4w2")
 
 [node name="Label" type="Label" parent="."]
-offset_left = -24.0
-offset_top = -69.0
-offset_right = 16.0
-offset_bottom = -46.0
+offset_left = -25.0
+offset_top = -91.0
+offset_right = 15.0
+offset_bottom = -68.0
 
 [node name="State" type="Label" parent="."]
 offset_left = -22.0
@@ -74,9 +103,14 @@ offset_bottom = 77.0
 [node name="DetectArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea"]
+visible = false
 shape = SubResource("CircleShape2D_u3oda")
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+one_shot = true
 
 [connection signal="mouse_shape_entered" from="MouseHitbox" to="." method="_on_mouse_shape_entered"]
 [connection signal="mouse_shape_exited" from="MouseHitbox" to="." method="_on_mouse_shape_exited"]
 [connection signal="body_entered" from="DetectArea" to="." method="_on_enemy_detected"]
 [connection signal="body_exited" from="DetectArea" to="." method="_on_enemy_left"]
+[connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]

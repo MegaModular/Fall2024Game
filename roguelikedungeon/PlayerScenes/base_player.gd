@@ -21,8 +21,11 @@ extends RigidBody2D
 @export var base_health_regen = 2.5
 #base cooldown reduction for ability. Max 50 (0.5)
 @export var base_cooldown_reduction = 0.0
+#Walk speed
+@export var base_walk_speed = 350.0
 
 var health
+var max_health
 var armor
 var magic_resist
 var dodge_chance
@@ -31,12 +34,12 @@ var ability_damage
 var attack_speed
 var cooldown_reduction
 var health_regen
-var walk_speed
+var walk_speed = base_walk_speed
 
 var state = "alert" #"moving", "attacking"
 
 #touchables, but these values are intended behavior. Touch speed if needed.
-@export var defaultSpeed = 100.0
+
 #how far the unit strays from the path (0(max) - 1(none))
 @export var pathHardness = 0.75
 var slowDownDamping = 5.0
@@ -53,9 +56,10 @@ var velocity = Vector2.ZERO
 var attackTarget = null
 var potentialTargets = []
 var attackMoveLocation = Vector2.ZERO
+var ableToAttack = true
 
 func _ready():
-	update_stats()
+	update_stats(true)
 	$State.text = state
 	navigation_agent.simplify_path = true
 	navigation_agent.path_desired_distance = 5.0
@@ -66,13 +70,44 @@ func _ready():
 func _process(_delta):
 	selectionLogic()
 	$Label.set_text("Target = " +  str(attackTarget))
+	update_stats(false)
+	
+	health -= 1
 
-func update_stats() -> void:
-	health = base_health
-	armor = base_armor
-	magic_resist = base_magic_resist
-	dodge_chance = base_dodge_chance
-	health_regen = base_health_regen
+#true if want to recalculate the stats from the beginning
+func update_stats(start) -> void:
+	if start:
+		max_health = base_health
+		health = base_health
+		armor = base_armor
+		magic_resist = base_magic_resist
+		dodge_chance = base_dodge_chance
+		health_regen = base_health_regen
+		attack_speed = base_attack_speed
+		ability_damage = base_ability_damage
+		cooldown_reduction = base_cooldown_reduction
+		walk_speed = base_walk_speed
+	
+	$Control/HealthBar.max_value = max_health
+	$Control/HealthBar.value = health
+	
+	#1 at 100, 0 at 0
+	var healthBarPercent = $Control/HealthBar.value / $Control/HealthBar.max_value
+	
+	var colorRed = 0
+	var colorGreen = 400
+	colorGreen = lerp(0, 400, healthBarPercent)
+	colorRed = lerp(255, 0, healthBarPercent)
+	var fill_stylebox = StyleBoxFlat.new()
+	fill_stylebox.bg_color = Color(colorRed/255, colorGreen/255, 0)
+	fill_stylebox.border_width_right = 5
+	fill_stylebox.corner_radius_bottom_left = 3
+	fill_stylebox.corner_radius_top_left = 3
+
+# Apply it as a theme override for the fill part
+	$Control/HealthBar.add_theme_stylebox_override("fill", fill_stylebox)
+
+	$AttackCooldownTimer.set_wait_time(1.0 / attack_speed)
 
 func tryToTarget(enemy):
 	if isSelected:
@@ -94,7 +129,7 @@ func attack_move_to(loc: Vector2):
 
 func _physics_process(_delta: float):
 	#Debug
-	$"State".text = state + " Potential Targets : " + str(potentialTargets.size()) + " attackMoveLoc = " + str(attackMoveLocation)
+	$"State".text = state + " Targets : " + str(potentialTargets.size()) + " attackMoveLoc = " + str(attackMoveLocation)
 	
 	#if attack-moving, attack Enemy as they enter range.
 	if attackMoveLocation != Vector2.ZERO:
@@ -102,7 +137,9 @@ func _physics_process(_delta: float):
 			attackTarget = get_closest_unit(potentialTargets)
 			state = "attacking"
 			path_to(position)
-			return
+			if navigation_agent.is_navigation_finished():
+				path_to(position)
+				return
 		else:
 			path_to(attackMoveLocation)
 	
@@ -113,7 +150,7 @@ func _physics_process(_delta: float):
 		var current_agent_position: Vector2 = global_position
 		var next_path_position: Vector2 = navigation_agent.get_next_path_position()
 		#print(current_agent_position.direction_to(next_path_position))
-		velocity = current_agent_position.direction_to(next_path_position) * defaultSpeed * 4
+		velocity = current_agent_position.direction_to(next_path_position) * walk_speed
 		
 		apply_force(velocity)
 	#stop at the end of path, and if there is an available target in range then automatically start attacking.
@@ -157,12 +194,12 @@ func selectionLogic():
 				deSelect()
 
 func Select() -> void:
-	#print("Selected", self)
+	#print("Selected")
 	isSelected = true
 	selectionBox.visible = true
 
 func deSelect() -> void:
-	#print("deSelected", self)
+	#print("deSelected")
 	isSelected = false
 	selectionBox.visible = false
 
@@ -196,4 +233,6 @@ func _on_enemy_left(body: Node2D) -> void:
 	if potentialTargets.has(body):
 		potentialTargets = cleanArray(potentialTargets)
 		potentialTargets.erase(body)
-		print("Left")
+
+func _on_attack_cooldown_timer_timeout() -> void:
+	ableToAttack = true

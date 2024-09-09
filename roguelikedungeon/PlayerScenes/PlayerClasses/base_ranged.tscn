@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0bophwd8cvxk"]
+
+[ext_resource type="PackedScene" uid="uid://88bx8jn8aa2k" path="res://PlayerScenes/base_player.tscn" id="1_g8wub"]
+[ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/base_ranged.gd" id="2_g11xk"]
+
+[node name="BaseRanged" instance=ExtResource("1_g8wub")]
+script = ExtResource("2_g11xk")
+
+[node name="Sprite2D" parent="." index="0"]
+modulate = Color(0, 1, 0, 1)
+
+[node name="CollisionShape2D" parent="." index="1"]
+visible = false
+
+[node name="CollisionShape2D" parent="MouseHitbox" index="0"]
+visible = false
+
+[node name="CollisionShape2D" parent="DetectArea" index="0"]
+visible = false

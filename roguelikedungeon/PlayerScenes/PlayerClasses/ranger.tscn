@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqbl4gswcy0ut"]
+
+[ext_resource type="PackedScene" uid="uid://c0bophwd8cvxk" path="res://PlayerScenes/PlayerClasses/base_ranged.tscn" id="1_u12cg"]
+[ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/ranger.gd" id="2_ric26"]
+
+[node name="Ranger" instance=ExtResource("1_u12cg")]
+script = ExtResource("2_ric26")
+
+[node name="Sprite2D" parent="." index="0"]
+modulate = Color(0, 0.299281, 1.44392e-07, 1)
+
+[node name="CollisionShape2D" parent="." index="1"]
+visible = false
+
+[node name="CollisionShape2D" parent="MouseHitbox" index="0"]
+visible = false
+
+[node name="Projectiles" type="Node" parent="." index="10"]

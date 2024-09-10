@@ -12,6 +12,8 @@ var damageType = 0
 var direction = Vector2.UP
 var velocity = Vector2.ZERO
 
+@onready var fontSettings = "res://Particles/damage_text.tscn::LabelSettings_ide6k"
+
 func _ready():
 	randomize()
 	direction += Vector2(randf_range(-0.5, 0.5),0)
@@ -19,10 +21,10 @@ func _ready():
 	speed = randf_range(minSpeed, maxSpeed)
 	#orange/brown
 	if damageType == 0:
-		self.modulate = Color(218,93,0,255)
+		self.modulate = Color(255.0/255.0,93.0/255.0,0,1)
 	#blu/purple
 	if damageType == 1:
-		self.modulate = Color(125,110,255,255)
+		self.modulate = Color(125.0/255.0,110.0/255.0,1,1)
 	#white by default
 	if damageType == 2:
 		return

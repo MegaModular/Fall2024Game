@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://cuiq5fgedjtd6"]
+
+[ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_c436q"]
+[ext_resource type="Script" path="res://MiscellaneousScenes/projectile.gd" id="1_rfxdc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1wkrp"]
+size = Vector2(40, 10)
+
+[node name="Projectile" type="Area2D"]
+script = ExtResource("1_rfxdc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+scale = Vector2(0.25, 0.05)
+texture = ExtResource("1_c436q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1wkrp")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

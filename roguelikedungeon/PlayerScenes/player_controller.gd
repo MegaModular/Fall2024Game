@@ -64,7 +64,6 @@ func _process(delta):
 						hero.attack_move_to(Vector2.ZERO)
 						hero.path_to(offsetLocation)
 
-
 #Logic for number keys 1-4 to select heroes. 5 to select all, double tap to focus camera on them too.
 func keySelectionLogic():
 	var heroes = $Heroes.get_children()
@@ -126,6 +125,7 @@ func calculate_center() -> Vector2:
 	c /= count
 	return c
 
+#Logic to determine the location of the box and input handling
 func dragSelectBoxLogic():
 	if Input.is_action_just_pressed("lmb"):
 		start = mousePosGlobal
@@ -149,13 +149,14 @@ func dragSelectBoxLogic():
 			isDragging = false
 			draw_area(0)
 
+#Input handling for drag select box.
 func _input(event):
 	keySelectionLogic()
 	if event is InputEventMouse:
 		mousePos = event.position
 		mousePosGlobal = get_global_mouse_position()
 
-#Honestly dont know what it does. Don't touch this
+#Probably makes the selection box and draws it each frame. Idk tho
 func draw_area(s=true):
 	panel.size = Vector2(abs(startV.x - endV.x), abs(startV.y - endV.y))
 	var pos = Vector2()

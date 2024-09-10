@@ -26,7 +26,7 @@ var direction = Vector2.ZERO
 var velocity
 
 func _ready():
-	print(playerReference.get_children())
+	#print(playerReference.get_children())
 	walk_speed = base_speed
 	health = base_health
 	armor = base_armor
@@ -35,8 +35,14 @@ func _ready():
 	updateHealthBar()
 
 func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
-	
 	var text = Globals.damageTextReference.instantiate()
+	var x = randf_range(0,1)
+	if x < dodge_chance/100:
+		text.damageAmount = "Dodged"
+		text.position = position
+		$"../../ParticleHolder".add_child(text)
+		return
+	
 	if type == 0:
 		damage *= 1.0 - armor/100.0
 		text.damageType = 0

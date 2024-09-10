@@ -4,6 +4,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_ide6k"]
 font_size = 24
+font_color = Color(1, 0.416126, 0.245233, 1)
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 11
@@ -25,6 +26,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="Control"]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 text = "64"

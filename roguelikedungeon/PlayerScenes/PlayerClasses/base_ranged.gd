@@ -8,6 +8,7 @@ func _process(delta: float) -> void:
 	super(delta)
 	if state == "attacking" && potentialTargets.has(attackTarget):
 		attack()
+		attackMoveLocation = Vector2.ZERO
 		return
 
 func attack():
@@ -18,5 +19,5 @@ func attack():
 		shoot()
 
 func shoot():
+	print("Shoot, function should be overridden")
 	return
-	print("baseShoot, Override this function.")

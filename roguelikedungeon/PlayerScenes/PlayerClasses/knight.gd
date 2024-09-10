@@ -7,8 +7,7 @@ var isAttacking : bool = false
 func _ready():
 	super()
 
-
-
+#Logic to make the player walk and attack instead of staying at range.
 func _process(_delta: float) -> void:
 	super(_delta)
 	if state == "attacking":
@@ -20,7 +19,7 @@ func _process(_delta: float) -> void:
 		if $NavAgent.is_navigation_finished() && is_instance_valid(attackTarget):
 			path_to(attackTarget.position)
 
-#stop, start attacking.
+#stop, start attacking. Handles cooldown and whatnot. Animation will be added here.
 func attack():
 	if ableToAttack:
 		path_to(position)
@@ -32,13 +31,12 @@ func attack():
 		update_stats(false)
 		$AttackCooldownTimer.start()
 
+#Check for valid target & send off the attack
 func performAttack(obj):
 	if is_instance_valid(obj) && enemiesInHitArea.has(obj):
 		obj.applyDamage(attack_damage, 0)
-	print("Attack")
+	#print("Attack")
 	return
-
-##YOU ARE CURRENTLY TRYING TO MAKE THE PLAYERS BE ABLE TO PULLED OFF WHEN THEY ARE ATTACKED.
 
 #Melee Range detectors.
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -51,4 +49,4 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 	if enemiesInHitArea.has(body):
 		enemiesInHitArea = cleanArray(enemiesInHitArea)
 		enemiesInHitArea.erase(body)
-		print("Left")
+		#print("Left")

@@ -67,18 +67,20 @@ func _ready():
 	#navigation_agent.debug_enabled = true
 	navigation_agent.set_path_max_distance(2.0)
 
-func _process(_delta):
+func _process(delta):
 	selectionLogic()
 	$Label.set_text("Target = " +  str(attackTarget))
 	update_stats(false)
 	
-	
-	health -= 0.16
+	#health regen
+	health += health_regen / 5.0 * delta
+
 #true if want to recalculate the stats from the beginning
 func update_stats(start) -> void:
 	if start:
 		max_health = base_health
-		health = base_health
+		if health == null:
+			health = base_health
 		armor = base_armor
 		attack_damage = base_attack_damage
 		magic_resist = base_magic_resist

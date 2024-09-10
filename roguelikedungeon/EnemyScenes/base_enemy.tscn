@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkvup5cg1gfm6"]
+[gd_scene load_steps=7 format=3 uid="uid://dkvup5cg1gfm6"]
 
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_m6vlh"]
 [ext_resource type="Script" path="res://EnemyScenes/base_enemy.gd" id="1_ylkj4"]
@@ -8,6 +8,22 @@ size = Vector2(64, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ykwv8"]
 radius = 50.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0gito"]
+bg_color = Color(0.6, 0.6, 0.6, 0.235294)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bdx3t"]
+bg_color = Color(0.607843, 0.560784, 0, 1)
+border_width_right = 10
+border_color = Color(0.6, 0.6, 0.6, 0.235294)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_bottom_left = 3
+anti_aliasing_size = 0.01
 
 [node name="Enemy" type="RigidBody2D" groups=["enemy"]]
 mass = 5.0
@@ -34,6 +50,23 @@ shape = SubResource("CircleShape2D_ykwv8")
 wait_time = 5.0
 one_shot = true
 autostart = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HealthBar" type="ProgressBar" parent="Control"]
+layout_mode = 0
+offset_left = -46.0
+offset_top = -61.0
+offset_right = 46.0
+offset_bottom = -44.0
+theme_override_styles/background = SubResource("StyleBoxFlat_0gito")
+theme_override_styles/fill = SubResource("StyleBoxFlat_bdx3t")
+value = 50.0
+show_percentage = false
 
 [connection signal="mouse_shape_entered" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_entered"]
 [connection signal="mouse_shape_exited" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_exited"]

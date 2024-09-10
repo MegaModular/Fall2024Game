@@ -12,11 +12,6 @@ script = ExtResource("2_o6a1e")
 [node name="Sprite2D" parent="." index="0"]
 modulate = Color(0.883988, 0, 0.358736, 1)
 
-[node name="HealthBar" parent="Control" index="1"]
-layout_mode = 0
-offset_top = -71.0
-offset_bottom = -44.0
-
 [node name="HitArea" type="Area2D" parent="." index="9"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea" index="0"]

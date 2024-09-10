@@ -8,12 +8,3 @@ script = ExtResource("2_g11xk")
 
 [node name="Sprite2D" parent="." index="0"]
 modulate = Color(0, 1, 0, 1)
-
-[node name="CollisionShape2D" parent="." index="1"]
-visible = false
-
-[node name="CollisionShape2D" parent="MouseHitbox" index="0"]
-visible = false
-
-[node name="CollisionShape2D" parent="DetectArea" index="0"]
-visible = false

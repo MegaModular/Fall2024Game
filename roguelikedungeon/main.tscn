@@ -34,3 +34,5 @@ position = Vector2(-1122, -126)
 
 [node name="Enemy2" parent="Enemies" instance=ExtResource("2_rcpvw")]
 position = Vector2(-1009, 188)
+
+[node name="ParticleHolder" type="Node" parent="."]

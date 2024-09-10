@@ -69,8 +69,6 @@ func _process(delta):
 func keySelectionLogic():
 	var heroes = $Heroes.get_children()
 	var cam = $Camera
-	if Input.is_action_just_pressed("lmb"):
-		deselectHeroes()
 	if Input.is_action_just_pressed("1"):
 		if heroes.size() >= 1:
 			deselectHeroes()

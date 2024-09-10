@@ -71,12 +71,17 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wrxsr")
 
-[node name="HealthBar" type="ProgressBar" parent="Control"]
+[node name="Control" type="Control" parent="Control"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HealthBar" type="ProgressBar" parent="Control/Control"]
+layout_mode = 0
 offset_left = -46.0
-offset_top = -64.0
+offset_top = -61.0
 offset_right = 46.0
-offset_bottom = -47.0
-theme_override_constants/outline_size = 2
+offset_bottom = -44.0
 theme_override_styles/background = SubResource("StyleBoxFlat_sr7cs")
 theme_override_styles/fill = SubResource("StyleBoxFlat_y0qwh")
 value = 50.0
@@ -85,7 +90,6 @@ show_percentage = false
 [node name="MouseHitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MouseHitbox"]
-visible = false
 shape = SubResource("RectangleShape2D_1o4w2")
 
 [node name="Label" type="Label" parent="."]

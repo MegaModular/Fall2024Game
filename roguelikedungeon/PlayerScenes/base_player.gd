@@ -72,14 +72,15 @@ func _process(_delta):
 	$Label.set_text("Target = " +  str(attackTarget))
 	update_stats(false)
 	
-	health -= 1
-
+	
+	health -= 0.16
 #true if want to recalculate the stats from the beginning
 func update_stats(start) -> void:
 	if start:
 		max_health = base_health
 		health = base_health
 		armor = base_armor
+		attack_damage = base_attack_damage
 		magic_resist = base_magic_resist
 		dodge_chance = base_dodge_chance
 		health_regen = base_health_regen
@@ -88,11 +89,13 @@ func update_stats(start) -> void:
 		cooldown_reduction = base_cooldown_reduction
 		walk_speed = base_walk_speed
 	
-	$Control/HealthBar.max_value = max_health
-	$Control/HealthBar.value = health
+	var healthBar = $Control/Control/HealthBar
+	
+	healthBar.max_value = max_health
+	healthBar.value = health
 	
 	#1 at 100, 0 at 0
-	var healthBarPercent = $Control/HealthBar.value / $Control/HealthBar.max_value
+	var healthBarPercent = healthBar.value / healthBar.max_value
 	
 	var colorRed = 0
 	var colorGreen = 400
@@ -105,7 +108,7 @@ func update_stats(start) -> void:
 	fill_stylebox.corner_radius_top_left = 3
 
 # Apply it as a theme override for the fill part
-	$Control/HealthBar.add_theme_stylebox_override("fill", fill_stylebox)
+	healthBar.add_theme_stylebox_override("fill", fill_stylebox)
 
 	$AttackCooldownTimer.set_wait_time(1.0 / attack_speed)
 
@@ -167,6 +170,8 @@ func _physics_process(_delta: float):
 		state = "attacking"
 
 func get_closest_unit(arr):
+	if arr.is_empty():
+		return null
 	var closest = arr[0]
 	var closestDistance = closest.position.distance_to(position)
 	for x in arr:

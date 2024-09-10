@@ -5,7 +5,7 @@ var AIState = "sleeping"
 @export var level = 1
 
 #Game Variables
-@export var base_health = 100.0
+@export var base_health = 500.0
 @export var base_armor = 20.0
 @export var base_magic_resist = 20.0
 @export var base_dodge_chance = 10.0
@@ -35,6 +35,7 @@ func _ready():
 	updateHealthBar()
 
 func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
+
 	var text = Globals.damageTextReference.instantiate()
 	var x = randf_range(0,1)
 	if x < dodge_chance/100:
@@ -51,6 +52,10 @@ func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
 		text.damageType = 1
 	if type == 2:
 		text.damageType = 2
+	
+	damage *= randf_range(0.8, 1.2)
+	damage = snapped(damage, 1)
+	
 	health -= damage;
 
 	text.damageAmount = damage
@@ -60,6 +65,9 @@ func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
 		for hero in playerReference.get_children():
 			if hero.attackTarget == self:
 				hero.attackTarget = hero.get_closest_unit(hero.potentialTargets)
+		if Globals.mouseInEnemyArea >= 1 && mouseInArea:
+			Globals.mouseInEnemyArea -= 1
+		print("enemy died")
 		queue_free()
 	updateHealthBar()
 
@@ -74,17 +82,17 @@ func _process(_delta):
 				add_child(particles)
 				return
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	direction = Vector2(1, 0)
 	velocity = direction * walk_speed
 	apply_force(velocity)
 
 #Manual Targeting.
-func _on_mouse_detection_mouse_shape_entered(shape_idx: int) -> void:
+func _on_mouse_detection_mouse_shape_entered(_shape_idx: int) -> void:
 	mouseInArea = true
 	Globals.mouseInEnemyArea += 1
 
-func _on_mouse_detection_mouse_shape_exited(shape_idx: int) -> void:
+func _on_mouse_detection_mouse_shape_exited(_shape_idx: int) -> void:
 	mouseInArea = false
 	Globals.mouseInEnemyArea -= 1
 
@@ -109,9 +117,3 @@ func updateHealthBar():
 
 # Apply it as a theme override for the fill part
 	healthBar.add_theme_stylebox_override("fill", fill_stylebox)
-#Debug, remove later, code accessses heros and calls onEnemyKilled(self), and removes self from playerTarget.
-func _on_debug_death_timer_timeout() -> void:
-	return
-	for hero in playerReference.get_children():
-		hero.onEnemyKilled(self)
-	queue_free()

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8cpyjhenccen"]
+
+[ext_resource type="PackedScene" uid="uid://c0bophwd8cvxk" path="res://PlayerScenes/PlayerClasses/base_ranged.tscn" id="1_u0jo5"]
+[ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/mage.gd" id="2_ot0oa"]
+
+[node name="Mage" instance=ExtResource("1_u0jo5")]
+script = ExtResource("2_ot0oa")
+
+[node name="Sprite2D" parent="." index="0"]
+modulate = Color(0.776179, 0.0144764, 0.536674, 1)
+
+[node name="CollisionShape2D" parent="." index="1"]
+visible = false
+
+[node name="CollisionShape2D" parent="MouseHitbox" index="0"]
+visible = false
+
+[node name="Projectiles" type="Node" parent="." index="10"]

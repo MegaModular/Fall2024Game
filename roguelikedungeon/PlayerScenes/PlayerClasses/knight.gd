@@ -5,6 +5,11 @@ var enemiesInHitArea = []
 var isAttacking : bool = false
 
 func _ready():
+	bonus_health += 120
+	bonus_armor += 10
+	bonus_magic_resist += 10
+	bonus_attack_speed += 5
+	bonus_attack_damage += 20
 	super()
 
 #Logic to make the player walk and attack instead of staying at range.
@@ -28,7 +33,7 @@ func attack():
 		path_to(position)
 		await get_tree().create_timer(0.25).timeout
 		performAttack(attackTarget)
-		update_stats(false)
+		update_stats()
 		$AttackCooldownTimer.start()
 
 #Check for valid target & send off the attack

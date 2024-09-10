@@ -53,5 +53,5 @@ func calculate_center():
 	return position
 
 
-func focusOn(position):
-	desiredPos = position
+func focusOn(a_position):
+	desiredPos = a_position

@@ -10,8 +10,6 @@ var velocity
 
 var playerReference
 
-signal contact(obj)
-
 
 func _ready() -> void:
 	if isPlayerOwned:

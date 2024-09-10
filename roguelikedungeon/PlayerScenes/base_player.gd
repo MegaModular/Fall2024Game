@@ -36,6 +36,17 @@ var cooldown_reduction
 var health_regen
 var walk_speed = base_walk_speed
 
+var bonus_health = 0
+var bonus_armor = 0
+var bonus_magic_resist = 0
+var bonus_dodge_chance = 0
+var bonus_attack_damage = 0
+var bonus_ability_damage = 0
+var bonus_attack_speed = 0
+var bonus_cooldown_reduction = 0
+var bonus_health_regen = 0
+var bonus_walk_speed = 0
+
 var state = "alert" #"moving", "attacking"
 
 #touchables, but these values are intended behavior. Touch speed if needed.
@@ -59,7 +70,7 @@ var attackMoveLocation = Vector2.ZERO
 var ableToAttack = true
 
 func _ready():
-	update_stats(true)
+	update_stats()
 	$State.text = state
 	navigation_agent.simplify_path = true
 	navigation_agent.path_desired_distance = 5.0
@@ -70,27 +81,14 @@ func _ready():
 func _process(delta):
 	selectionLogic()
 	$Label.set_text("Target = " +  str(attackTarget))
-	update_stats(false)
+	$"State".text = state + " Targets : " + str(potentialTargets.size()) + " attackMoveLoc = " + str(attackMoveLocation)
+
+	update_health_bar()
 	
 	#health regen
 	health += health_regen / 5.0 * delta
 
-#true if want to recalculate the stats from the beginning
-func update_stats(start) -> void:
-	if start:
-		max_health = base_health
-		if health == null:
-			health = base_health
-		armor = base_armor
-		attack_damage = base_attack_damage
-		magic_resist = base_magic_resist
-		dodge_chance = base_dodge_chance
-		health_regen = base_health_regen
-		attack_speed = base_attack_speed
-		ability_damage = base_ability_damage
-		cooldown_reduction = base_cooldown_reduction
-		walk_speed = base_walk_speed
-	
+func update_health_bar() -> void:
 	var healthBar = $Control/Control/HealthBar
 	
 	healthBar.max_value = max_health
@@ -112,6 +110,34 @@ func update_stats(start) -> void:
 # Apply it as a theme override for the fill part
 	healthBar.add_theme_stylebox_override("fill", fill_stylebox)
 
+func update_stats() -> void:
+	#base stats
+	max_health = base_health
+	if health == null:
+		health = base_health
+	armor = base_armor
+	attack_damage = base_attack_damage
+	magic_resist = base_magic_resist
+	dodge_chance = base_dodge_chance
+	health_regen = base_health_regen
+	attack_speed = base_attack_speed
+	ability_damage = base_ability_damage
+	cooldown_reduction = base_cooldown_reduction
+	walk_speed = base_walk_speed
+	
+	max_health += bonus_health
+	armor += bonus_armor
+	attack_damage += bonus_attack_damage
+	magic_resist += bonus_magic_resist
+	dodge_chance += bonus_dodge_chance
+	health_regen += bonus_health_regen
+	attack_speed += bonus_attack_speed
+	ability_damage += bonus_ability_damage
+	cooldown_reduction += bonus_cooldown_reduction
+	walk_speed += bonus_walk_speed
+	
+	update_health_bar()
+	
 	$AttackCooldownTimer.set_wait_time(1.0 / attack_speed)
 
 func tryToTarget(enemy):
@@ -133,9 +159,6 @@ func attack_move_to(loc: Vector2):
 	path_to(attackMoveLocation)
 
 func _physics_process(_delta: float):
-	#Debug
-	$"State".text = state + " Targets : " + str(potentialTargets.size()) + " attackMoveLoc = " + str(attackMoveLocation)
-	
 	#if attack-moving, attack Enemy as they enter range.
 	if attackMoveLocation != Vector2.ZERO:
 		if !potentialTargets.is_empty():
@@ -221,7 +244,10 @@ func _on_mouse_shape_exited(_shape_idx: int) -> void:
 	mouseInArea = false
 
 func cleanArray(array):
+
 	var newArr = []
+	if array.is_empty():
+		return newArr
 	for val in array:
 		if is_instance_valid(val):
 			newArr.append(val)
@@ -237,8 +263,8 @@ func onEnemyKilled(enemy):
 		attackTarget = null
 
 func _on_enemy_left(body: Node2D) -> void:
+	potentialTargets = cleanArray(potentialTargets)
 	if potentialTargets.has(body):
-		potentialTargets = cleanArray(potentialTargets)
 		potentialTargets.erase(body)
 
 func _on_attack_cooldown_timer_timeout() -> void:

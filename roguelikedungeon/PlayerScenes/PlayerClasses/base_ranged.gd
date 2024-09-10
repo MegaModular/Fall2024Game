@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 func attack():
 	if ableToAttack:
 		ableToAttack = false
-		update_stats(false)
+		update_stats()
 		$AttackCooldownTimer.start()
 		shoot()
 

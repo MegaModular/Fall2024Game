@@ -178,7 +178,7 @@ func get_units_in_area(area):
 	return u
 
 #Again, no clue what this does. Dont call it.
-func _on_area_selected(object):
+func _on_area_selected(_object):
 	#print(object)
 	var area = []
 	area.append(Vector2(min(start.x, end.x), min(start.y, end.y)))

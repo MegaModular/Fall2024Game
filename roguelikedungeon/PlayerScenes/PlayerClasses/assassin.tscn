@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkci0e8fvkuuv"]
+
+[ext_resource type="PackedScene" uid="uid://bletf0epogj4o" path="res://PlayerScenes/PlayerClasses/base_melee.tscn" id="1_ornrs"]
+[ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/assassin.gd" id="2_ke84i"]
+
+[node name="Assassin" instance=ExtResource("1_ornrs")]
+script = ExtResource("2_ke84i")
+
+[node name="Sprite2D" parent="." index="0"]
+modulate = Color(1, 0.27605, 0.193061, 1)

@@ -17,6 +17,8 @@ func _ready() -> void:
 	rotation = direction.angle()
 
 func _process(delta: float) -> void:
+	if Globals.isPaused:
+		return
 	velocity = direction * speed * delta
 	position += velocity
 

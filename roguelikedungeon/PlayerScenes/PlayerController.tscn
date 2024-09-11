@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://xhvsoi8u2qop"]
+[gd_scene load_steps=9 format=3 uid="uid://xhvsoi8u2qop"]
 
 [ext_resource type="Script" path="res://PlayerScenes/player_controller.gd" id="1_p034w"]
 [ext_resource type="PackedScene" uid="uid://1n70ubct7d8g" path="res://PlayerScenes/Camera.tscn" id="1_v34qf"]
 [ext_resource type="PackedScene" uid="uid://bqbl4gswcy0ut" path="res://PlayerScenes/PlayerClasses/ranger.tscn" id="3_dpvkd"]
 [ext_resource type="PackedScene" uid="uid://d36nmqonm6to4" path="res://PlayerScenes/PlayerClasses/knight.tscn" id="3_kgvpd"]
 [ext_resource type="PackedScene" uid="uid://c8cpyjhenccen" path="res://PlayerScenes/PlayerClasses/mage.tscn" id="4_7dt83"]
+[ext_resource type="PackedScene" uid="uid://bkci0e8fvkuuv" path="res://PlayerScenes/PlayerClasses/assassin.tscn" id="5_kvtm6"]
+[ext_resource type="PackedScene" uid="uid://b6hh0d3vpkh5p" path="res://PlayerScenes/hud.tscn" id="7_s1etp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4bjow"]
 bg_color = Color(0.6, 0.6, 0.6, 0.333333)
@@ -14,20 +16,26 @@ script = ExtResource("1_p034w")
 
 [node name="Heroes" type="Node" parent="."]
 
-[node name="knight1" parent="Heroes" instance=ExtResource("3_kgvpd")]
-position = Vector2(24, 166)
-
 [node name="Ranger" parent="Heroes" instance=ExtResource("3_dpvkd")]
 position = Vector2(-117, 45)
-
-[node name="Ranger2" parent="Heroes" instance=ExtResource("3_dpvkd")]
-position = Vector2(-58, -59)
 
 [node name="Mage" parent="Heroes" instance=ExtResource("4_7dt83")]
 position = Vector2(116, -23)
 
+[node name="Knight" parent="Heroes" instance=ExtResource("3_kgvpd")]
+position = Vector2(18, 70)
+
+[node name="Assassin" parent="Heroes" instance=ExtResource("5_kvtm6")]
+position = Vector2(-38, -72)
+
 [node name="Camera" parent="." instance=ExtResource("1_v34qf")]
 position = Vector2(91, 48)
+
+[node name="HUD" parent="Camera" instance=ExtResource("7_s1etp")]
+offset_left = -960.0
+offset_top = -540.0
+offset_right = -960.0
+offset_bottom = -540.0
 
 [node name="UI" type="CanvasLayer" parent="."]
 

@@ -23,6 +23,8 @@ extends RigidBody2D
 @export var base_cooldown_reduction = 0.0
 #Walk speed
 @export var base_walk_speed = 350.0
+#lifesteal
+@export var base_omnivamp = 0.0
 
 var health
 var max_health
@@ -35,6 +37,7 @@ var attack_speed
 var cooldown_reduction
 var health_regen
 var walk_speed = base_walk_speed
+var omnivamp
 
 var bonus_health = 0
 var bonus_armor = 0
@@ -46,6 +49,7 @@ var bonus_attack_speed = 0
 var bonus_cooldown_reduction = 0
 var bonus_health_regen = 0
 var bonus_walk_speed = 0
+var bonus_omnivamp = 0.0
 
 var state = "alert" #"moving", "attacking"
 
@@ -79,6 +83,8 @@ func _ready():
 	navigation_agent.set_path_max_distance(2.0)
 
 func _process(delta):
+	if Globals.isPaused:
+		return
 	selectionLogic()
 	$Label.set_text("Target = " +  str(attackTarget))
 	$"State".text = state + " Targets : " + str(potentialTargets.size()) + " attackMoveLoc = " + str(attackMoveLocation)
@@ -158,7 +164,22 @@ func attack_move_to(loc: Vector2):
 	attackMoveLocation = loc
 	path_to(attackMoveLocation)
 
+var storedVelocity = Vector2.ZERO
+
 func _physics_process(_delta: float):
+	#Stores velocity if paused
+	if Globals.isPaused:
+		if storedVelocity == Vector2.ZERO:
+			storedVelocity = linear_velocity
+			set_linear_damp(9999)
+		return
+	#When unpaused, restore velocity
+	elif storedVelocity != Vector2.ZERO:
+		apply_impulse(linear_velocity)
+		set_linear_damp(1.5)
+		storedVelocity = Vector2.ZERO
+	
+	
 	#if attack-moving, attack Enemy as they enter range.
 	if attackMoveLocation != Vector2.ZERO:
 		if !potentialTargets.is_empty():

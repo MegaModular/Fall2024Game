@@ -35,7 +35,6 @@ func _ready():
 	updateHealthBar()
 
 func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
-
 	var text = Globals.damageTextReference.instantiate()
 	var x = randf_range(0,1)
 	if x < dodge_chance/100:
@@ -72,6 +71,9 @@ func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
 	updateHealthBar()
 
 func _process(_delta):
+	if Globals.isPaused:
+		return
+	
 	#Target Selection Code
 	if Input.is_action_just_pressed("rmb") && mouseInArea:
 		for hero in playerReference.get_children():
@@ -82,7 +84,21 @@ func _process(_delta):
 				add_child(particles)
 				return
 
+var storedVelocity = Vector2.ZERO
+
 func _physics_process(_delta: float) -> void:
+		#Stores velocity if paused
+	if Globals.isPaused:
+		if storedVelocity == Vector2.ZERO:
+			storedVelocity = linear_velocity
+			set_linear_damp(9999)
+		return
+	#When unpaused, restore velocity
+	elif storedVelocity != Vector2.ZERO:
+		apply_impulse(linear_velocity)
+		set_linear_damp(1.5)
+		storedVelocity = Vector2.ZERO
+	
 	direction = Vector2(1, 0)
 	velocity = direction * walk_speed
 	apply_force(velocity)

@@ -2,6 +2,10 @@ extends "res://PlayerScenes/PlayerClasses/base_ranged.gd"
 
 var x
 
+const abilities = ["RapidFire", "PowerShot", "Explosive Arrows"]
+
+var selectedAbility
+
 func _ready() -> void:
 	super()
 

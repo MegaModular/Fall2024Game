@@ -15,6 +15,8 @@ var desiredPos = position
 const SCREENSIZE = Vector2(1920, 1080)
 
 func _process(delta: float) -> void:
+	if Globals.isPaused:
+		return
 	
 	if Input.is_action_pressed("space"):
 		velocity = Vector2.ZERO

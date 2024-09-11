@@ -14,6 +14,8 @@ var startV = Vector2()
 var end = Vector2()
 var endV = Vector2()
 var isDragging = false
+
+#FUCK YOU STOP THROWING THIS FUCKING ERROR THESE ARE USED\
 signal area_selected
 signal start_move_selection
 
@@ -23,19 +25,29 @@ var units = []
 @onready var panel = $"UI/Panel"
 
 func _ready():
+	$Camera/HUD.hideHUD()
 	connect("area_selected", Callable(self,"_on_area_selected"))
 	units = get_tree().get_nodes_in_group("unit")
 	#print(units)
 
 #Contains drag unit selection, and movement input handling.
 func _process(delta):
+	if Input.is_action_just_pressed("esc") && !Globals.isPaused:
+		print("Paused")
+		Globals.isPaused = true
+		$Camera/HUD.showHUD()
+	elif Input.is_action_just_pressed("esc") && Globals.isPaused:
+		print("Unpaused")
+		Globals.isPaused = false
+		$Camera/HUD.hideHUD()
+	
+	if Globals.isPaused:
+		return
 	dragSelectBoxLogic()
 	
 	if doubleTapTime >= 0:
 		doubleTapTime -= delta
 	
-	if Input.is_action_just_pressed("esc"):
-		get_tree().quit()
 	#Logic to determine the location of a click and to tell heroes to move while keeping mind of their offset.
 	if Input.is_action_just_pressed("rmb") || Input.is_action_just_pressed("a"):
 		var center = calculate_center()

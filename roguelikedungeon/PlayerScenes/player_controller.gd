@@ -1,5 +1,4 @@
 #Script contains logic for player controls of moving / manipulating the heros.
-
 extends Node2D
 
 #touchable
@@ -30,17 +29,54 @@ func _ready():
 	units = get_tree().get_nodes_in_group("unit")
 	#print(units)
 
+@onready var hud = $Camera/HUD
+
+#Handles input for displaying and closing menus. Pauses and Unpauses the game.
+
+func HUDInput():
+	#exit menu
+	if Input.is_action_just_pressed("esc"):
+		#quit menu show
+		if !Globals.isPaused:
+			hud.showHUD()
+			Globals.isPaused = true
+			return
+		#quit menu hide
+		if Globals.isPaused:
+			hud.hideAllHUD()
+			Globals.isPaused = false
+			return
+		#skill Menu
+	if Input.is_action_just_pressed("t"):
+		if hud.quitMenuShown:
+			return
+		if hud.skillMenuShown:
+			hud.hideSKILL()
+			if !hud.isHUDShown():
+				Globals.isPaused = false
+			return
+		hud.showSKILL()
+		Globals.isPaused = true
+		if !hud.isHUDShown():
+			Globals.isPaused = false
+		return
+	
+	if Input.is_action_just_pressed("i"):
+		if hud.quitMenuShown:
+			return
+		if hud.invMenuShown:
+			hud.hideINV()
+			if !hud.isHUDShown():
+				Globals.isPaused = false
+			return
+		hud.showINV()
+		Globals.isPaused = true
+		if !hud.isHUDShown():
+			Globals.isPaused = false
+		return
+
 #Contains drag unit selection, and movement input handling.
 func _process(delta):
-	if Input.is_action_just_pressed("esc") && !Globals.isPaused:
-		print("Paused")
-		Globals.isPaused = true
-		$Camera/HUD.showHUD()
-	elif Input.is_action_just_pressed("esc") && Globals.isPaused:
-		print("Unpaused")
-		Globals.isPaused = false
-		$Camera/HUD.hideHUD()
-	
 	if Globals.isPaused:
 		return
 	dragSelectBoxLogic()
@@ -163,6 +199,7 @@ func dragSelectBoxLogic():
 
 #Input handling for drag select box.
 func _input(event):
+	HUDInput()
 	keySelectionLogic()
 	if event is InputEventMouse:
 		mousePos = event.position

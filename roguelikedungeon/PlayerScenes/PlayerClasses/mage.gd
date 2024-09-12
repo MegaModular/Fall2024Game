@@ -1,9 +1,11 @@
 extends "res://PlayerScenes/PlayerClasses/base_ranged.gd"
 
 var x
+const abilities = ["Frost Nova", "Fireball", "Chain Lightning"]
 
 func _ready() -> void:
 	bonus_ability_damage += 50
+	heroClass = "mage"
 	super()
 
 func _process(delta: float) -> void:

@@ -2,6 +2,9 @@ extends RigidBody2D
 
 @export var level = 1
 
+@export var heroClass : String
+@export var abilitySelected : String
+
 #Game Variables
 #damage applied on every attack, physical. 
 @export var base_attack_damage = 20.0
@@ -86,7 +89,7 @@ func _process(delta):
 	if Globals.isPaused:
 		return
 	selectionLogic()
-	$Label.set_text("Target = " +  str(attackTarget))
+	$Label.set_text("Target = " +  str(attackTarget) + "Ability Selected : "+ abilitySelected)
 	$"State".text = state + " Targets : " + str(potentialTargets.size()) + " attackMoveLoc = " + str(attackMoveLocation)
 
 	update_health_bar()
@@ -165,19 +168,27 @@ func attack_move_to(loc: Vector2):
 	path_to(attackMoveLocation)
 
 var storedVelocity = Vector2.ZERO
+var recentlyUnpaused : bool = false
 
 func _physics_process(_delta: float):
 	#Stores velocity if paused
 	if Globals.isPaused:
+		recentlyUnpaused = true
 		if storedVelocity == Vector2.ZERO:
 			storedVelocity = linear_velocity
 			set_linear_damp(9999)
+		if !$AttackCooldownTimer.is_paused():
+			$AttackCooldownTimer.set_paused(true)
 		return
 	#When unpaused, restore velocity
 	elif storedVelocity != Vector2.ZERO:
 		apply_impulse(linear_velocity)
 		set_linear_damp(1.5)
 		storedVelocity = Vector2.ZERO
+	if recentlyUnpaused:
+		if $AttackCooldownTimer.is_paused():
+			$AttackCooldownTimer.set_paused(false)
+		recentlyUnpaused = false
 	
 	
 	#if attack-moving, attack Enemy as they enter range.

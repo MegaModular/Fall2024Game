@@ -7,6 +7,8 @@ const abilities = ["RapidFire", "PowerShot", "Explosive Arrows"]
 var selectedAbility
 
 func _ready() -> void:
+	bonus_attack_speed += 0.5
+	heroClass = "ranger"
 	super()
 
 func _process(delta: float) -> void:

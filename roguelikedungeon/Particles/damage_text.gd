@@ -30,6 +30,8 @@ func _ready():
 		return
 
 func _process(delta: float) -> void:
+	if Globals.isPaused:
+		return
 	$Control/Label.set_text(str(damageAmount))
 	#$Control/Label.label_settings.Font.Color = Color(0,0,0)"modulate"
 	direction += Vector2(0, 4* delta)

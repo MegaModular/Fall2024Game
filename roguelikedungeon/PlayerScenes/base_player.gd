@@ -56,6 +56,9 @@ var bonus_omnivamp = 0.0
 
 var state = "alert" #"moving", "attacking"
 
+var lastAbilityCast = null
+var lastAbilityLevel = 1
+
 #touchables, but these values are intended behavior. Touch speed if needed.
 
 #how far the unit strays from the path (0(max) - 1(none))
@@ -97,6 +100,10 @@ func _process(delta):
 	#health regen
 	health += health_regen / 5.0 * delta
 
+func heal(amount):
+	health += amount
+	clamp(health, 0, max_health)
+
 func update_health_bar() -> void:
 	var healthBar = $Control/Control/HealthBar
 	
@@ -133,6 +140,7 @@ func update_stats() -> void:
 	ability_damage = base_ability_damage
 	cooldown_reduction = base_cooldown_reduction
 	walk_speed = base_walk_speed
+	omnivamp = base_omnivamp
 	
 	max_health += bonus_health
 	armor += bonus_armor
@@ -144,6 +152,7 @@ func update_stats() -> void:
 	ability_damage += bonus_ability_damage
 	cooldown_reduction += bonus_cooldown_reduction
 	walk_speed += bonus_walk_speed
+	omnivamp += bonus_omnivamp
 	
 	update_health_bar()
 	

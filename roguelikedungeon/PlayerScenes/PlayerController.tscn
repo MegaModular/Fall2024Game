@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b6hh0d3vpkh5p" path="res://PlayerScenes/hud.tscn" id="7_s1etp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4bjow"]
-bg_color = Color(0.6, 0.6, 0.6, 0.333333)
+bg_color = Color(0.6, 0.6, 0.6, 0.196078)
 
 [node name="Player" type="Node2D"]
 script = ExtResource("1_p034w")
@@ -26,7 +26,7 @@ position = Vector2(116, -23)
 position = Vector2(18, 70)
 
 [node name="Assassin" parent="Heroes" instance=ExtResource("5_kvtm6")]
-position = Vector2(-38, -72)
+position = Vector2(-126, -99)
 
 [node name="UI" type="CanvasLayer" parent="."]
 

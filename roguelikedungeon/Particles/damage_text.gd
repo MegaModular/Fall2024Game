@@ -37,7 +37,7 @@ func _process(delta: float) -> void:
 	direction += Vector2(0, 4* delta)
 	direction.normalized()
 	velocity = direction * speed * delta
-	position += 2 * velocity
+	position +=  velocity
 
 
 func _on_timer_timeout() -> void:

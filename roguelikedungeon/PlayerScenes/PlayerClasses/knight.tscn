@@ -1,10 +1,76 @@
-[gd_scene load_steps=3 format=3 uid="uid://d36nmqonm6to4"]
+[gd_scene load_steps=7 format=3 uid="uid://d36nmqonm6to4"]
 
 [ext_resource type="PackedScene" uid="uid://bletf0epogj4o" path="res://PlayerScenes/PlayerClasses/base_melee.tscn" id="1_g5wlx"]
 [ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/knight.gd" id="2_o6a1e"]
 
+[sub_resource type="Curve" id="Curve_joagn"]
+_data = [Vector2(0, 0.727749), 0.0, 0.0, 0, 0, Vector2(0.0653595, 0.778796), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_tfmab"]
+offsets = PackedFloat32Array(0, 0.485611, 1)
+colors = PackedColorArray(0.745739, 0.381377, 3.85046e-07, 1, 0.845864, 0.662598, 0.0714825, 1, 0.926405, 0.661494, 0.101183, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5r6e0"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_djkqe"]
+radius = 135.0
+
 [node name="Knight" instance=ExtResource("1_g5wlx")]
 script = ExtResource("2_o6a1e")
 
-[node name="Sprite2D" parent="." index="0"]
+[node name="WhirlwindParticles" type="CPUParticles2D" parent="." index="0"]
+emitting = false
+amount = 500
+speed_scale = 2.0
+emission_shape = 2
+emission_sphere_radius = 128.0
+gravity = Vector2(0, 0)
+orbit_velocity_min = 0.5
+orbit_velocity_max = 1.0
+angle_max = 90.0
+scale_amount_max = 30.0
+scale_amount_curve = SubResource("Curve_joagn")
+color = Color(0.946891, 0.592122, 0.102948, 1)
+color_initial_ramp = SubResource("Gradient_tfmab")
+hue_variation_max = 1.0
+
+[node name="Sprite2D" parent="." index="1"]
 modulate = Color(0.423651, 0.423651, 0.423651, 1)
+
+[node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
+visible = false
+layout_mode = 0
+offset_left = -46.0
+offset_top = -91.0
+offset_right = 45.0
+offset_bottom = -68.0
+theme_override_styles/background = SubResource("StyleBoxFlat_5r6e0")
+value = 50.0
+show_percentage = false
+
+[node name="AbilityTimer" type="Timer" parent="." index="12"]
+wait_time = 5.0
+one_shot = true
+
+[node name="AbilityCooldownTimer" type="Timer" parent="." index="13"]
+one_shot = true
+
+[node name="WhirlwindDamageTimer" type="Timer" parent="." index="14"]
+one_shot = true
+
+[node name="WhirlwindArea" type="Area2D" parent="." index="15"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WhirlwindArea" index="0"]
+shape = SubResource("CircleShape2D_djkqe")
+
+[connection signal="timeout" from="AbilityTimer" to="." method="_on_ability_timer_timeout"]
+[connection signal="timeout" from="WhirlwindDamageTimer" to="." method="_on_whirlwind_damage_timer_timeout"]
+[connection signal="body_entered" from="WhirlwindArea" to="." method="_on_whirlwind_area_body_entered"]
+[connection signal="body_exited" from="WhirlwindArea" to="." method="_on_whirlwind_area_body_exited"]

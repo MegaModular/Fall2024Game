@@ -100,8 +100,6 @@ func writeSkillMenu():
 		skillButtons[1].set_text(heroArrayReference[3].abilities[1])
 		skillButtons[2].set_text(heroArrayReference[3].abilities[2])
 	
-	$CheckButton
-	
 	
 	
 
@@ -113,8 +111,8 @@ func _on_resume_pressed() -> void:
 	Globals.isPaused = false
 	hideHUD()
 
-
 #Toggled on: true, num = which button toggled, heroNum = which hero editing.
+#Called whenever a button is pressed to select a skill.
 func _Hero1ButtonHandling(toggled_on: bool, num: int, heroNum : int) -> void:
 	var heroArrayReference = $"../../Heroes".get_children()
 	if toggled_on:
@@ -129,13 +127,11 @@ func _Hero1ButtonHandling(toggled_on: bool, num: int, heroNum : int) -> void:
 		if heroNum == 3:
 			skillButtons  = [$SkillMenu/Hero4/CheckButton, $SkillMenu/Hero4/CheckButton2, $SkillMenu/Hero4/CheckButton3]
 		
+		#Turns off other abilities while one is selected.
 		for i in range(3):
 			if i != num:
 				skillButtons[i].button_pressed = false
-		
-		#Resets other two buttons:
-		$CheckButton
 		#Important line, assigns selected variable.
 		heroArrayReference[heroNum].abilitySelected = heroArrayReference[heroNum].abilities[num]
 		#Debug
-		print(heroArrayReference[heroNum].abilitySelected)
+		#print(heroArrayReference[heroNum].abilitySelected)

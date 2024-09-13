@@ -75,6 +75,7 @@ text = "Inventory :D"
 label_settings = SubResource("LabelSettings_ni1nh")
 
 [node name="SkillMenu" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Panel" type="Panel" parent="SkillMenu"]
 offset_right = 960.0

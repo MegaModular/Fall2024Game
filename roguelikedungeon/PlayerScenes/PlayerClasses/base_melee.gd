@@ -4,6 +4,8 @@ extends "res://PlayerScenes/base_player.gd"
 var enemiesInHitArea = []
 var isAttacking : bool = false
 
+var disableAttack : bool = false
+
 func _ready():
 	super()
 
@@ -23,6 +25,8 @@ func _process(_delta: float) -> void:
 
 #stop, start attacking. Handles cooldown and whatnot. Animation will be added here.
 func attack():
+	if disableAttack:
+		return
 	if ableToAttack:
 		path_to(position)
 		attackMoveLocation = Vector2.ZERO

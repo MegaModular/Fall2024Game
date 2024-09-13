@@ -14,6 +14,8 @@ var AIState = "sleeping"
 @onready var playerReference = $"../../Player/Heroes"
 @onready var targetParticlesScene = preload("res://Particles/target_particles.tscn")
 
+var stunTime : float = 0.0
+
 var health
 var armor
 var magic_resist
@@ -70,7 +72,14 @@ func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
 		queue_free()
 	updateHealthBar()
 
-func _process(_delta):
+func applyStun(time : float):
+	stunTime += time
+
+func _process(delta):
+	if stunTime > 0:
+		stunTime -= delta
+		return
+	
 	if Globals.isPaused:
 		return
 	
@@ -87,6 +96,8 @@ func _process(_delta):
 var storedVelocity = Vector2.ZERO
 
 func _physics_process(_delta: float) -> void:
+	if stunTime > 0:
+		return
 		#Stores velocity if paused
 	if Globals.isPaused:
 		if storedVelocity == Vector2.ZERO:

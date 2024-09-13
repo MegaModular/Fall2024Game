@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d36nmqonm6to4"]
+[gd_scene load_steps=12 format=3 uid="uid://d36nmqonm6to4"]
 
 [ext_resource type="PackedScene" uid="uid://bletf0epogj4o" path="res://PlayerScenes/PlayerClasses/base_melee.tscn" id="1_g5wlx"]
 [ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/knight.gd" id="2_o6a1e"]
@@ -11,6 +11,20 @@ point_count = 3
 offsets = PackedFloat32Array(0, 0.485611, 1)
 colors = PackedColorArray(0.745739, 0.381377, 3.85046e-07, 1, 0.845864, 0.662598, 0.0714825, 1, 0.926405, 0.661494, 0.101183, 1)
 
+[sub_resource type="Gradient" id="Gradient_n0lqv"]
+offsets = PackedFloat32Array(0.773381, 1)
+colors = PackedColorArray(0.725341, 0.499764, 1.92523e-07, 1, 0.933333, 0.509804, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_v47wd"]
+colors = PackedColorArray(0.679711, 0.518522, 0.0712967, 1, 1, 1, 1, 1)
+
+[sub_resource type="Gradient" id="Gradient_iw2qs"]
+offsets = PackedFloat32Array(0.377698, 1)
+colors = PackedColorArray(0.845437, 0.527679, 3.85046e-07, 1, 0, 0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_s481y"]
+colors = PackedColorArray(0.737554, 0.403169, 0.0624294, 1, 0.929835, 0.864052, 0.183649, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5r6e0"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_color = Color(0, 0, 0, 1)
@@ -21,6 +35,9 @@ corner_radius_bottom_left = 3
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_djkqe"]
 radius = 135.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cm0x5"]
+radius = 200.0
 
 [node name="Knight" instance=ExtResource("1_g5wlx")]
 script = ExtResource("2_o6a1e")
@@ -41,7 +58,37 @@ color = Color(0.946891, 0.592122, 0.102948, 1)
 color_initial_ramp = SubResource("Gradient_tfmab")
 hue_variation_max = 1.0
 
-[node name="Sprite2D" parent="." index="1"]
+[node name="ChargeParticles" type="CPUParticles2D" parent="." index="1"]
+emitting = false
+amount = 200
+lifetime = 0.5
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 200.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color_ramp = SubResource("Gradient_n0lqv")
+color_initial_ramp = SubResource("Gradient_v47wd")
+
+[node name="ChargeExplosion" type="CPUParticles2D" parent="." index="2"]
+emitting = false
+amount = 500
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 0.1
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 500.0
+angle_max = 90.0
+scale_amount_min = 10.0
+scale_amount_max = 20.0
+color_ramp = SubResource("Gradient_iw2qs")
+color_initial_ramp = SubResource("Gradient_s481y")
+
+[node name="Sprite2D" parent="." index="3"]
 modulate = Color(0.423651, 0.423651, 0.423651, 1)
 
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
@@ -55,22 +102,30 @@ theme_override_styles/background = SubResource("StyleBoxFlat_5r6e0")
 value = 50.0
 show_percentage = false
 
-[node name="AbilityTimer" type="Timer" parent="." index="12"]
+[node name="AbilityTimer" type="Timer" parent="." index="14"]
 wait_time = 5.0
 one_shot = true
 
-[node name="AbilityCooldownTimer" type="Timer" parent="." index="13"]
+[node name="AbilityCooldownTimer" type="Timer" parent="." index="15"]
 one_shot = true
 
-[node name="WhirlwindDamageTimer" type="Timer" parent="." index="14"]
+[node name="WhirlwindDamageTimer" type="Timer" parent="." index="16"]
 one_shot = true
 
-[node name="WhirlwindArea" type="Area2D" parent="." index="15"]
+[node name="WhirlwindArea" type="Area2D" parent="." index="17"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WhirlwindArea" index="0"]
+visible = false
 shape = SubResource("CircleShape2D_djkqe")
+
+[node name="ChargeArea" type="Area2D" parent="." index="18"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ChargeArea" index="0"]
+shape = SubResource("CircleShape2D_cm0x5")
 
 [connection signal="timeout" from="AbilityTimer" to="." method="_on_ability_timer_timeout"]
 [connection signal="timeout" from="WhirlwindDamageTimer" to="." method="_on_whirlwind_damage_timer_timeout"]
 [connection signal="body_entered" from="WhirlwindArea" to="." method="_on_whirlwind_area_body_entered"]
 [connection signal="body_exited" from="WhirlwindArea" to="." method="_on_whirlwind_area_body_exited"]
+[connection signal="body_entered" from="ChargeArea" to="." method="_on_charge_area_body_entered"]
+[connection signal="body_exited" from="ChargeArea" to="." method="_on_charge_area_body_exited"]

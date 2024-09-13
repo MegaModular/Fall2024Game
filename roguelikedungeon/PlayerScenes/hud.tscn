@@ -96,6 +96,7 @@ layout_mode = 3
 anchors_preset = 0
 
 [node name="Label" type="Label" parent="SkillMenu/Hero1"]
+layout_mode = 0
 offset_left = 205.0
 offset_top = 241.0
 offset_right = 324.0
@@ -104,6 +105,7 @@ text = "<Type>:"
 label_settings = SubResource("LabelSettings_naod2")
 
 [node name="CheckButton" type="CheckButton" parent="SkillMenu/Hero1"]
+layout_mode = 0
 offset_left = 368.0
 offset_top = 251.0
 offset_right = 531.0
@@ -111,6 +113,7 @@ offset_bottom = 282.0
 text = "<Ability1>"
 
 [node name="CheckButton2" type="CheckButton" parent="SkillMenu/Hero1"]
+layout_mode = 0
 offset_left = 531.0
 offset_top = 251.0
 offset_right = 694.0
@@ -118,6 +121,7 @@ offset_bottom = 282.0
 text = "<Ability1>"
 
 [node name="CheckButton3" type="CheckButton" parent="SkillMenu/Hero1"]
+layout_mode = 0
 offset_left = 694.0
 offset_top = 251.0
 offset_right = 857.0
@@ -136,6 +140,7 @@ offset_top = 200.0
 offset_bottom = 200.0
 
 [node name="Label" type="Label" parent="SkillMenu/Hero2"]
+layout_mode = 0
 offset_left = 205.0
 offset_top = 241.0
 offset_right = 324.0
@@ -144,6 +149,7 @@ text = "<Type>:"
 label_settings = SubResource("LabelSettings_naod2")
 
 [node name="CheckButton" type="CheckButton" parent="SkillMenu/Hero2"]
+layout_mode = 0
 offset_left = 368.0
 offset_top = 251.0
 offset_right = 531.0
@@ -151,6 +157,7 @@ offset_bottom = 282.0
 text = "<Ability1>"
 
 [node name="CheckButton2" type="CheckButton" parent="SkillMenu/Hero2"]
+layout_mode = 0
 offset_left = 531.0
 offset_top = 251.0
 offset_right = 694.0
@@ -158,6 +165,7 @@ offset_bottom = 282.0
 text = "<Ability1>"
 
 [node name="CheckButton3" type="CheckButton" parent="SkillMenu/Hero2"]
+layout_mode = 0
 offset_left = 694.0
 offset_top = 251.0
 offset_right = 857.0
@@ -176,6 +184,7 @@ offset_top = 400.0
 offset_bottom = 400.0
 
 [node name="Label" type="Label" parent="SkillMenu/Hero3"]
+layout_mode = 0
 offset_left = 205.0
 offset_top = 241.0
 offset_right = 324.0
@@ -184,6 +193,7 @@ text = "<Type>:"
 label_settings = SubResource("LabelSettings_naod2")
 
 [node name="CheckButton" type="CheckButton" parent="SkillMenu/Hero3"]
+layout_mode = 0
 offset_left = 368.0
 offset_top = 251.0
 offset_right = 531.0
@@ -191,6 +201,7 @@ offset_bottom = 282.0
 text = "<Ability1>"
 
 [node name="CheckButton2" type="CheckButton" parent="SkillMenu/Hero3"]
+layout_mode = 0
 offset_left = 531.0
 offset_top = 251.0
 offset_right = 694.0
@@ -198,6 +209,7 @@ offset_bottom = 282.0
 text = "<Ability1>"
 
 [node name="CheckButton3" type="CheckButton" parent="SkillMenu/Hero3"]
+layout_mode = 0
 offset_left = 694.0
 offset_top = 251.0
 offset_right = 857.0
@@ -216,6 +228,7 @@ offset_top = 600.0
 offset_bottom = 600.0
 
 [node name="Label" type="Label" parent="SkillMenu/Hero4"]
+layout_mode = 0
 offset_left = 205.0
 offset_top = 241.0
 offset_right = 324.0
@@ -224,6 +237,7 @@ text = "<Type>:"
 label_settings = SubResource("LabelSettings_naod2")
 
 [node name="CheckButton" type="CheckButton" parent="SkillMenu/Hero4"]
+layout_mode = 0
 offset_left = 368.0
 offset_top = 251.0
 offset_right = 531.0
@@ -231,6 +245,7 @@ offset_bottom = 282.0
 text = "<Ability1>"
 
 [node name="CheckButton2" type="CheckButton" parent="SkillMenu/Hero4"]
+layout_mode = 0
 offset_left = 531.0
 offset_top = 251.0
 offset_right = 694.0
@@ -238,6 +253,7 @@ offset_bottom = 282.0
 text = "<Ability1>"
 
 [node name="CheckButton3" type="CheckButton" parent="SkillMenu/Hero4"]
+layout_mode = 0
 offset_left = 694.0
 offset_top = 251.0
 offset_right = 857.0

@@ -41,7 +41,9 @@ func attack():
 func performAttack(obj):
 	if is_instance_valid(obj) && enemiesInHitArea.has(obj):
 		obj.applyDamage(attack_damage, 0)
+		heal(attack_damage * omnivamp/100)
 	#print("Attack")
+	update_stats()
 	return
 
 #Melee Range detectors.

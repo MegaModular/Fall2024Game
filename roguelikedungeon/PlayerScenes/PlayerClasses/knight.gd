@@ -12,10 +12,12 @@ const abilities = ["Shield Up", "Whirlwind", "Charge"]
 #Triple move speed for 1 second, and deal 50 * level + 100% AD in an AOE around self after move speed is over.
 
 var whirlwindEIA = []
+var chargeEIA = []
 
 func _ready() -> void:
 	$WhirlwindArea/CollisionShape2D.disabled = true
-	level = 1
+	$ChargeArea/CollisionShape2D.disabled = true
+	level = 10
 	
 	heroClass = "knight"
 	super()
@@ -43,7 +45,6 @@ func whirlwind():
 	var cooldownTime = 10.0
 	var abilityDuration = 3.0
 	bonus_omnivamp += 30
-	heal(-250)
 	lastAbilityCast = abilities[1]
 	lastAbilityLevel = level
 	print("Whirlwind Cast" + str(self))
@@ -63,7 +64,23 @@ func whirlwind():
 	$AbilityTimer.start()
 
 func charge():
-	return
+	var cooldownTime = 20.0
+	var abilityDuration = 3.0
+	bonus_walk_speed += 500
+	lastAbilityCast = abilities[2]
+	lastAbilityLevel = level
+	print("Charge Cast" + str(self))
+	disableAttack = true
+	
+	$ChargeParticles.emitting = true
+	$Control/Control/AbilityDurationBar.max_value = abilityDuration
+	$Control/Control/AbilityDurationBar.visible = true
+	$ChargeArea/CollisionShape2D.disabled = false
+	cooldownTime -= cooldownTime * cooldown_reduction / 100
+	$AbilityCooldownTimer.set_wait_time(cooldownTime + abilityDuration)
+	$AbilityTimer.set_wait_time(abilityDuration)
+	update_stats()
+	$AbilityTimer.start()
 
 func applyWhirlwindDamage():
 	whirlwindEIA = cleanArray(whirlwindEIA)
@@ -72,6 +89,12 @@ func applyWhirlwindDamage():
 		heal((attack_damage * 0.5 + (5 * level) )* omnivamp/100.0)
 		update_health_bar()
 
+
+func applyChargeDamage():
+	chargeEIA = cleanArray(chargeEIA)
+	for enemy in chargeEIA:
+		enemy.applyDamage(50 * lastAbilityLevel + attack_damage, 0)
+		enemy.applyStun(4.0)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	super(delta)
@@ -111,7 +134,14 @@ func _on_ability_timer_timeout() -> void:
 		$WhirlwindParticles.emitting = false
 		bonus_omnivamp -= 30
 		update_stats()
-
+	if lastAbilityCast == abilities[2]:
+		applyChargeDamage()
+		$ChargeParticles.emitting = false
+		$ChargeExplosion.emitting = true
+		$ChargeArea/CollisionShape2D.disabled = true
+		$Control/Control/AbilityDurationBar.visible = false
+		disableAttack = false
+		bonus_walk_speed -= 500
 
 func _on_whirlwind_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
@@ -129,3 +159,14 @@ func _on_whirlwind_damage_timer_timeout() -> void:
 	applyWhirlwindDamage()
 	if !$AbilityTimer.is_stopped():
 		$WhirlwindDamageTimer.start()
+
+
+func _on_charge_area_body_entered(body: Node2D) -> void:
+	if body.is_in_group("enemy"):
+		chargeEIA = cleanArray(chargeEIA)
+		chargeEIA.append(body)
+
+func _on_charge_area_body_exited(body: Node2D) -> void:
+	if body.is_in_group("enemy"):
+		chargeEIA = cleanArray(chargeEIA)
+		chargeEIA.erase(body)

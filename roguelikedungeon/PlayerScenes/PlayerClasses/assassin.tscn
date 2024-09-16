@@ -1,10 +1,85 @@
-[gd_scene load_steps=3 format=3 uid="uid://bkci0e8fvkuuv"]
+[gd_scene load_steps=8 format=3 uid="uid://bkci0e8fvkuuv"]
 
 [ext_resource type="PackedScene" uid="uid://bletf0epogj4o" path="res://PlayerScenes/PlayerClasses/base_melee.tscn" id="1_ornrs"]
 [ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/assassin.gd" id="2_ke84i"]
 
+[sub_resource type="Gradient" id="Gradient_x68t4"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_7h82p"]
+colors = PackedColorArray(0.795326, 0.312864, 1.92523e-07, 1, 0.68621, 0.541641, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_loe30"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qbkql"]
+radius = 750.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f74hb"]
+radius = 150.0
+
 [node name="Assassin" instance=ExtResource("1_ornrs")]
 script = ExtResource("2_ke84i")
 
-[node name="Sprite2D" parent="." index="0"]
+[node name="BombExplosion" type="CPUParticles2D" parent="." index="0"]
+emitting = false
+amount = 2000
+one_shot = true
+explosiveness = 1.0
+randomness = 0.5
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 1000.0
+scale_amount_min = 5.0
+scale_amount_max = 10.0
+color_ramp = SubResource("Gradient_x68t4")
+color_initial_ramp = SubResource("Gradient_7h82p")
+
+[node name="Sprite2D" parent="." index="1"]
 modulate = Color(1, 0.27605, 0.193061, 1)
+
+[node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
+visible = false
+offset_left = -46.0
+offset_top = -91.0
+offset_right = 45.0
+offset_bottom = -68.0
+theme_override_styles/background = SubResource("StyleBoxFlat_loe30")
+value = 50.0
+show_percentage = false
+
+[node name="AbilityCooldownTimer" type="Timer" parent="." index="12"]
+one_shot = true
+
+[node name="BombFuse" type="Timer" parent="." index="13"]
+one_shot = true
+
+[node name="BombRange" type="Area2D" parent="." index="14"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BombRange" index="0"]
+visible = false
+shape = SubResource("CircleShape2D_qbkql")
+
+[node name="BombExplosionRange" type="Area2D" parent="." index="15"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BombExplosionRange" index="0"]
+visible = false
+shape = SubResource("CircleShape2D_f74hb")
+
+[node name="BombRaycast" type="RayCast2D" parent="." index="16"]
+collision_mask = 2
+
+[node name="AbilityTimer" type="Timer" parent="." index="17"]
+one_shot = true
+
+[connection signal="timeout" from="BombFuse" to="." method="_on_bomb_fuse_timeout"]
+[connection signal="mouse_entered" from="BombRange" to="." method="_on_bomb_range_mouse_entered"]
+[connection signal="mouse_exited" from="BombRange" to="." method="_on_bomb_range_mouse_exited"]
+[connection signal="body_entered" from="BombExplosionRange" to="." method="_on_bomb_explosion_range_body_entered"]
+[connection signal="timeout" from="AbilityTimer" to="." method="_on_ability_timer_timeout"]

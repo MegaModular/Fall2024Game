@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://c6usa6m2uqkk8"]
+[gd_scene load_steps=5 format=3 uid="uid://c6usa6m2uqkk8"]
 
 [ext_resource type="PackedScene" uid="uid://xhvsoi8u2qop" path="res://PlayerScenes/PlayerController.tscn" id="1_3tqey"]
 [ext_resource type="PackedScene" uid="uid://dkvup5cg1gfm6" path="res://EnemyScenes/base_enemy.tscn" id="2_rcpvw"]
@@ -10,6 +10,9 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(-1766, -393, -1735, 630
 parsed_geometry_type = 0
 agent_radius = 25.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uqlx4"]
+size = Vector2(50, 50)
+
 [node name="Main" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_3tqey")]
@@ -18,6 +21,7 @@ agent_radius = 25.0
 navigation_polygon = SubResource("NavigationPolygon_behh2")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="NavigationRegion2D"]
+collision_layer = 3
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="NavigationRegion2D/StaticBody2D"]
 radius = 20.0
@@ -75,3 +79,16 @@ position = Vector2(-1378, 405)
 position = Vector2(-1100, 401)
 
 [node name="ParticleHolder" type="Node" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(-404, -230)
+collision_layer = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_uqlx4")
+
+[node name="ColorRect" type="ColorRect" parent="StaticBody2D"]
+offset_left = -25.0
+offset_top = -24.0
+offset_right = 25.0
+offset_bottom = 26.0

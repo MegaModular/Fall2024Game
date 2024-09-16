@@ -226,7 +226,7 @@ func _physics_process(_delta: float):
 	else:
 		state = "alert"
 		set_linear_damp(slowDownDamping)
-		if !potentialTargets.is_empty():
+		if !potentialTargets.is_empty() && attackTarget == null:
 			attackTarget = get_closest_unit(potentialTargets)
 			state = "attacking"
 	#if target exists and is in range, stop and start attacking

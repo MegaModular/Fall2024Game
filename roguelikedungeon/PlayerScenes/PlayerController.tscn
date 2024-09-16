@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://xhvsoi8u2qop"]
+[gd_scene load_steps=10 format=3 uid="uid://xhvsoi8u2qop"]
 
 [ext_resource type="Script" path="res://PlayerScenes/player_controller.gd" id="1_p034w"]
 [ext_resource type="PackedScene" uid="uid://1n70ubct7d8g" path="res://PlayerScenes/Camera.tscn" id="1_v34qf"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c8cpyjhenccen" path="res://PlayerScenes/PlayerClasses/mage.tscn" id="4_7dt83"]
 [ext_resource type="PackedScene" uid="uid://bkci0e8fvkuuv" path="res://PlayerScenes/PlayerClasses/assassin.tscn" id="5_kvtm6"]
 [ext_resource type="PackedScene" uid="uid://b6hh0d3vpkh5p" path="res://PlayerScenes/hud.tscn" id="7_s1etp"]
+[ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="8_n3xv1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4bjow"]
 bg_color = Color(0.6, 0.6, 0.6, 0.196078)
@@ -38,3 +39,13 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(91, 48)
 
 [node name="HUD" parent="Camera" instance=ExtResource("7_s1etp")]
+
+[node name="ClassProjectiles" type="Node" parent="."]
+
+[node name="Bomb" type="Sprite2D" parent="ClassProjectiles"]
+visible = false
+modulate = Color(0, 0, 0, 1)
+rotation = 0.785398
+scale = Vector2(0.1, 0.125)
+skew = 0.785398
+texture = ExtResource("8_n3xv1")

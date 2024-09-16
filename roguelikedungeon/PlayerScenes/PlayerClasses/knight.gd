@@ -98,20 +98,21 @@ func applyChargeDamage():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	super(delta)
-
-	#Ability Input Handling
-	if abilitySelected == abilities[0]:
-		if Input.is_action_just_pressed("q") && $AbilityCooldownTimer.is_stopped():
-			shieldsUp()
-			$AbilityCooldownTimer.start()
-	if abilitySelected == abilities[1]:
-		if Input.is_action_just_pressed("q") && $AbilityCooldownTimer.is_stopped():
-			whirlwind()
-			$AbilityCooldownTimer.start()
-	if abilitySelected == abilities[2]:
-		if Input.is_action_just_pressed("q") && $AbilityCooldownTimer.is_stopped():
-			charge()
-			$AbilityCooldownTimer.start()
+	
+	if isSelected:
+		#Ability Input Handling
+		if abilitySelected == abilities[0]:
+			if Input.is_action_just_pressed("q") && $AbilityCooldownTimer.is_stopped():
+				shieldsUp()
+				$AbilityCooldownTimer.start()
+		if abilitySelected == abilities[1]:
+			if Input.is_action_just_pressed("q") && $AbilityCooldownTimer.is_stopped():
+				whirlwind()
+				$AbilityCooldownTimer.start()
+		if abilitySelected == abilities[2]:
+			if Input.is_action_just_pressed("q") && $AbilityCooldownTimer.is_stopped():
+				charge()
+				$AbilityCooldownTimer.start()
 	
 	if !$AbilityTimer.is_stopped():
 		$Control/Control/AbilityDurationBar.value = $AbilityTimer.time_left

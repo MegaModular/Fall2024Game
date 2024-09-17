@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3 uid="uid://dr1rdju0xw7yq"]
+
+[ext_resource type="Script" path="res://MiscellaneousScenes/fire_area.gd" id="1_qeb1l"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7x5b8"]
+radius = 200.0
+
+[sub_resource type="Gradient" id="Gradient_vedmf"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_ofw5w"]
+colors = PackedColorArray(0.7527, 0.603604, 0, 1, 0.807159, 0.347707, 0, 1)
+
+[sub_resource type="Gradient" id="Gradient_rw3jc"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_3gktj"]
+colors = PackedColorArray(0.795326, 0.312864, 1.92523e-07, 1, 0.68621, 0.541641, 0, 1)
+
+[node name="FireArea" type="Area2D"]
+script = ExtResource("1_qeb1l")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_7x5b8")
+
+[node name="Flame" type="CPUParticles2D" parent="."]
+scale = Vector2(2, 2)
+amount = 1000
+lifetime = 2.0
+emission_shape = 1
+emission_sphere_radius = 100.0
+spread = 90.0
+gravity = Vector2(0, -100)
+initial_velocity_max = 50.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color_ramp = SubResource("Gradient_vedmf")
+color_initial_ramp = SubResource("Gradient_ofw5w")
+
+[node name="TickTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[node name="BombExplosion" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 2000
+one_shot = true
+explosiveness = 1.0
+randomness = 0.5
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 500.0
+linear_accel_min = -200.0
+scale_amount_min = 5.0
+scale_amount_max = 10.0
+color_ramp = SubResource("Gradient_rw3jc")
+color_initial_ramp = SubResource("Gradient_3gktj")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="TickTimer" to="." method="_on_tick_timer_timeout"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]

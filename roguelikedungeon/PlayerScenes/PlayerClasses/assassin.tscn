@@ -46,6 +46,7 @@ modulate = Color(1, 0.27605, 0.193061, 1)
 
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
 visible = false
+layout_mode = 0
 offset_left = -46.0
 offset_top = -91.0
 offset_right = 45.0

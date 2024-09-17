@@ -2,7 +2,7 @@ extends Node2D
 
 
 var isPlayerOwned : bool = true
-var projectileType = "Arrow" #"Magic"
+var projectileType = "Arrow" #"Magic", #"FireArrow"
 
 var direction = Vector2.RIGHT
 var speed : float = 1000.0
@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
-		playerReference._on_contact(body, self.position)
+		playerReference._on_contact(body, self.position, projectileType)
 		queue_free()
 	if body.is_in_group("unit"):
 		return

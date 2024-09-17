@@ -2,11 +2,11 @@ extends "res://PlayerScenes/PlayerClasses/base_ranged.gd"
 
 var x
 
-const abilities = ["RapidFire", "PowerShot", "Explosive Arrows"]
+const abilities = ["RapidFire", "PowerShot", "FireArrow"]
+
+@onready var fireAreaReference = preload("res://MiscellaneousScenes/fire_area.tscn")
 
 var selectedAbility
-
-var isArrowExplosive : bool = false
 
 var explosiveEIA = []
 
@@ -29,12 +29,11 @@ func _process(delta: float) -> void:
 			if Input.is_action_just_pressed("e") && $AbilityCooldownTimer.is_stopped():
 				powerShot()
 				$AbilityCooldownTimer.start()
-		if abilitySelected == abilities[2] && !isArrowExplosive:
-			explosiveArrows()
-		elif isArrowExplosive && abilitySelected != abilities[2]:
-			bonus_attack_speed += 100.0
-			isArrowExplosive = false
-			update_stats()
+		if abilitySelected == abilities[2]:
+			if Input.is_action_just_pressed("e") && $AbilityCooldownTimer.is_stopped():
+				fireArrow()
+				$AbilityCooldownTimer.start()
+
 	
 	if !$AbilityTimer.is_stopped():
 		$Control/Control/AbilityDurationBar.value = $AbilityTimer.time_left
@@ -59,12 +58,16 @@ func powerShot():
 	return
 
 #passive ability
-func explosiveArrows():
+func fireArrow():
 	#Both because this ability takes multiple seconds to expire.
-	$AbilityTimer.set_wait_time(1.0)
-	$AbilityTimer.start()
+	var cooldownTime = 15.0
 	lastAbilityCast = abilities[2]
-	isArrowExplosive = true
+	var basicArrow = Globals.projectileReference.instantiate()
+	$AbilityCooldownTimer.set_wait_time(cooldownTime)
+	basicArrow.direction = (get_global_mouse_position() - position).normalized()
+	basicArrow.projectileType = "FireArrow"
+	basicArrow.position = position
+	$Projectiles.add_child(basicArrow)
 
 func shoot():
 	#print("This function was called from the ranger scene.")
@@ -75,15 +78,17 @@ func shoot():
 	$Projectiles.add_child(basicArrow)
 
 #Change Explosive Arrow to do burn damage over time.
-func _on_contact(body, arrowPos):
+func _on_contact(body, arrowPos, arrowType):
 	#print("Hey busta" + str(body))
-	if isArrowExplosive:
-		$ExplosiveArrowArea.global_position = arrowPos
-		for enemy in explosiveEIA:
-			enemy.applyDamage(attack_damage * (1 + (0.1*level)), 0)
-		return
+	if arrowType == "FireArrow":
+		var fireArea = fireAreaReference.instantiate()
+		fireArea.position = arrowPos
+		fireArea.duration = 5
+		fireArea.fireDamage = 0.5 + (0.25 * level) * attack_damage
+		fireArea.damageType = 0
+		$"../../ClassProjectiles".add_child(fireArea)
+	
 	body.applyDamage(attack_damage, 0)
-
 
 func _on_ability_timer_timeout() -> void:
 	if lastAbilityCast == abilities[0]:
@@ -95,15 +100,3 @@ func _on_ability_timer_timeout() -> void:
 		update_stats()
 		lastAbilityLevel = level
 	#Whirlwind
-
-
-func _on_explosive_arrow_area_body_entered(body: Node2D) -> void:
-	explosiveEIA = cleanArray(explosiveEIA)
-	if body.is_in_group("enemy"):
-		explosiveEIA.append(body)
-
-
-func _on_explosive_arrow_area_body_exited(body: Node2D) -> void:
-	explosiveEIA = cleanArray(explosiveEIA)
-	if explosiveEIA.has(body):
-		explosiveEIA.erase(body)

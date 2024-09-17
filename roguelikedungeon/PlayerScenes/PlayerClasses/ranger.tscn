@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqbl4gswcy0ut"]
+[gd_scene load_steps=4 format=3 uid="uid://bqbl4gswcy0ut"]
 
 [ext_resource type="PackedScene" uid="uid://c0bophwd8cvxk" path="res://PlayerScenes/PlayerClasses/base_ranged.tscn" id="1_u12cg"]
 [ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/ranger.gd" id="2_ric26"]
@@ -10,9 +10,6 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_50i33"]
-radius = 100.0
 
 [node name="Ranger" instance=ExtResource("1_u12cg")]
 position = Vector2(-1, 0)
@@ -46,11 +43,4 @@ one_shot = true
 [node name="AbilityCooldownTimer" type="Timer" parent="." index="12"]
 one_shot = true
 
-[node name="ExplosiveArrowArea" type="Area2D" parent="." index="13"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosiveArrowArea" index="0"]
-shape = SubResource("CircleShape2D_50i33")
-
 [connection signal="timeout" from="AbilityTimer" to="." method="_on_ability_timer_timeout"]
-[connection signal="body_entered" from="ExplosiveArrowArea" to="." method="_on_explosive_arrow_area_body_entered"]
-[connection signal="body_exited" from="ExplosiveArrowArea" to="." method="_on_explosive_arrow_area_body_exited"]

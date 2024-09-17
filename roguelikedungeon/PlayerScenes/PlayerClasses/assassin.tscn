@@ -9,7 +9,7 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 [sub_resource type="Gradient" id="Gradient_7h82p"]
 colors = PackedColorArray(0.795326, 0.312864, 1.92523e-07, 1, 0.68621, 0.541641, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_loe30"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bbf87"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 3
@@ -50,7 +50,7 @@ offset_left = -46.0
 offset_top = -91.0
 offset_right = 45.0
 offset_bottom = -68.0
-theme_override_styles/background = SubResource("StyleBoxFlat_loe30")
+theme_override_styles/background = SubResource("StyleBoxFlat_bbf87")
 value = 50.0
 show_percentage = false
 

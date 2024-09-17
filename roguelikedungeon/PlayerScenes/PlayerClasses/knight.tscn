@@ -25,7 +25,7 @@ colors = PackedColorArray(0.845437, 0.527679, 3.85046e-07, 1, 0, 0, 0, 0)
 [sub_resource type="Gradient" id="Gradient_s481y"]
 colors = PackedColorArray(0.737554, 0.403169, 0.0624294, 1, 0.929835, 0.864052, 0.183649, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5r6e0"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dx2gv"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 3
@@ -93,12 +93,11 @@ modulate = Color(0.423651, 0.423651, 0.423651, 1)
 
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
 visible = false
-layout_mode = 0
 offset_left = -46.0
 offset_top = -91.0
 offset_right = 45.0
 offset_bottom = -68.0
-theme_override_styles/background = SubResource("StyleBoxFlat_5r6e0")
+theme_override_styles/background = SubResource("StyleBoxFlat_dx2gv")
 value = 50.0
 show_percentage = false
 

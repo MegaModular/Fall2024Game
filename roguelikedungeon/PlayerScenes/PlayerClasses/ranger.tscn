@@ -1,7 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqbl4gswcy0ut"]
+[gd_scene load_steps=5 format=3 uid="uid://bqbl4gswcy0ut"]
 
 [ext_resource type="PackedScene" uid="uid://c0bophwd8cvxk" path="res://PlayerScenes/PlayerClasses/base_ranged.tscn" id="1_u12cg"]
 [ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/ranger.gd" id="2_ric26"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ym2bm"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_50i33"]
+radius = 100.0
 
 [node name="Ranger" instance=ExtResource("1_u12cg")]
 position = Vector2(-1, 0)
@@ -13,7 +24,33 @@ modulate = Color(0, 0.299281, 1.44392e-07, 1)
 [node name="CollisionShape2D" parent="." index="1"]
 visible = false
 
+[node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
+visible = false
+layout_mode = 0
+offset_left = -46.0
+offset_top = -91.0
+offset_right = 45.0
+offset_bottom = -68.0
+theme_override_styles/background = SubResource("StyleBoxFlat_ym2bm")
+value = 50.0
+show_percentage = false
+
 [node name="CollisionShape2D" parent="MouseHitbox" index="0"]
 visible = false
 
 [node name="Projectiles" type="Node" parent="." index="10"]
+
+[node name="AbilityTimer" type="Timer" parent="." index="11"]
+one_shot = true
+
+[node name="AbilityCooldownTimer" type="Timer" parent="." index="12"]
+one_shot = true
+
+[node name="ExplosiveArrowArea" type="Area2D" parent="." index="13"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosiveArrowArea" index="0"]
+shape = SubResource("CircleShape2D_50i33")
+
+[connection signal="timeout" from="AbilityTimer" to="." method="_on_ability_timer_timeout"]
+[connection signal="body_entered" from="ExplosiveArrowArea" to="." method="_on_explosive_arrow_area_body_entered"]
+[connection signal="body_exited" from="ExplosiveArrowArea" to="." method="_on_explosive_arrow_area_body_exited"]

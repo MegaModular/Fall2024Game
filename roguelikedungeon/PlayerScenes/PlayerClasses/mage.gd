@@ -19,6 +19,6 @@ func shoot():
 	basicMagicAttack.position = position
 	$Projectiles.add_child(basicMagicAttack)
 
-func _on_contact(body):
+func _on_contact(body, _arrowPos):
 	#print("Hey busta" + str(body))
 	body.applyDamage(attack_damage + (ability_damage/100), 1)

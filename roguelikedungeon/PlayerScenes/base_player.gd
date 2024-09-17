@@ -154,6 +154,7 @@ func update_stats() -> void:
 	walk_speed += bonus_walk_speed
 	omnivamp += bonus_omnivamp
 	
+	attack_speed = clamp(attack_speed, 0.25, 5)
 	update_health_bar()
 	
 	$AttackCooldownTimer.set_wait_time(1.0 / attack_speed)

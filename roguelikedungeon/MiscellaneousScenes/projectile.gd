@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
-		playerReference._on_contact(body)
+		playerReference._on_contact(body, self.position)
 		queue_free()
 	if body.is_in_group("unit"):
 		return

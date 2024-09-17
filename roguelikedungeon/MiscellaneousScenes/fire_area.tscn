@@ -25,7 +25,7 @@ shape = SubResource("CircleShape2D_7x5b8")
 
 [node name="Flame" type="CPUParticles2D" parent="."]
 scale = Vector2(2, 2)
-amount = 1000
+amount = 5000
 lifetime = 2.0
 emission_shape = 1
 emission_sphere_radius = 100.0

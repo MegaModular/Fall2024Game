@@ -5,6 +5,7 @@ var x
 const abilities = ["RapidFire", "PowerShot", "FireArrow"]
 
 @onready var fireAreaReference = preload("res://MiscellaneousScenes/fire_area.tscn")
+@onready var powerShotParticleReference = preload("res://Particles/power_shot_hit_particles.tscn")
 
 var selectedAbility
 
@@ -54,12 +55,21 @@ func rapidFire():
 	lastAbilityCast = abilities[0]
 	lastAbilityLevel = level
 
-func powerShot():
-	return
 
-#passive ability
+#Waits for a second, then shoots the arrow and it has recoil.
+func powerShot():
+	var cooldownTime = 10.0
+	lastAbilityCast = abilities[1]
+	var basicArrow = Globals.projectileReference.instantiate()
+	$AbilityCooldownTimer.set_wait_time(cooldownTime)
+	basicArrow.direction = (get_global_mouse_position() - position).normalized()
+	basicArrow.projectileType = "PowerShot"
+	basicArrow.position = position
+	await get_tree().create_timer(0.5).timeout
+	$Projectiles.add_child(basicArrow)
+	apply_impulse(-basicArrow.direction * 500)
+
 func fireArrow():
-	#Both because this ability takes multiple seconds to expire.
 	var cooldownTime = 15.0
 	lastAbilityCast = abilities[2]
 	var basicArrow = Globals.projectileReference.instantiate()
@@ -87,14 +97,23 @@ func _on_contact(body, arrowPos, arrowType):
 		fireArea.fireDamage = 0.5 + (0.25 * level) * attack_damage
 		fireArea.damageType = 0
 		$"../../ClassProjectiles".add_child(fireArea)
-	
+	if arrowType == "PowerShot":
+		body.applyDamage(2 * attack_damage + 50 * level, 0)
+		var powerShotParticles = powerShotParticleReference.instantiate()
+		powerShotParticles.position = arrowPos
+		$"../../ClassProjectiles".add_child(powerShotParticles)
+		return
 	body.applyDamage(attack_damage, 0)
 
 func _on_ability_timer_timeout() -> void:
+	#Rapidfire
 	if lastAbilityCast == abilities[0]:
 		bonus_attack_speed -= 0.5 * level
 		$Control/Control/AbilityDurationBar.visible = false
 		update_stats()
+	if lastAbilityCast == abilities[1]:
+		return
+	#Fire arrow
 	if lastAbilityCast == abilities[2]:
 		bonus_attack_speed -= 100.0
 		update_stats()

@@ -1,10 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://cuiq5fgedjtd6"]
+[gd_scene load_steps=7 format=3 uid="uid://cuiq5fgedjtd6"]
 
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_c436q"]
 [ext_resource type="Script" path="res://MiscellaneousScenes/projectile.gd" id="1_rfxdc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1wkrp"]
 size = Vector2(40, 10)
+
+[sub_resource type="Gradient" id="Gradient_4njn2"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_jp48b"]
+colors = PackedColorArray(0, 0.861217, 0.150687, 1, 0.922304, 0.812275, 0, 1)
+
+[sub_resource type="Gradient" id="Gradient_apexg"]
+colors = PackedColorArray(0.794439, 0.303497, 3.85046e-07, 1, 0.712521, 0.566388, 0, 1)
 
 [node name="Projectile" type="Area2D"]
 script = ExtResource("1_rfxdc")
@@ -20,6 +29,30 @@ shape = SubResource("RectangleShape2D_1wkrp")
 [node name="Timer" type="Timer" parent="."]
 wait_time = 10.0
 autostart = true
+
+[node name="PowerShotParticles" type="CPUParticles2D" parent="."]
+position = Vector2(16, 0)
+amount = 200
+lifetime = 0.5
+gravity = Vector2(200, 0)
+initial_velocity_max = 200.0
+angle_max = 90.0
+scale_amount_min = 2.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_4njn2")
+color_initial_ramp = SubResource("Gradient_jp48b")
+
+[node name="FireArrowParticles" type="CPUParticles2D" parent="."]
+position = Vector2(16, 0)
+amount = 200
+lifetime = 0.5
+gravity = Vector2(200, 0)
+initial_velocity_max = 200.0
+angle_max = 90.0
+scale_amount_min = 2.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_4njn2")
+color_initial_ramp = SubResource("Gradient_apexg")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

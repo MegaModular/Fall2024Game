@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://iupp3bookvcu"]
+[gd_scene load_steps=5 format=3 uid="uid://iupp3bookvcu"]
 
 [ext_resource type="Script" path="res://MiscellaneousScenes/chain_lightning.gd" id="1_0o6e3"]
-[ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="2_fjkyj"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3afs7"]
 
@@ -16,12 +15,6 @@ script = ExtResource("1_0o6e3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_3afs7")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(1, 1, 0, 1)
-scale = Vector2(0.1, 0.1)
-skew = 0.349066
-texture = ExtResource("2_fjkyj")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 amount = 500

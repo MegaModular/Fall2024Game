@@ -23,15 +23,28 @@ func _input(event: InputEvent) -> void:
 	if event is not InputEventMouse:
 		$VisionRaycast.target_position = get_local_mouse_position()
 
+var burnGuyPos : Vector2
+
 func _process(delta: float) -> void:
 	super(delta)
-	if $BurnParticles.emitting == true && is_instance_valid(burningGuy):
-		$BurnParticles.global_position = burningGuy.global_position
-		$BurningGuyExplosionRange.global_position = burningGuy.global_position
+	#Burns guy whos on fire. Checks to see if hes still alive and if not just makes the shit explode anyway.
+	if is_instance_valid(burningGuy):
+		burnGuyPos = burningGuy.global_position
+	if $BurnParticles.emitting == true:
+		$BombExplosion.global_position = burnGuyPos
+		$BurnParticles.global_position = burnGuyPos
+		$BurningGuyExplosionRange.global_position = burnGuyPos
 		tickTime += 1
+		if !is_instance_valid(burningGuy):
+			$LivingBombBurnDuration.stop()
+			$BurnParticles.emitting = false
+			_on_living_bomb_burn_duration_timeout()
+			return
 		if tickTime >= 30:
 			burningGuy.applyDamage(0.05 * ability_damage, 1)
 			tickTime = 0
+
+	
 	if isSelected:
 		#Ability Input Handling
 		if abilitySelected == abilities[0]:
@@ -103,8 +116,8 @@ func _on_contact(body, _arrowPos, arrowType):
 	body.applyDamage(attack_damage + (ability_damage/100), 1)
 
 func on_lightning_hit(body):
-	body.applyDamage(25 * level + (ability_damage), 1)
-	body.applyStun(1)
+	body.applyDamage((25 * level) + (ability_damage), 1)
+	body.applyStun(5)
 	var lp = lightningParticlesScene.instantiate()
 	lp.position = body.position
 	$"../../ClassProjectiles".add_child(lp)
@@ -120,7 +133,6 @@ func _on_ability_range_mouse_exited() -> void:
 
 func _on_living_bomb_burn_duration_timeout() -> void:
 	$BurnParticles.emitting = false
-	$BombExplosion.global_position = burningGuy.global_position
 	$BombExplosion.emitting = true
 	burningGuy = null
 	await get_tree().create_timer(0.2).timeout

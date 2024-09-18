@@ -1,12 +1,11 @@
 extends Area2D
 
-var speed = 1500
+var speed = 1000
 
 var targets = []
 
 var target = null
 
-var impulseTicks = 0
 var index = 0
 var velocity = Vector2.ZERO
 
@@ -29,8 +28,6 @@ func _process(delta: float) -> void:
 		target = targets[index]
 	if !targets.is_empty() && is_instance_valid(target):
 		var dir = (target.global_position - global_position).normalized()
-		#if impulseTicks <= 20:
-			#velocity += randDirectionVector * 1000 * delta
 		velocity += dir * speed * delta
 		velocity = lerp(velocity, Vector2.ZERO, 0.25)
 		global_position += velocity
@@ -39,11 +36,8 @@ func _process(delta: float) -> void:
 		$CPUParticles2D.emitting = false
 
 func _on_body_entered(body: Node2D) -> void:
-	print(targets)
 	if body.is_in_group("enemy"):
 		get_parent().on_lightning_hit(body)
-		impulseTicks = 0
-		randDirectionVector = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 		if body == target:
 			target = null
 			velocity = Vector2.ZERO

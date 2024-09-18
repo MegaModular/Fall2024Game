@@ -19,17 +19,14 @@ func _ready():
 		return
 	queue_free()
 
-#ChainLightnign needs to move independent of player and reference it.
+#Spaghetti Code. Was kind of a fever dream coding it lmfao idk what it does exactly
 func _process(delta: float) -> void:
 	#Target selection
 	targets = Globals.cleanArray(targets)
 	if index >= targets.size():
 		index = 0
-	
 	if target == null && !targets.is_empty():
 		target = targets[index]
-
-	
 	if !targets.is_empty() && is_instance_valid(target):
 		var dir = (target.global_position - global_position).normalized()
 		#if impulseTicks <= 20:

@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://cn7rsfv1uu4pw"]
+
+[ext_resource type="Script" path="res://Particles/particles.gd" id="1_m1uqr"]
+
+[sub_resource type="Gradient" id="Gradient_y0m5l"]
+offsets = PackedFloat32Array(0.58, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_nby4a"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 1, 1, 1)
+
+[node name="CPUParticles2D" type="CPUParticles2D"]
+emitting = false
+amount = 50
+one_shot = true
+speed_scale = 2.0
+explosiveness = 0.85
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 500.0
+scale_amount_min = 5.0
+scale_amount_max = 10.0
+color_ramp = SubResource("Gradient_y0m5l")
+color_initial_ramp = SubResource("Gradient_nby4a")
+script = ExtResource("1_m1uqr")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

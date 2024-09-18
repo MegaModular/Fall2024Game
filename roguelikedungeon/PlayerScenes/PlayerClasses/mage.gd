@@ -5,6 +5,7 @@ const abilities = ["Blizzard", "Living Bomb", "Chain Lightning"]
 
 @onready var blizzardScene = preload("res://MiscellaneousScenes/blizzard_area.tscn")
 @onready var chainLightningScene = preload("res://MiscellaneousScenes/chain_lightning.tscn")
+@onready var lightningParticlesScene = preload("res://Particles/electric_damage_particles.tscn")
 
 var mouseInRange : bool = false
 
@@ -104,6 +105,9 @@ func _on_contact(body, _arrowPos, arrowType):
 func on_lightning_hit(body):
 	body.applyDamage(25 * level + (ability_damage), 1)
 	body.applyStun(1)
+	var lp = lightningParticlesScene.instantiate()
+	lp.position = body.position
+	$"../../ClassProjectiles".add_child(lp)
 	#print(body)
 
 

@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://moxbctw426cc"]
+
+[ext_resource type="Script" path="res://MiscellaneousScenes/fire_area.gd" id="1_plvjc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bjwwp"]
+radius = 250.0
+
+[sub_resource type="Gradient" id="Gradient_h5knh"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_q8u24"]
+colors = PackedColorArray(0.392312, 0.701705, 1, 1, 1, 1, 1, 1)
+
+[node name="BlizzardArea" type="Area2D"]
+script = ExtResource("1_plvjc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_bjwwp")
+
+[node name="Flame" type="CPUParticles2D" parent="."]
+scale = Vector2(2, 2)
+amount = 2000
+emission_shape = 2
+emission_sphere_radius = 125.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_max = 100.0
+orbit_velocity_max = 0.5
+scale_amount_min = 2.0
+scale_amount_max = 10.0
+color_ramp = SubResource("Gradient_h5knh")
+color_initial_ramp = SubResource("Gradient_q8u24")
+
+[node name="BombExplosion" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 1
+
+[node name="DeathTimer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="TickTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]
+[connection signal="timeout" from="TickTimer" to="." method="_on_tick_timer_timeout"]

@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://iupp3bookvcu"]
+
+[ext_resource type="Script" path="res://MiscellaneousScenes/chain_lightning.gd" id="1_0o6e3"]
+[ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="2_fjkyj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3afs7"]
+
+[sub_resource type="Gradient" id="Gradient_m3nwa"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_24xtg"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 1, 1, 1)
+
+[node name="ChainLightning" type="Area2D"]
+script = ExtResource("1_0o6e3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_3afs7")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 0, 1)
+scale = Vector2(0.1, 0.1)
+skew = 0.349066
+texture = ExtResource("2_fjkyj")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 500
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 200.0
+linear_accel_min = -200.0
+linear_accel_max = -50.0
+damping_max = 1000.0
+angle_max = 90.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color_ramp = SubResource("Gradient_m3nwa")
+color_initial_ramp = SubResource("Gradient_24xtg")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

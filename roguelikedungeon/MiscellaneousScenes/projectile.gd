@@ -5,7 +5,7 @@ extends Area2D
 #Flys straight. at speed pixels/s
 
 var isPlayerOwned : bool = true
-var projectileType = "Arrow" #"Magic", #"FireArrow", #"PowerShot
+var projectileType = "Arrow" #"Magic", #"FireArrow", #"PowerShot, #"LivingBomb"
 
 var direction = Vector2.RIGHT
 var speed : float = 1000.0

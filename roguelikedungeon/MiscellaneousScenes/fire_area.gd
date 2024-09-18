@@ -46,6 +46,8 @@ func _on_tick_timer_timeout() -> void:
 		return
 	for body in enemiesInArea:
 		body.applyDamage(fireDamage, damageType)
+		if damageType == 1:
+			body.applyStun(0.25)
 
 func _on_death_timer_timeout() -> void:
 	queue_free()

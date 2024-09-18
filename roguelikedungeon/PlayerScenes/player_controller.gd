@@ -14,7 +14,7 @@ var end = Vector2()
 var endV = Vector2()
 var isDragging = false
 
-#FUCK YOU STOP THROWING THIS FUCKING ERROR THESE ARE USED\
+#FUCK YOU STOP THROWING THIS FUCKING ERROR THESE ARE USED
 signal area_selected
 signal start_move_selection
 

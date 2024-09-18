@@ -1,7 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://c8cpyjhenccen"]
+[gd_scene load_steps=9 format=3 uid="uid://c8cpyjhenccen"]
 
 [ext_resource type="PackedScene" uid="uid://c0bophwd8cvxk" path="res://PlayerScenes/PlayerClasses/base_ranged.tscn" id="1_u0jo5"]
 [ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/mage.gd" id="2_ot0oa"]
+
+[sub_resource type="Gradient" id="Gradient_kfbym"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_x7scb"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.917903, 0.289973, 0, 1, 0.779276, 0.704908, 3.85046e-07, 1, 0.898105, 3.85046e-07, 0.503344, 1)
+
+[sub_resource type="Gradient" id="Gradient_6gt1p"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_toctx"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -11,17 +21,54 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_xxpf0"]
+radius = 750.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l0sou"]
+radius = 300.0
+
 [node name="Mage" instance=ExtResource("1_u0jo5")]
 script = ExtResource("2_ot0oa")
 
-[node name="Sprite2D" parent="." index="0"]
+[node name="BurnParticles" type="CPUParticles2D" parent="." index="0"]
+emitting = false
+amount = 100
+emission_shape = 3
+emission_rect_extents = Vector2(40, 40)
+direction = Vector2(0, -1)
+gravity = Vector2(0, 100)
+initial_velocity_min = 50.0
+initial_velocity_max = 200.0
+angle_max = 90.0
+scale_amount_min = 5.0
+scale_amount_max = 10.0
+color_ramp = SubResource("Gradient_kfbym")
+color_initial_ramp = SubResource("Gradient_x7scb")
+
+[node name="BombExplosion" type="CPUParticles2D" parent="." index="1"]
+emitting = false
+amount = 2000
+one_shot = true
+explosiveness = 1.0
+randomness = 0.5
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 1000.0
+scale_amount_min = 5.0
+scale_amount_max = 10.0
+color_ramp = SubResource("Gradient_6gt1p")
+color_initial_ramp = SubResource("Gradient_x7scb")
+
+[node name="Sprite2D" parent="." index="2"]
 modulate = Color(0.776179, 0.0144764, 0.536674, 1)
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="3"]
 visible = false
 
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
 visible = false
+layout_mode = 0
 offset_left = -46.0
 offset_top = -91.0
 offset_right = 45.0
@@ -33,4 +80,31 @@ show_percentage = false
 [node name="CollisionShape2D" parent="MouseHitbox" index="0"]
 visible = false
 
-[node name="Projectiles" type="Node" parent="." index="10"]
+[node name="Projectiles" type="Node" parent="." index="12"]
+
+[node name="AbilityCooldownTimer" type="Timer" parent="." index="13"]
+one_shot = true
+
+[node name="AbilityRange" type="Area2D" parent="." index="14"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AbilityRange" index="0"]
+visible = false
+shape = SubResource("CircleShape2D_xxpf0")
+
+[node name="LivingBombBurnDuration" type="Timer" parent="." index="15"]
+wait_time = 3.0
+one_shot = true
+
+[node name="BurningGuyExplosionRange" type="Area2D" parent="." index="16"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BurningGuyExplosionRange" index="0"]
+shape = SubResource("CircleShape2D_l0sou")
+
+[node name="VisionRaycast" type="RayCast2D" parent="." index="17"]
+collision_mask = 3
+
+[connection signal="mouse_entered" from="AbilityRange" to="." method="_on_ability_range_mouse_entered"]
+[connection signal="mouse_exited" from="AbilityRange" to="." method="_on_ability_range_mouse_exited"]
+[connection signal="timeout" from="LivingBombBurnDuration" to="." method="_on_living_bomb_burn_duration_timeout"]
+[connection signal="body_entered" from="BurningGuyExplosionRange" to="." method="_on_burning_guy_explosion_range_body_entered"]
+[connection signal="body_exited" from="BurningGuyExplosionRange" to="." method="_on_burning_guy_explosion_range_body_exited"]

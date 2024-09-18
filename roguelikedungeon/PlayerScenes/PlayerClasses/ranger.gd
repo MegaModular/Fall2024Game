@@ -61,6 +61,7 @@ func powerShot():
 	var cooldownTime = 10.0
 	lastAbilityCast = abilities[1]
 	var basicArrow = Globals.projectileReference.instantiate()
+	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
 	basicArrow.direction = (get_global_mouse_position() - position).normalized()
 	basicArrow.projectileType = "PowerShot"
@@ -73,6 +74,7 @@ func fireArrow():
 	var cooldownTime = 15.0
 	lastAbilityCast = abilities[2]
 	var basicArrow = Globals.projectileReference.instantiate()
+	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
 	basicArrow.direction = (get_global_mouse_position() - position).normalized()
 	basicArrow.projectileType = "FireArrow"

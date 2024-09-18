@@ -39,3 +39,4 @@ color_ramp = SubResource("Gradient_m3nwa")
 color_initial_ramp = SubResource("Gradient_24xtg")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="finished" from="CPUParticles2D" to="." method="_on_cpu_particles_2d_finished"]

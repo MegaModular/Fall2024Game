@@ -66,6 +66,12 @@ modulate = Color(0.776179, 0.0144764, 0.536674, 1)
 [node name="CollisionShape2D" parent="." index="3"]
 visible = false
 
+[node name="NavAgent" parent="." index="5"]
+path_postprocessing = 0
+avoidance_enabled = false
+radius = 10.0
+neighbor_distance = 500.0
+
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
 visible = false
 layout_mode = 0
@@ -98,6 +104,7 @@ one_shot = true
 [node name="BurningGuyExplosionRange" type="Area2D" parent="." index="16"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BurningGuyExplosionRange" index="0"]
+visible = false
 shape = SubResource("CircleShape2D_l0sou")
 
 [node name="VisionRaycast" type="RayCast2D" parent="." index="17"]

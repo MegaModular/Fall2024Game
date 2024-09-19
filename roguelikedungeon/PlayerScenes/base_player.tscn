@@ -53,6 +53,10 @@ position = Vector2(0, 43)
 scale = Vector2(1, 20)
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
+path_postprocessing = 1
+avoidance_enabled = true
+radius = 20.0
+neighbor_distance = 100.0
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

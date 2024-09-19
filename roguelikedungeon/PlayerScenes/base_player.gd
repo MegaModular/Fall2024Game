@@ -85,7 +85,7 @@ func _ready():
 	navigation_agent.simplify_path = true
 	navigation_agent.path_desired_distance = 5.0
 	navigation_agent.target_desired_distance = 30.0
-	#navigation_agent.debug_enabled = true
+	navigation_agent.debug_enabled = true
 	navigation_agent.set_path_max_distance(2.0)
 
 func _process(delta):

@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://c6usa6m2uqkk8"]
+[gd_scene load_steps=6 format=3 uid="uid://c6usa6m2uqkk8"]
 
 [ext_resource type="PackedScene" uid="uid://xhvsoi8u2qop" path="res://PlayerScenes/PlayerController.tscn" id="1_3tqey"]
 [ext_resource type="PackedScene" uid="uid://dkvup5cg1gfm6" path="res://EnemyScenes/base_enemy.tscn" id="2_rcpvw"]
+[ext_resource type="PackedScene" uid="uid://bl7uu5sbe75da" path="res://MiscellaneousScenes/dungeon_generator.tscn" id="3_sbe70"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_behh2"]
 vertices = PackedVector2Array(512.523, 427.398, 658.539, 91.4531, 935.539, -382.648, 993.922, 501.57, 425.352, 766.578, 45.8828, 0, 179.93, -84.9531, 254.547, 5.78906, 39.7266, 22.9375, 213.953, -402.992, 453.789, -72.7891, 192.133, -179.094, 191.547, 481.43, -1710.69, 606.742, -394.781, 361.211, 360.102, 37.0625, 307.781, 98.6797, 174.844, 239.703, 22.9375, 39.7266, 39.7266, -22.9375, -90.2891, -186.688, 22.9375, -39.7266, 0, -45.8828, -22.9375, -39.7266, -1740.24, -368.438, -330.938, 113.859, -77.8281, -230.883, -39.7266, -22.9375, -45.8828, 0, -143.219, 252.656, -39.7266, 22.9375, -22.9375, 39.7266, 0, 45.8828, 397.742, 185.703, 273.078, 302.461)
@@ -92,3 +93,5 @@ offset_left = -25.0
 offset_top = -24.0
 offset_right = 25.0
 offset_bottom = 26.0
+
+[node name="DungeonGenerator" parent="." instance=ExtResource("3_sbe70")]

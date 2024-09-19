@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqynkb4rc5yau"]
+
+[ext_resource type="Script" path="res://MiscellaneousScenes/room.gd" id="1_egjpm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_62fyx"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.856639, 8.66354e-07, 0.485891, 1)
+
+[node name="Room" type="Node2D"]
+script = ExtResource("1_egjpm")
+
+[node name="Panel" type="Panel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_62fyx")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -45.0
+offset_top = -45.0
+offset_right = -5.0
+offset_bottom = -22.0
+text = "tadsfasdfas"

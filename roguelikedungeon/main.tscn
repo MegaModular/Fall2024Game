@@ -30,8 +30,6 @@ sources/0 = SubResource("TileSetAtlasSource_k2c2b")
 
 [node name="Main" type="Node2D"]
 
-[node name="Player" parent="." instance=ExtResource("1_3tqey")]
-
 [node name="Enemies" type="Node" parent="."]
 
 [node name="Enemy" parent="Enemies" instance=ExtResource("2_rcpvw")]
@@ -78,6 +76,8 @@ position = Vector2(-1378, 405)
 
 [node name="Enemy15" parent="Enemies" instance=ExtResource("2_rcpvw")]
 position = Vector2(-1100, 401)
+
+[node name="Player" parent="." instance=ExtResource("1_3tqey")]
 
 [node name="ParticleHolder" type="Node" parent="."]
 

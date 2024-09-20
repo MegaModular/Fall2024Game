@@ -21,7 +21,7 @@ corner_radius_bottom_left = 3
 radius = 750.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_f74hb"]
-radius = 150.0
+radius = 250.0
 
 [node name="Assassin" instance=ExtResource("1_ornrs")]
 script = ExtResource("2_ke84i")
@@ -43,6 +43,9 @@ color_initial_ramp = SubResource("Gradient_7h82p")
 
 [node name="Sprite2D" parent="." index="1"]
 modulate = Color(1, 0.27605, 0.193061, 1)
+
+[node name="NavAgent" parent="." index="4"]
+radius = 20.0
 
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
 visible = false
@@ -70,7 +73,6 @@ shape = SubResource("CircleShape2D_qbkql")
 [node name="BombExplosionRange" type="Area2D" parent="." index="15"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BombExplosionRange" index="0"]
-visible = false
 shape = SubResource("CircleShape2D_f74hb")
 
 [node name="BombRaycast" type="RayCast2D" parent="." index="16"]

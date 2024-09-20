@@ -4,11 +4,11 @@ var roomSize : Vector2i
 var roomCoords : Vector2i
 var connections = []
 
-func addConnection(newRoom : Node2D) -> void:
+func addConnection(newRoom : Vector2i) -> void:
 	connections.append(newRoom)
-	$Label.text = str(connections)
+	#$Label.text = str(connections)
 
-func removeConnection(newRoom : Node2D)-> void:
+func removeConnection(newRoom : Vector2i)-> void:
 	if connections.has(newRoom):
 		connections.erase(newRoom)
 

@@ -3,6 +3,7 @@ extends Node2D
 var roomSize : Vector2i
 var roomCoords : Vector2i
 var connections = []
+var isConnectedToCenter : bool = false
 
 func addConnection(newRoom : Vector2i) -> void:
 	connections.append(newRoom)

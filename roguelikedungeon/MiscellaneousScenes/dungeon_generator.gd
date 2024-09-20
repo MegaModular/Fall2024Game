@@ -1,17 +1,25 @@
 extends Node2D
 
-var startingRoomSize = 6
+var startingRoomSize = 8
 
-var minRoomSize = 6
-var maxRoomSize = 16
+var minRoomSize = 8
+var maxRoomSize = 20
 
+#Chance for a non-important connection to be generated from 0-1
+var roomConnectionChance = 0.4
+
+#Size of generated paths
+var pathSize = 2
+
+#Minimum distance a room can generate from another room
 var minimumGenDistance = 20 
 
-var minAutoConnectDistance = 25
+#Minimum Distance for a room to generate to automatically connect to another
+var minAutoConnectDistance = 60
 
-var numberOfRooms = 15
-
-const MAXDUNGEONSIZE = 50
+var numberOfRooms = 25
+#double the size is the generated area.
+const MAXDUNGEONSIZE = 75
 
 #Make array of random values, which the vector2 distance between two rooms is no greater than 10.
 #The dungeon will be a new scene in which "room" has different values, and randomly generates
@@ -23,6 +31,7 @@ const MAXDUNGEONSIZE = 50
 var lastRoomPos = Vector2.ZERO
 
 var generated_dungeon_graph = []
+var endRooms = []
 
 func _ready():
 	randomize()
@@ -50,6 +59,7 @@ func generate_dungeon_graph(numRooms: int):
 	x.roomCoords = Vector2i(0, 0)
 	x.roomSize = Vector2i(1, 1)
 	x.isConnectedToCenter = true
+	x.connectionDistanceToCenter = 0
 	add_child(x)
 	dungeon.append(x)
 	
@@ -60,7 +70,7 @@ func generate_dungeon_graph(numRooms: int):
 		var roomLocX = randi_range(-MAXDUNGEONSIZE, MAXDUNGEONSIZE)
 		var roomLocY = randi_range(-MAXDUNGEONSIZE, MAXDUNGEONSIZE)
 		
-		while isRoomTooClose(dungeon, Vector2i(roomLocX, roomLocY)) == false && isRoomTooFar(dungeon, Vector2i(roomLocX, roomLocY)):
+		while isRoomTooClose(dungeon, Vector2i(roomLocX, roomLocY)) == false && isRoomTooFar(dungeon, Vector2i(roomLocX, roomLocY)) == false:
 			roomLocX = randi_range(-MAXDUNGEONSIZE, MAXDUNGEONSIZE)
 			roomLocY = randi_range(-MAXDUNGEONSIZE, MAXDUNGEONSIZE)
 		
@@ -72,14 +82,15 @@ func generate_dungeon_graph(numRooms: int):
 		#add connections, and each room will only have one connection as such that only one hallway will generate.
 		for room in dungeon:
 			if room.roomCoords.distance_to(x.roomCoords) < minAutoConnectDistance:
-				x.addConnection(room.roomCoords)
-				if room.isConnectedToCenter:
+				if room.isConnectedToCenter && x.isConnectedToCenter == false:
 					x.isConnectedToCenter = true
+					x.centerConnection = room.roomCoords
+					x.connectionDistanceToCenter = room.connectionDistanceToCenter + 1
+				else:
+					x.addConnection(room.roomCoords)
 		
 		add_child(x)
 		dungeon.append(x)
-		
-		#dungeon[dungeon.size()-1].toString()
 	
 	return dungeon
 
@@ -90,8 +101,9 @@ func isRoomTooClose(dungeonArr, newRoomPos : Vector2i) -> bool:
 	return true
 
 func isRoomTooFar(dungeonArr, newRoomPos : Vector2i) -> bool:
+	var isTrue = false
 	for room in dungeonArr:
-		if newRoomPos.distance_to(room.roomCoords) > minAutoConnectDistance:
+		if newRoomPos.distance_to(room.roomCoords) < minAutoConnectDistance:
 			return false
 	return true
 
@@ -100,8 +112,11 @@ func carveOutPath(dungeonArr):
 	#Make walker walk and carve from each connection
 	for room in dungeonArr:
 		room.toString()
+		if room.centerConnection != null:
+			carveSinglePath(room.roomCoords, room.centerConnection)
 		for connection in room.connections:
-			carveSinglePath(room.roomCoords, connection)
+			if randf_range(0, 10) < roomConnectionChance:
+				carveSinglePath(room.roomCoords, connection)
 	
 
 func carveSinglePath(startingPos, endPos) -> void:
@@ -114,8 +129,8 @@ func carveSinglePath(startingPos, endPos) -> void:
 		if startingPos.x < endPos.x:
 			startingPos.x += 1
 			$TileMapLayer.set_cell(startingPos, 0,Vector2i(0, 1))
-		for i in range(-1, 1):
-			for j in range(-1, 1):
+		for i in range(-pathSize, pathSize-1):
+			for j in range(-pathSize, pathSize-1):
 				$TileMapLayer.set_cell(startingPos + Vector2i(i,j), 0, Vector2i(0,1))
 	while(startingPos.y != endPos.y):
 		print(startingPos)
@@ -125,8 +140,8 @@ func carveSinglePath(startingPos, endPos) -> void:
 		if startingPos.y < endPos.y:
 			startingPos.y += 1
 			$TileMapLayer.set_cell(startingPos, 0,Vector2i(0, 1))
-		for i in range(-1, 1):
-			for j in range(-1, 1):
+		for i in range(-pathSize, pathSize-1):
+			for j in range(-pathSize, pathSize-1):
 				$TileMapLayer.set_cell(startingPos + Vector2i(i,j), 0, Vector2i(0,1))
 	return
 
@@ -136,8 +151,11 @@ func drawRooms(dungeonArr):
 	for room in dungeonArr:
 		if room.isConnectedToCenter == false:
 			dungeonArr.erase(room)
-		$TileMapLayer.set_cell(room.roomCoords, 0,Vector2i(0, 1))
-		#for x in room.roomSize.x:
-		#	for y in room.roomSize.y:
-		#		$TileMapLayer.set_cell(room.roomCoords + Vector2i(x,y), 0,Vector2i(0, 1))
+			$TileMapLayer.set_cell(room.roomCoords, 0,Vector2i(0, 1))
+		else:
+			$TileMapLayer.set_cell(room.roomCoords, 0,Vector2i(1, 0))
+		for x in room.roomSize.x:
+			for y in room.roomSize.y:
+				var offset = Vector2i(room.roomSize.x /2, room.roomSize.y / 2)
+				$TileMapLayer.set_cell(room.roomCoords + Vector2i(x,y) - offset, 0,Vector2i(0, 1))
 	return

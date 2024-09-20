@@ -4,6 +4,9 @@ var roomSize : Vector2i
 var roomCoords : Vector2i
 var connections = []
 var isConnectedToCenter : bool = false
+var centerConnection : Vector2i
+var connectionDistanceToCenter : int
+
 
 func addConnection(newRoom : Vector2i) -> void:
 	connections.append(newRoom)

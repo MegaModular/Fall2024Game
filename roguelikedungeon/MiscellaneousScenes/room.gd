@@ -18,4 +18,5 @@ func removeConnection(newRoom : Vector2i)-> void:
 
 func toString():
 	print("Room: " + str(self) + "\nSize = " + str(roomSize) + "\nCoordinates: "+ str(roomCoords)+"\nConnections: " + str(connections))
+	print("Connection To Center: " + str(centerConnection) + ", Distance = " + str(connectionDistanceToCenter))
 	return

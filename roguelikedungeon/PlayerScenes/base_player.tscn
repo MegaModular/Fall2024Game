@@ -54,6 +54,7 @@ scale = Vector2(1, 20)
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
 path_postprocessing = 1
+avoidance_enabled = true
 debug_enabled = true
 
 [node name="Control" type="Control" parent="."]

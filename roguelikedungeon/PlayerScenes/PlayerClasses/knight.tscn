@@ -92,6 +92,7 @@ color_initial_ramp = SubResource("Gradient_s481y")
 modulate = Color(0.423651, 0.423651, 0.423651, 1)
 
 [node name="NavAgent" parent="." index="6"]
+avoidance_enabled = false
 neighbor_distance = 100.0
 time_horizon_obstacles = 1.0
 

@@ -67,6 +67,7 @@ modulate = Color(0.776179, 0.0144764, 0.536674, 1)
 visible = false
 
 [node name="NavAgent" parent="." index="5"]
+avoidance_enabled = false
 neighbor_distance = 100.0
 time_horizon_obstacles = 1.0
 

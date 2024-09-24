@@ -5,7 +5,7 @@ var minRoomSize = 12
 var maxRoomSize = 25
 
 #Chance for a non-important connection to be generated from 0-1
-var roomConnectionChance = 0.1
+var roomConnectionChance = 0.2
 
 #Size of generated paths
 var pathSize = 2
@@ -38,6 +38,7 @@ var generated_dungeon_graph = []
 var potentialInterestRooms = []
 #Rooms that should not be far away from the center and minimal connections to. Good place for important things.
 var endRooms = []
+#If endroom is empty, then we have to randomly place the exit / rewards around the map.
 
 func _ready():
 	randomize()
@@ -186,8 +187,8 @@ func drawRooms(dungeonArr):
 	return
 
 #Due to how I coded it, loop rooms have to be generated after everything else. This function does that.
-func drawLoopRooms(loopRooms):
-	for room in loopRooms:
+func drawLoopRooms(aloopRooms):
+	for room in aloopRooms:
 		drawLoopRoom(room)
 
 #these functions generate various types of rooms.

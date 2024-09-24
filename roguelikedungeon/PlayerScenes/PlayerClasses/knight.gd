@@ -143,6 +143,7 @@ func _on_ability_timer_timeout() -> void:
 		$Control/Control/AbilityDurationBar.visible = false
 		disableAttack = false
 		bonus_walk_speed -= 500
+		update_stats()
 
 func _on_whirlwind_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):

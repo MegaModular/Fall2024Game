@@ -20,10 +20,10 @@ modulate = Color(0, 0.299281, 1.44392e-07, 1)
 
 [node name="CollisionShape2D" parent="." index="1"]
 visible = false
+modulate = Color(1, 1, 1, 1)
 
 [node name="NavAgent" parent="." index="3"]
 avoidance_enabled = false
-neighbor_distance = 100.0
 time_horizon_obstacles = 1.0
 
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
@@ -47,5 +47,10 @@ one_shot = true
 
 [node name="AbilityCooldownTimer" type="Timer" parent="." index="12"]
 one_shot = true
+
+[node name="PointLight2D" parent="." index="13"]
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 1
+shadow_filter_smooth = 2.0
 
 [connection signal="timeout" from="AbilityTimer" to="." method="_on_ability_timer_timeout"]

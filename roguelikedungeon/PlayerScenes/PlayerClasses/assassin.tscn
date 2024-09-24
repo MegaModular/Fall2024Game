@@ -44,9 +44,12 @@ color_initial_ramp = SubResource("Gradient_7h82p")
 [node name="Sprite2D" parent="." index="1"]
 modulate = Color(1, 0.27605, 0.193061, 1)
 
+[node name="CollisionShape2D" parent="." index="2"]
+position = Vector2(0, 0)
+scale = Vector2(1, 1)
+
 [node name="NavAgent" parent="." index="4"]
 avoidance_enabled = false
-neighbor_distance = 100.0
 time_horizon_obstacles = 1.0
 
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
@@ -59,6 +62,9 @@ offset_bottom = -68.0
 theme_override_styles/background = SubResource("StyleBoxFlat_bbf87")
 value = 50.0
 show_percentage = false
+
+[node name="Label" parent="." index="7"]
+visible = true
 
 [node name="AbilityCooldownTimer" type="Timer" parent="." index="12"]
 one_shot = true
@@ -82,6 +88,12 @@ collision_mask = 2
 
 [node name="AbilityTimer" type="Timer" parent="." index="17"]
 one_shot = true
+
+[node name="PointLight2D" parent="." index="18"]
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 1)
+shadow_filter = 1
+shadow_filter_smooth = 2.0
 
 [connection signal="timeout" from="BombFuse" to="." method="_on_bomb_fuse_timeout"]
 [connection signal="mouse_entered" from="BombRange" to="." method="_on_bomb_range_mouse_entered"]

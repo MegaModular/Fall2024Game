@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dkvup5cg1gfm6"]
+[gd_scene load_steps=9 format=3 uid="uid://dkvup5cg1gfm6"]
 
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_m6vlh"]
 [ext_resource type="Script" path="res://EnemyScenes/base_enemy.gd" id="1_ylkj4"]
@@ -25,13 +25,22 @@ corner_radius_top_left = 3
 corner_radius_bottom_left = 3
 anti_aliasing_size = 0.01
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_st4gf"]
+radius = 800.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8arfb"]
+radius = 100.0
+
 [node name="Enemy" type="RigidBody2D" groups=["enemy"]]
+collision_layer = 7
+collision_mask = 7
 mass = 5.0
 lock_rotation = true
 linear_damp = 2.0
 script = ExtResource("1_ylkj4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_j7qsb")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -40,10 +49,14 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_m6vlh")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_postprocessing = 1
+avoidance_enabled = true
+max_neighbors = 5
 
 [node name="MouseDetection" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MouseDetection"]
+visible = false
 shape = SubResource("CircleShape2D_ykwv8")
 
 [node name="Control" type="Control" parent="."]
@@ -63,5 +76,25 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_bdx3t")
 value = 50.0
 show_percentage = false
 
+[node name="DetectRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectRange"]
+visible = false
+shape = SubResource("CircleShape2D_st4gf")
+
+[node name="AttackRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
+shape = SubResource("CircleShape2D_8arfb")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -33.0
+offset_top = -58.0
+offset_right = 7.0
+offset_bottom = -35.0
+
 [connection signal="mouse_shape_entered" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_entered"]
 [connection signal="mouse_shape_exited" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_exited"]
+[connection signal="body_entered" from="DetectRange" to="." method="_on_detect_range_body_entered"]
+[connection signal="body_entered" from="AttackRange" to="." method="_on_attack_range_body_entered"]
+[connection signal="body_exited" from="AttackRange" to="." method="_on_attack_range_body_exited"]

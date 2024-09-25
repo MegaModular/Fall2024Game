@@ -116,7 +116,7 @@ shape = SubResource("CircleShape2D_u3oda")
 one_shot = true
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-energy = 0.2
+energy = 0.5
 range_item_cull_mask = 3
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 1)

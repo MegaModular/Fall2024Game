@@ -19,8 +19,7 @@ var bombEIA = []
 @onready var bombReference = $"../../ClassProjectiles/Bomb"
 
 func _ready() -> void:
-	bonus_attack_damage += 100
-	level = 10
+	level = 1
 	heroClass = "assassin"
 	$BombExplosionRange/CollisionShape2D.disabled = true
 	super()

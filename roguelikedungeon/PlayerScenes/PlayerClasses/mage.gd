@@ -85,6 +85,8 @@ func chainLightning():
 		cl.targets = burnGuyEIA
 		$AbilityCooldownTimer.start()
 		add_child(cl)
+		return
+	$AbilityCooldownTimer.set_wait_time(1)
 
 func livingBomb():
 	var cooldownTime = 10.0

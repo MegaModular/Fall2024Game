@@ -17,7 +17,6 @@ var chargeEIA = []
 func _ready() -> void:
 	$WhirlwindArea/CollisionShape2D.disabled = true
 	$ChargeArea/CollisionShape2D.disabled = true
-	level = 10
 	
 	heroClass = "knight"
 	super()

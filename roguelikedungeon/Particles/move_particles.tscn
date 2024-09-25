@@ -6,6 +6,7 @@
 colors = PackedColorArray(0.15231, 0.482163, 1, 1, 0.125216, 0.307163, 0.775984, 0)
 
 [node name="MoveParticles" type="CPUParticles2D"]
+z_index = 1
 emitting = false
 amount = 1000
 lifetime = 0.25

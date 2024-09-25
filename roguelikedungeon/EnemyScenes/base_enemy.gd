@@ -1,11 +1,16 @@
 extends RigidBody2D
 
+#Do target selection here, then make the base melee child and base range child. 
+#Then, be able to derive new classes from each, with varying stats and whatnot.
+#These will be able to damage player too, but not from this script.
+
+
 var AIState = "sleeping"
 
 @export var level = 1
 
 #Game Variables
-@export var base_health = 500.0
+@export var base_health = 200.0
 @export var base_armor = 20.0
 @export var base_magic_resist = 20.0
 @export var base_dodge_chance = 10.0
@@ -27,6 +32,16 @@ var mouseInArea = false
 var direction = Vector2.ZERO
 var velocity
 
+var framesToMakeDecision = 60
+
+var target = null
+var targetInRange : bool = false
+var potentialTargets = []
+var targetsInRange = []
+
+
+
+
 func _ready():
 	#print(playerReference.get_children())
 	walk_speed = base_speed
@@ -36,6 +51,7 @@ func _ready():
 	dodge_chance = base_dodge_chance
 	updateHealthBar()
 
+#Make this target player if hit.
 func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
 	var text = Globals.damageTextReference.instantiate()
 	var x = randf_range(0,1)
@@ -76,14 +92,17 @@ func applyStun(time : float):
 	stunTime += time
 
 func _process(delta):
+	
+	$Label.set_text(str(target) + str(targetInRange))
 	if stunTime > 0:
 		stunTime -= delta
 		return
 	
+	
 	if Globals.isPaused:
 		return
 	
-	#Target Selection Code
+	#Target Selection Code, from player.
 	if Input.is_action_just_pressed("rmb") && mouseInArea:
 		for hero in playerReference.get_children():
 			hero.tryToTarget(self)
@@ -112,7 +131,7 @@ func _physics_process(_delta: float) -> void:
 	
 	direction = Vector2(1, 0)
 	velocity = direction * walk_speed
-	apply_force(velocity)
+	apply_force(velocity * 0)
 
 #Manual Targeting.
 func _on_mouse_detection_mouse_shape_entered(_shape_idx: int) -> void:
@@ -144,3 +163,27 @@ func updateHealthBar():
 
 # Apply it as a theme override for the fill part
 	healthBar.add_theme_stylebox_override("fill", fill_stylebox)
+
+
+func _on_detect_range_body_entered(body: Node2D) -> void:
+	if body.is_in_group("unit"):
+		print("Player Detected")
+		if !is_instance_valid(target):
+			target = body
+		potentialTargets.append(body)
+
+func _on_attack_range_body_entered(body: Node2D) -> void:
+	if potentialTargets.has(body):
+		print("Body detected In Range")
+		targetsInRange.append(body)
+		if !targetInRange:
+			targetInRange = true
+			target = body
+
+func _on_attack_range_body_exited(body: Node2D) -> void:
+	if target == body:
+		targetInRange = false
+		if !targetsInRange.is_empty() && is_instance_valid(targetsInRange[0]):
+			target = targetsInRange[0]
+	if potentialTargets.has(body):
+		targetsInRange.erase(body)

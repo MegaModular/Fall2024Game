@@ -1,5 +1,7 @@
 extends Node2D
 
+const TILE_SIZE = 64
+
 var startingRoomSize = 8
 var minRoomSize = 12
 var maxRoomSize = 25
@@ -16,9 +18,20 @@ var minimumGenDistance = 30
 #Minimum Distance for a room to generate to automatically connect to another
 var minAutoConnectDistance = 80
 
-var numberOfRooms = 25
+#100 - double monster density
+var additionalMonsterDensity = 0
+
+#S - 8
+#M - 10
+#L - 15
+#XL - 25
+#XXL - 40
+#XXXL - 60
+var numberOfRooms = 10
 #double the size is the generated area.
-const MAXDUNGEONSIZE = 100
+#S-L: 75
+#XL-XXXL - 120
+const MAXDUNGEONSIZE = 75
 
 #lower, faster. Don't use number less than 2.
 var crossRoomSize = 3
@@ -29,6 +42,7 @@ var crossRoomSize = 3
 #distance of one another.
 
 @onready var roomScene = preload("res://MiscellaneousScenes/room.tscn")
+@onready var enemySpawnerScene = preload("res://EnemyScenes/enemy_spawner_instance.tscn")
 
 var lastRoomPos = Vector2.ZERO
 
@@ -55,7 +69,9 @@ func _ready():
 	#Generate Rooms
 	#carveSinglePath(Vector2(0,0), Vector2(-10,10))
 	generate_dungeon(numberOfRooms)
+	
 	print(endRooms)
+	print(potentialInterestRooms)
 
 #Function that calls functions in order. Generates the rooms first, then overrides with a path
 #ensuring that a viable path will always generate.
@@ -65,6 +81,7 @@ func generate_dungeon(numRooms: int) -> void:
 	carveOutPath(generated_dungeon_graph)
 	drawLoopRooms(loopRooms)
 	markSpecialRooms(generated_dungeon_graph)
+	populateRooms()
 
 #Makes the dungeon itself in the dungeon[] array. Adds the respective connections that are required.
 func generate_dungeon_graph(numRooms: int):
@@ -289,3 +306,15 @@ func markSpecialRooms(dungeonArr):
 					
 				
 			$TileMapLayer.set_cell(room.roomCoords, 0, Vector2i(1, 0))
+
+#Adds chests/ enemy spawners to each dungeon room.
+func populateRooms():
+	var cells = $TileMapLayer.get_used_cells_by_id(0, Vector2i(0, 1), -1)
+	for cell in cells:
+		if cell.distance_to(Vector2i(0,0)) > 15:
+			if randf_range(0, 1) < 0.005 + (0.005 * additionalMonsterDensity/100):
+				var enemySpawner = enemySpawnerScene.instantiate()
+				enemySpawner.position = $TileMapLayer.map_to_local(cell)
+				add_child(enemySpawner)
+	
+	return

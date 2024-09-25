@@ -17,17 +17,17 @@ script = ExtResource("1_p034w")
 
 [node name="Heroes" type="Node" parent="."]
 
-[node name="Ranger" parent="Heroes" instance=ExtResource("3_dpvkd")]
-position = Vector2(-117, 45)
-
-[node name="Mage" parent="Heroes" instance=ExtResource("4_7dt83")]
-position = Vector2(116, -23)
-
 [node name="Knight" parent="Heroes" instance=ExtResource("3_kgvpd")]
 position = Vector2(18, 70)
 
 [node name="Assassin" parent="Heroes" instance=ExtResource("5_kvtm6")]
 position = Vector2(-126, -99)
+
+[node name="Ranger" parent="Heroes" instance=ExtResource("3_dpvkd")]
+position = Vector2(-117, 45)
+
+[node name="Mage" parent="Heroes" instance=ExtResource("4_7dt83")]
+position = Vector2(116, -23)
 
 [node name="UI" type="CanvasLayer" parent="."]
 

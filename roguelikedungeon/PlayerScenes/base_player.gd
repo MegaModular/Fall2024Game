@@ -65,6 +65,9 @@ var lastAbilityLevel = 1
 @export var pathHardness = 0.75
 var slowDownDamping = 5.0
 
+#Used if the character is ranged to set the $Vision.
+
+
 @export var isSelected : bool = false
 var mouseInArea : bool = false
 
@@ -79,6 +82,10 @@ var potentialTargets = []
 var attackMoveLocation = Vector2.ZERO
 var ableToAttack = true
 
+var isDead : bool = false
+
+var frameCount = 0
+
 func _ready():
 	update_stats()
 	$State.text = state
@@ -92,8 +99,8 @@ func _process(delta):
 	if Globals.isPaused:
 		return
 	selectionLogic()
-	$Label.set_text("Target = " +  str(attackTarget) + "Ability Selected : "+ abilitySelected)
-	$"State".text = state + " Targets : " + str(potentialTargets.size()) + " attackMoveLoc = " + str(attackMoveLocation)
+	$Label.set_text("Target = " +  str(attackTarget))
+	$"State".text = state 
 
 	update_health_bar()
 	
@@ -182,6 +189,7 @@ var recentlyUnpaused : bool = false
 
 func _physics_process(_delta: float):
 	#Stores velocity if paused
+	frameCount += 1
 	if Globals.isPaused:
 		recentlyUnpaused = true
 		if storedVelocity == Vector2.ZERO:
@@ -199,7 +207,6 @@ func _physics_process(_delta: float):
 		if $AttackCooldownTimer.is_paused():
 			$AttackCooldownTimer.set_paused(false)
 		recentlyUnpaused = false
-	
 	
 	#if attack-moving, attack Enemy as they enter range.
 	if attackMoveLocation != Vector2.ZERO:

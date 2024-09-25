@@ -65,10 +65,8 @@ modulate = Color(0.776179, 0.0144764, 0.536674, 1)
 
 [node name="CollisionShape2D" parent="." index="3"]
 visible = false
-modulate = Color(1, 1, 1, 1)
 
 [node name="NavAgent" parent="." index="5"]
-avoidance_enabled = false
 time_horizon_obstacles = 1.0
 
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
@@ -107,12 +105,14 @@ visible = false
 shape = SubResource("CircleShape2D_l0sou")
 
 [node name="VisionRaycast" type="RayCast2D" parent="." index="17"]
-collision_mask = 3
+collision_mask = 8
 
 [node name="PointLight2D" parent="." index="18"]
-shadow_color = Color(0, 0, 0, 1)
 shadow_filter = 1
 shadow_filter_smooth = 2.0
+
+[node name="Vision" parent="." index="19"]
+collision_mask = 4
 
 [connection signal="mouse_entered" from="AbilityRange" to="." method="_on_ability_range_mouse_entered"]
 [connection signal="mouse_exited" from="AbilityRange" to="." method="_on_ability_range_mouse_exited"]

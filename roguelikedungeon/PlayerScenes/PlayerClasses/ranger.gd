@@ -12,7 +12,7 @@ var selectedAbility
 var explosiveEIA = []
 
 func _ready() -> void:
-	level = 10
+	level = 1
 	bonus_attack_speed += 0.5
 	heroClass = "ranger"
 	super()

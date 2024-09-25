@@ -6,14 +6,14 @@
 
 [node name="Main" type="Node2D"]
 
+[node name="ParticleHolder" type="Node" parent="."]
+
 [node name="Enemies" type="Node" parent="."]
 
 [node name="Enemy" parent="Enemies" instance=ExtResource("2_rcpvw")]
 position = Vector2(-443, -67)
 
 [node name="Player" parent="." instance=ExtResource("1_3tqey")]
-
-[node name="ParticleHolder" type="Node" parent="."]
 
 [node name="DungeonGenerator" parent="." instance=ExtResource("3_sbe70")]
 

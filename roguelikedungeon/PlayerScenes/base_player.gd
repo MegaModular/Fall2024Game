@@ -25,7 +25,7 @@ extends RigidBody2D
 #base cooldown reduction for ability. Max 50 (0.5)
 @export var base_cooldown_reduction = 0.0
 #Walk speed
-@export var base_walk_speed = 350.0
+@export var base_walk_speed = 200.0
 #lifesteal
 @export var base_omnivamp = 0.0
 
@@ -86,6 +86,8 @@ var isDead : bool = false
 
 var frameCount = 0
 
+var moveOrder = 0
+
 func _ready():
 	update_stats()
 	$State.text = state
@@ -93,7 +95,7 @@ func _ready():
 	navigation_agent.path_desired_distance = 30.0
 	navigation_agent.target_desired_distance = 30.0
 	navigation_agent.debug_enabled = false
-	navigation_agent.set_path_max_distance(2.0)
+
 
 func _process(delta):
 	if Globals.isPaused:
@@ -187,9 +189,33 @@ func attack_move_to(loc: Vector2):
 var storedVelocity = Vector2.ZERO
 var recentlyUnpaused : bool = false
 
-func _physics_process(_delta: float):
-	#Stores velocity if paused
+func _physics_process(delta: float):
+		
+	#do base movement if path exists and no current target to attackMove to.
+	if !navigation_agent.is_navigation_finished():
+		state = "moving"
+		set_linear_damp(1.5)
+		var current_agent_position: Vector2 = global_position
+		var next_path_position: Vector2 = navigation_agent.get_next_path_position()
+		#print(current_agent_position.direction_to(next_path_position))
+		#velocity = current_agent_position.direction_to(next_path_position) * walk_speed
+		self.position = self.position.move_toward(next_path_position, delta * walk_speed)
+		#apply_force(velocity)
+	#stop at the end of path, and if there is an available target in range then automatically start attacking.
+
+	#Give one frame to each of these for calculating shit
 	frameCount += 1
+	if frameCount % 4 != moveOrder:
+		return
+	
+	
+	if navigation_agent.is_navigation_finished():
+		state = "alert"
+		set_linear_damp(slowDownDamping)
+		if !potentialTargets.is_empty() && attackTarget == null:
+			attackTarget = get_closest_unit(potentialTargets)
+			state = "attacking"
+	#Stores velocity if paused
 	if Globals.isPaused:
 		recentlyUnpaused = true
 		if storedVelocity == Vector2.ZERO:
@@ -214,29 +240,10 @@ func _physics_process(_delta: float):
 			attackTarget = get_closest_unit(potentialTargets)
 			state = "attacking"
 			path_to(position)
-			if navigation_agent.is_navigation_finished():
-				path_to(position)
-				return
+			return
 		else:
 			path_to(attackMoveLocation)
-	
-	#do base movement if path exists and no current target to attackMove to.
-	if !navigation_agent.is_navigation_finished():
-		state = "moving"
-		set_linear_damp(1.5)
-		var current_agent_position: Vector2 = global_position
-		var next_path_position: Vector2 = navigation_agent.get_next_path_position()
-		#print(current_agent_position.direction_to(next_path_position))
-		velocity = current_agent_position.direction_to(next_path_position) * walk_speed
-		
-		apply_force(velocity)
-	#stop at the end of path, and if there is an available target in range then automatically start attacking.
-	else:
-		state = "alert"
-		set_linear_damp(slowDownDamping)
-		if !potentialTargets.is_empty() && attackTarget == null:
-			attackTarget = get_closest_unit(potentialTargets)
-			state = "attacking"
+
 	#if target exists and is in range, stop and start attacking
 	if potentialTargets.has(attackTarget) && attackMoveLocation == Vector2.ZERO:
 		#stop
@@ -283,13 +290,9 @@ func deSelect() -> void:
 	selectionBox.visible = false
 
 func _on_mouse_shape_entered(_shape_idx: int) -> void:
-	#print("Mouse Detected", self)
-	$MouseHover.visible = true
 	mouseInArea = true
 
 func _on_mouse_shape_exited(_shape_idx: int) -> void:
-	#print("Mouse No Longer Detected", self)
-	$MouseHover.visible = false
 	mouseInArea = false
 
 func cleanArray(array):

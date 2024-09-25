@@ -27,11 +27,11 @@ var additionalMonsterDensity = 0
 #XL - 25
 #XXL - 40
 #XXXL - 60
-var numberOfRooms = 10
+var numberOfRooms = 40
 #double the size is the generated area.
 #S-L: 75
 #XL-XXXL - 120
-const MAXDUNGEONSIZE = 75
+const MAXDUNGEONSIZE = 120
 
 #lower, faster. Don't use number less than 2.
 var crossRoomSize = 3
@@ -69,9 +69,6 @@ func _ready():
 	#Generate Rooms
 	#carveSinglePath(Vector2(0,0), Vector2(-10,10))
 	generate_dungeon(numberOfRooms)
-	
-	print(endRooms)
-	print(potentialInterestRooms)
 
 #Function that calls functions in order. Generates the rooms first, then overrides with a path
 #ensuring that a viable path will always generate.
@@ -82,6 +79,9 @@ func generate_dungeon(numRooms: int) -> void:
 	drawLoopRooms(loopRooms)
 	markSpecialRooms(generated_dungeon_graph)
 	populateRooms()
+	print("Dungeon Generated.\nRooms : " + str(generated_dungeon_graph.size()) + "\nMonster Density : " + str((100 + additionalMonsterDensity))
+	+ "\nWith " + str(Globals.numEnemies) + " monsters spawned.\nNumber of Potential Rooms: " + str(potentialInterestRooms.size())
+	+ "\nAnd with " + str(endRooms.size()) + " potential end rooms.")
 
 #Makes the dungeon itself in the dungeon[] array. Adds the respective connections that are required.
 func generate_dungeon_graph(numRooms: int):

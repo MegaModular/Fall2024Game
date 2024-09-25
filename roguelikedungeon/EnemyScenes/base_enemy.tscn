@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_m6vlh"]
 [ext_resource type="Script" path="res://EnemyScenes/base_enemy.gd" id="1_ylkj4"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_j7qsb"]
-size = Vector2(64, 64)
+[sub_resource type="CircleShape2D" id="CircleShape2D_ynqm3"]
+radius = 60.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ykwv8"]
 radius = 50.0
@@ -40,8 +40,7 @@ linear_damp = 2.0
 script = ExtResource("1_ylkj4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-shape = SubResource("RectangleShape2D_j7qsb")
+shape = SubResource("CircleShape2D_ynqm3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.955793, 0.732945, 0.196415, 1)
@@ -50,8 +49,10 @@ texture = ExtResource("1_m6vlh")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 path_postprocessing = 1
+simplify_path = true
+simplify_epsilon = 20.0
 avoidance_enabled = true
-max_neighbors = 5
+radius = 30.0
 
 [node name="MouseDetection" type="Area2D" parent="."]
 

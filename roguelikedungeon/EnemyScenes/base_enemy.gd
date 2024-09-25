@@ -4,16 +4,13 @@ extends RigidBody2D
 #Then, be able to derive new classes from each, with varying stats and whatnot.
 #These will be able to damage player too, but not from this script.
 
-
-var AIState = "sleeping"
-
 @export var level = 1
 
 #Game Variables
-@export var base_health = 200.0
-@export var base_armor = 20.0
-@export var base_magic_resist = 20.0
-@export var base_dodge_chance = 10.0
+@export var base_health = 100.0
+@export var base_armor = 0.0
+@export var base_magic_resist = 0.0
+@export var base_dodge_chance = 0.0
 @export var base_speed = 200
 
 @onready var playerReference = $"../../Player/Heroes"
@@ -32,17 +29,17 @@ var mouseInArea = false
 var direction = Vector2.ZERO
 var velocity
 
-var framesToMakeDecision = 60
-
 var target = null
 var targetInRange : bool = false
-var potentialTargets = []
-var targetsInRange = []
 
+var pathUpdateFrames = 15
 
-
+var frameCount = 0
 
 func _ready():
+	set_physics_process(false)
+	set_process(false)
+	Globals.numEnemies += 1
 	#print(playerReference.get_children())
 	walk_speed = base_speed
 	health = base_health
@@ -50,6 +47,7 @@ func _ready():
 	magic_resist = base_magic_resist
 	dodge_chance = base_dodge_chance
 	updateHealthBar()
+	$NavigationAgent2D.debug_enabled = false
 
 #Make this target player if hit.
 func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
@@ -82,9 +80,9 @@ func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
 		for hero in playerReference.get_children():
 			if hero.attackTarget == self:
 				hero.attackTarget = hero.get_closest_unit(hero.potentialTargets)
-		if Globals.mouseInEnemyArea >= 1 && mouseInArea:
-			Globals.mouseInEnemyArea -= 1
-		print("enemy died")
+		if Globals.mouseInEnemyArea > 0 && mouseInArea:
+			Globals.mouseInEnemyArea = 0
+		Globals.numEnemies -= 1
 		queue_free()
 	updateHealthBar()
 
@@ -92,15 +90,12 @@ func applyStun(time : float):
 	stunTime += time
 
 func _process(delta):
-	
-	$Label.set_text(str(target) + str(targetInRange))
+	if Globals.isPaused:
+		return	
 	if stunTime > 0:
 		stunTime -= delta
 		return
 	
-	
-	if Globals.isPaused:
-		return
 	
 	#Target Selection Code, from player.
 	if Input.is_action_just_pressed("rmb") && mouseInArea:
@@ -114,24 +109,43 @@ func _process(delta):
 
 var storedVelocity = Vector2.ZERO
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if stunTime > 0:
 		return
 		#Stores velocity if paused
 	if Globals.isPaused:
-		if storedVelocity == Vector2.ZERO:
-			storedVelocity = linear_velocity
-			set_linear_damp(9999)
+	#	if storedVelocity == Vector2.ZERO:
+	#		storedVelocity = linear_velocity
+	#		set_linear_damp(9999)
 		return
+	self.global_position = self.global_position.move_toward($NavigationAgent2D.get_next_path_position(), walk_speed * delta)
 	#When unpaused, restore velocity
-	elif storedVelocity != Vector2.ZERO:
-		apply_impulse(linear_velocity)
-		set_linear_damp(1.5)
-		storedVelocity = Vector2.ZERO
+	#elif storedVelocity != Vector2.ZERO:
+	#	apply_impulse(linear_velocity)
+	#	set_linear_damp(1.5)
+	#	storedVelocity = Vector2.ZERO
 	
-	direction = Vector2(1, 0)
-	velocity = direction * walk_speed
-	apply_force(velocity * 0)
+	#if target exists, path to it while out of range.
+	if  frameCount % pathUpdateFrames == 0:
+		if is_instance_valid(target) and targetInRange:
+			$NavigationAgent2D.target_position = position
+			frameCount += 1
+			return
+		if target != null && $NavigationAgent2D.is_navigation_finished():
+			$NavigationAgent2D.target_position = target.global_position
+		#If path exists already, update it every 30 frames for better performance
+		if !$NavigationAgent2D.is_navigation_finished():
+			$NavigationAgent2D.target_position = target.global_position
+		
+		#Stop if target is in range
+		
+	frameCount += 1
+	#direction = self.position.direction_to($NavigationAgent2D.get_next_path_position())
+	#velocity = direction * walk_speed
+	#apply_force(velocity) 
+	
+
+
 
 #Manual Targeting.
 func _on_mouse_detection_mouse_shape_entered(_shape_idx: int) -> void:
@@ -167,23 +181,14 @@ func updateHealthBar():
 
 func _on_detect_range_body_entered(body: Node2D) -> void:
 	if body.is_in_group("unit"):
-		print("Player Detected")
-		if !is_instance_valid(target):
-			target = body
-		potentialTargets.append(body)
+		set_physics_process(true)
+		set_process(true)
+		target = body
 
 func _on_attack_range_body_entered(body: Node2D) -> void:
-	if potentialTargets.has(body):
-		print("Body detected In Range")
-		targetsInRange.append(body)
-		if !targetInRange:
-			targetInRange = true
-			target = body
-
+	if body.is_in_group("unit"):
+		targetInRange = true
+		target = body
 func _on_attack_range_body_exited(body: Node2D) -> void:
-	if target == body:
+	if body == target:
 		targetInRange = false
-		if !targetsInRange.is_empty() && is_instance_valid(targetsInRange[0]):
-			target = targetsInRange[0]
-	if potentialTargets.has(body):
-		targetsInRange.erase(body)

@@ -75,11 +75,14 @@ func HUDInput():
 			Globals.isPaused = false
 		return
 
+var quickBandageFix = 0
+
 #Contains drag unit selection, and movement input handling.
 func _process(delta):
 	if Globals.isPaused:
 		return
 	dragSelectBoxLogic()
+	
 	
 	if doubleTapTime >= 0:
 		doubleTapTime -= delta
@@ -111,6 +114,10 @@ func _process(delta):
 						particles.position = offsetLocation
 						hero.attack_move_to(Vector2.ZERO)
 						hero.path_to(offsetLocation)
+		else:
+			quickBandageFix += 1
+			if quickBandageFix > 120:
+				Globals.mouseInEnemyArea = 0
 
 #Logic for number keys 1-4 to select heroes. 5 to select all, double tap to focus camera on them too.
 func keySelectionLogic():

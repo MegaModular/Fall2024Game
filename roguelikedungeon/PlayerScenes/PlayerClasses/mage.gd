@@ -17,6 +17,7 @@ var tickTime = 0
 func _ready() -> void:
 	bonus_ability_damage += 50
 	heroClass = "mage"
+	moveOrder = 3
 	super()
 
 func _input(event: InputEvent) -> void:

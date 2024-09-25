@@ -21,6 +21,7 @@ var bombEIA = []
 func _ready() -> void:
 	level = 1
 	heroClass = "assassin"
+	moveOrder = 1
 	$BombExplosionRange/CollisionShape2D.disabled = true
 	super()
 

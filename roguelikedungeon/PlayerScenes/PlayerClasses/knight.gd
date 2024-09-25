@@ -11,13 +11,14 @@ const abilities = ["Shield Up", "Whirlwind", "Charge"]
 #"Charge":
 #Triple move speed for 1 second, and deal 50 * level + 100% AD in an AOE around self after move speed is over.
 
+
 var whirlwindEIA = []
 var chargeEIA = []
 
 func _ready() -> void:
 	$WhirlwindArea/CollisionShape2D.disabled = true
 	$ChargeArea/CollisionShape2D.disabled = true
-	
+	moveOrder = 0
 	heroClass = "knight"
 	super()
 

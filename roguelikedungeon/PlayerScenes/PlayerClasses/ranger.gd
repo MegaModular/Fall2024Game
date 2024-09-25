@@ -13,6 +13,7 @@ var explosiveEIA = []
 
 func _ready() -> void:
 	level = 1
+	moveOrder = 2  
 	bonus_attack_speed += 0.5
 	heroClass = "ranger"
 	super()

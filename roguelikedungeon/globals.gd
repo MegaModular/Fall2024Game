@@ -5,10 +5,13 @@ extends Node
 
 var mouseInEnemyArea : int = 0
 
+var numEnemies : int = 0
+
 var isPaused : bool = false
 
 var skillHUDVisible : bool = false
 var invHUDVisible : bool = false
+
 
 func cleanArray(array):
 	var newArr = []

@@ -1,10 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://cnmmwqk36qag8"]
+[gd_scene load_steps=4 format=3 uid="uid://cnmmwqk36qag8"]
 
 [ext_resource type="PackedScene" uid="uid://dkvup5cg1gfm6" path="res://EnemyScenes/base_enemy.tscn" id="1_tte2k"]
 [ext_resource type="Script" path="res://EnemyScenes/base_ranged_enemy.gd" id="2_witur"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_dspj1"]
+radius = 500.0
+
 [node name="base_ranged_enemy" instance=ExtResource("1_tte2k")]
 script = ExtResource("2_witur")
+
+[node name="CollisionShape2D" parent="AttackRange" index="0"]
+shape = SubResource("CircleShape2D_dspj1")
 
 [node name="AttackTimer" type="Timer" parent="." index="8"]
 wait_time = 3.0

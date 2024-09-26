@@ -4,7 +4,6 @@ var ableToAttack = true
 
 func _ready() -> void:
 	super()
-	$AttackRange/CollisionShape2D.shape.radius = 500
 
 func _process(delta: float) -> void:
 	if Globals.isPaused:
@@ -14,11 +13,11 @@ func _process(delta: float) -> void:
 		$AttackTimer.set_paused(false)
 	super(delta)
 	if $NavigationAgent2D.is_navigation_finished() && ableToAttack && targetInRange:
-		attack()
+		shoot()
 	return
 
-func attack():
-	print("Override this function")
+func shoot():
+	#print("Override this function")
 	ableToAttack = false
 	$AttackTimer.start()
 

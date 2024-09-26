@@ -6,6 +6,9 @@
 [node name="base_melee_enemy" instance=ExtResource("1_5s0hv")]
 script = ExtResource("2_2j62q")
 
+[node name="Sprite2D" parent="." index="1"]
+modulate = Color(1, 0.60452, 0.986753, 1)
+
 [node name="AttackTimer" type="Timer" parent="." index="8"]
 wait_time = 3.0
 one_shot = true

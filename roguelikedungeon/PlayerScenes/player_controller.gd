@@ -15,7 +15,9 @@ var endV = Vector2()
 var isDragging = false
 
 #FUCK YOU STOP THROWING THIS FUCKING ERROR THESE ARE USED
+@warning_ignore("unused_signal")
 signal area_selected
+@warning_ignore("unused_signal")
 signal start_move_selection
 
 var units = []

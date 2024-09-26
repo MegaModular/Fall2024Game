@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 			tickTime = 0
 
 	
-	if isSelected:
+	if isSelected && !Globals.isPaused:
 		#Ability Input Handling
 		if abilitySelected == abilities[0]:
 			if Input.is_action_just_pressed("r") && $AbilityCooldownTimer.is_stopped() && mouseInRange && !$VisionRaycast.is_colliding():

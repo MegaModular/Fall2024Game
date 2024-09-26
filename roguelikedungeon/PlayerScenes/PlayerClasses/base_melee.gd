@@ -33,13 +33,13 @@ func attack():
 		attackMoveLocation = Vector2.ZERO
 		ableToAttack = false
 		path_to(position)
-		await get_tree().create_timer(0.25).timeout
 		performAttack(attackTarget)
 		update_stats()
 		$AttackCooldownTimer.start()
 
 #Check for valid target & send off the attack
 func performAttack(obj):
+	await get_tree().create_timer(0.4 * (1/(attack_speed/0.5))).timeout
 	if is_instance_valid(obj) && enemiesInHitArea.has(obj):
 		obj.applyDamage(attack_damage, 0)
 		heal(attack_damage * omnivamp/100)

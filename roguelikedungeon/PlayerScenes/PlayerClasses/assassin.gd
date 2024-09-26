@@ -33,7 +33,7 @@ func _input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	super(delta)
 	
-	if isSelected:
+	if isSelected && !Globals.isPaused:
 		#Ability Input Handling
 		if abilitySelected == abilities[0]:
 			if Input.is_action_just_pressed("w") && $AbilityCooldownTimer.is_stopped() && ableToBomb():

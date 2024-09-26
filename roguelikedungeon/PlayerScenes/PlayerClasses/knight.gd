@@ -15,6 +15,8 @@ const abilities = ["Shield Up", "Whirlwind", "Charge"]
 var whirlwindEIA = []
 var chargeEIA = []
 
+var desiredRotation : float = 0.0
+
 func _ready() -> void:
 	$WhirlwindArea/CollisionShape2D.disabled = true
 	$ChargeArea/CollisionShape2D.disabled = true
@@ -89,6 +91,11 @@ func applyWhirlwindDamage():
 		heal((attack_damage * 0.5 + (5 * level) )* omnivamp/100.0)
 		update_health_bar()
 
+#Overriden method from base_melee class
+func performAttack(target):
+	$AnimationPlayer.play("Attack")
+	$AnimationPlayer.set_speed_scale(attack_speed/0.5)
+	super(target)
 
 func applyChargeDamage():
 	chargeEIA = cleanArray(chargeEIA)
@@ -97,9 +104,32 @@ func applyChargeDamage():
 		enemy.applyStun(4.0)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if Globals.isPaused:
+		$AnimationPlayer.pause()
+		if !$AbilityTimer.is_paused():
+			$AbilityTimer.set_paused(true)
+		if !$AbilityCooldownTimer.is_paused():
+			$AbilityCooldownTimer.set_paused(true)
+		return
+	elif $AbilityTimer.is_paused():
+		$AnimationPlayer.play()
+		$AbilityTimer.set_paused(false)
+		$AbilityCooldownTimer.set_paused(false)
 	super(delta)
 	
-	if isSelected:
+	if $AbilityTimer.time_left != 0 && lastAbilityCast == abilities[1]:
+		$SpriteRotationHelper.rotation -= 6*PI*delta
+	else:
+		$SpriteRotationHelper.rotation = lerp_angle($SpriteRotationHelper.rotation, desiredRotation, 0.2)
+		if is_instance_valid(attackTarget):
+			#$SpriteRotationHelper.look_at(attackTarget.global_position)
+			desiredRotation = get_angle_to(attackTarget.global_position)
+		elif !$NavAgent.is_navigation_finished():
+			#$SpriteRotationHelper.look_at($NavAgent.target_position)
+			desiredRotation = get_angle_to($NavAgent.target_position)
+	
+	
+	if isSelected && !Globals.isPaused:
 		#Ability Input Handling
 		if abilitySelected == abilities[0]:
 			if Input.is_action_just_pressed("q") && $AbilityCooldownTimer.is_stopped():

@@ -128,7 +128,6 @@ color_initial_ramp = SubResource("Gradient_s481y")
 
 [node name="Sprite2D" parent="SpriteRotationHelper" index="0"]
 rotation = 1.5708
-scale = Vector2(0.4, 0.4)
 texture = ExtResource("3_bb0h4")
 hframes = 40
 frame = 1
@@ -146,6 +145,13 @@ offset_bottom = -68.0
 theme_override_styles/background = SubResource("StyleBoxFlat_dx2gv")
 value = 50.0
 show_percentage = false
+
+[node name="State" parent="." index="9"]
+offset_left = -22.0
+offset_top = 54.0
+offset_right = 18.0
+offset_bottom = 77.0
+text = ""
 
 [node name="PointLight2D" parent="." index="13"]
 shadow_filter = 1

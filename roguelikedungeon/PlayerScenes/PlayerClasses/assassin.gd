@@ -16,12 +16,15 @@ var bombDesired = Vector2.ZERO
 
 var bombEIA = []
 
+var desiredRotation : float = 0
+
 @onready var bombReference = $"../../ClassProjectiles/Bomb"
 
 func _ready() -> void:
 	level = 1
 	heroClass = "assassin"
 	moveOrder = 1
+	base_walk_speed += 50
 	$BombExplosionRange/CollisionShape2D.disabled = true
 	super()
 
@@ -31,7 +34,24 @@ func _input(event: InputEvent) -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if Globals.isPaused:
+		$AnimationPlayer.pause()
+		if !$AbilityTimer.is_paused():
+			$AbilityTimer.set_paused(true)
+		if !$AbilityCooldownTimer.is_paused():
+			$AbilityCooldownTimer.set_paused(true)
+		return
+	elif $AbilityTimer.is_paused():
+		$AnimationPlayer.play()
+		$AbilityTimer.set_paused(false)
+		$AbilityCooldownTimer.set_paused(false)
+	
 	super(delta)
+	$SpriteRotationHelper.rotation = lerp_angle($SpriteRotationHelper.rotation, desiredRotation, 0.2)
+	if is_instance_valid(attackTarget):
+		desiredRotation = get_angle_to(attackTarget.global_position)
+	elif !$NavAgent.is_navigation_finished():
+		desiredRotation = get_angle_to($NavAgent.target_position)
 	
 	if isSelected && !Globals.isPaused:
 		#Ability Input Handling
@@ -53,6 +73,11 @@ func _process(delta: float) -> void:
 	
 	if !$AbilityTimer.is_stopped():
 		$Control/Control/AbilityDurationBar.value = $AbilityTimer.time_left
+
+func performAttack(target):
+	$AnimationPlayer.play("Attack")
+	$AnimationPlayer.set_speed_scale(attack_speed/0.5)
+	super(target)
 
 func ableToBomb() -> bool:
 	if !mouseInRange:

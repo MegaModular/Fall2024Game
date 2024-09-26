@@ -11,15 +11,33 @@ var selectedAbility
 
 var explosiveEIA = []
 
+var desiredRotation : float = 0
+
 func _ready() -> void:
 	level = 1
 	moveOrder = 2  
-	bonus_attack_speed += 0.5
+	base_health -= 25
+	bonus_attack_speed += 1
 	heroClass = "ranger"
 	super()
 
 func _process(delta: float) -> void:
+	if Globals.isPaused:
+		if !$AbilityTimer.is_paused():
+			$AbilityTimer.set_paused(true)
+		if !$AbilityCooldownTimer.is_paused():
+			$AbilityCooldownTimer.set_paused(true)
+		return
+	elif $AbilityTimer.is_paused():
+		$AbilityTimer.set_paused(false)
+		$AbilityCooldownTimer.set_paused(false)
+	
 	super(delta)
+	$SpriteRotationHelper.rotation = lerp_angle($SpriteRotationHelper.rotation, desiredRotation, 0.2)
+	if is_instance_valid(attackTarget):
+		desiredRotation = get_angle_to(attackTarget.global_position)
+	elif !$NavAgent.is_navigation_finished():
+		desiredRotation = get_angle_to($NavAgent.target_position)
 	
 	if isSelected && !Globals.isPaused:
 		#Ability Input Handling
@@ -66,9 +84,11 @@ func powerShot():
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
 	basicArrow.direction = (get_global_mouse_position() - position).normalized()
 	basicArrow.projectileType = "PowerShot"
-	basicArrow.position = position
+	basicArrow.position = position + (attackTarget.position - position).normalized() * 20
+	desiredRotation = get_angle_to(get_global_mouse_position())
 	await get_tree().create_timer(0.5).timeout
 	$Projectiles.add_child(basicArrow)
+	$AnimationPlayer.play("Attack")
 	apply_impulse(-basicArrow.direction * 500)
 
 func fireArrow():
@@ -79,16 +99,20 @@ func fireArrow():
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
 	basicArrow.direction = (get_global_mouse_position() - position).normalized()
 	basicArrow.projectileType = "FireArrow"
-	basicArrow.position = position
+	basicArrow.position = position + (attackTarget.position - position).normalized() * 20
 	$Projectiles.add_child(basicArrow)
+	desiredRotation = get_angle_to(get_global_mouse_position())
+	$AnimationPlayer.play("Attack")
 
 func shoot():
 	#print("This function was called from the ranger scene.")
 	var basicArrow = Globals.projectileReference.instantiate()
 	basicArrow.direction = (attackTarget.position - position).normalized()
 	basicArrow.projectileType = "Arrow"
-	basicArrow.position = position
+	basicArrow.position = position + (attackTarget.position - position).normalized() * 20
 	$Projectiles.add_child(basicArrow)
+	$AnimationPlayer.set_speed_scale(attack_speed/0.5)
+	$AnimationPlayer.play("Attack")
 
 #Change Explosive Arrow to do burn damage over time.
 func _on_contact(body, arrowPos, arrowType):

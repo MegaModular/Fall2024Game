@@ -90,7 +90,6 @@ var moveOrder = 0
 
 func _ready():
 	update_stats()
-	$State.text = state
 	navigation_agent.simplify_path = true
 	navigation_agent.path_desired_distance = 30.0
 	navigation_agent.target_desired_distance = 30.0
@@ -101,8 +100,8 @@ func _process(delta):
 	if Globals.isPaused:
 		return
 	selectionLogic()
-	$Label.set_text("Target = " +  str(attackTarget))
-	$"State".text = state 
+	#$Label.set_text("Target = " +  str(attackTarget))
+	#$"State".text = state 
 
 	update_health_bar()
 	
@@ -193,7 +192,7 @@ func update_stats() -> void:
 	
 	attack_speed = clamp(attack_speed, 0.25, 5)
 	update_health_bar()
-	
+	$State.text = heroClass.capitalize()
 	$AttackCooldownTimer.set_wait_time(1.0 / attack_speed)
 
 func tryToTarget(enemy):

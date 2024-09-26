@@ -19,7 +19,7 @@ var minimumGenDistance = 30
 var minAutoConnectDistance = 80
 
 #100 - double monster density
-var additionalMonsterDensity = 0
+var additionalMonsterDensity = 500
 
 #S - 8
 #M - 10

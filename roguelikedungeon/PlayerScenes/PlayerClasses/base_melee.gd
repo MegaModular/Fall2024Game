@@ -39,12 +39,21 @@ func attack():
 
 #Check for valid target & send off the attack
 func performAttack(obj):
+	#Animation shite
 	await get_tree().create_timer(0.4 * (1/(attack_speed/0.5))).timeout
-	if is_instance_valid(obj) && enemiesInHitArea.has(obj):
-		obj.applyDamage(attack_damage, 0)
-		heal(attack_damage * omnivamp/100)
-	#print("Attack")
 	update_stats()
+	if is_instance_valid(obj) && enemiesInHitArea.has(obj):
+		if heroClass == "assassin":
+			obj.applyDamage(attack_damage * 0.65, 0)
+		else:
+			obj.applyDamage(attack_damage, 0)
+		heal(attack_damage * omnivamp/100)
+		if heroClass == "assassin":
+			await get_tree().create_timer(0.2 * (1/(attack_speed/0.5))).timeout
+			if is_instance_valid(obj):
+				obj.applyDamage(attack_damage * 0.65, 0)
+				heal(attack_damage * omnivamp/100)
+	#print("Attack")
 	return
 
 #Melee Range detectors.

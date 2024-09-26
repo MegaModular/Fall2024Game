@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bqbl4gswcy0ut"]
+[gd_scene load_steps=8 format=3 uid="uid://bqbl4gswcy0ut"]
 
 [ext_resource type="PackedScene" uid="uid://c0bophwd8cvxk" path="res://PlayerScenes/PlayerClasses/base_ranged.tscn" id="1_u12cg"]
 [ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/ranger.gd" id="2_ric26"]
+[ext_resource type="Texture2D" uid="uid://do3xer418ddei" path="res://Art/Ranger/rangerSprites.png" id="3_ohoiw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ym2bm"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -11,19 +12,58 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="Animation" id="Animation_7l52d"]
+resource_name = "Attack"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRotationHelper/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.1, 0.133333, 0.166667, 0.2, 0.233333, 0.266667, 0.3, 0.333333, 0.366667, 0.4, 0.433333, 0.466667, 0.5, 0.533333, 0.566667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [1, 3, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+}
+
+[sub_resource type="Animation" id="Animation_mwwjj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRotationHelper/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8x361"]
+_data = {
+"Attack": SubResource("Animation_7l52d"),
+"RESET": SubResource("Animation_mwwjj")
+}
+
 [node name="Ranger" instance=ExtResource("1_u12cg")]
 position = Vector2(-1, 0)
 script = ExtResource("2_ric26")
 
-[node name="Sprite2D" parent="." index="0"]
-modulate = Color(0, 0.299281, 1.44392e-07, 1)
+[node name="Sprite2D" parent="SpriteRotationHelper" index="0"]
+rotation = 1.5708
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("3_ohoiw")
+hframes = 20
+frame = 1
 
 [node name="CollisionShape2D" parent="." index="1"]
 visible = false
-modulate = Color(1, 1, 1, 1)
 
-[node name="NavAgent" parent="." index="3"]
-avoidance_enabled = false
+[node name="NavAgent" parent="." index="2"]
 time_horizon_obstacles = 1.0
 
 [node name="AbilityDurationBar" type="ProgressBar" parent="Control/Control" index="1"]
@@ -40,6 +80,9 @@ show_percentage = false
 [node name="CollisionShape2D" parent="MouseHitbox" index="0"]
 visible = false
 
+[node name="PointLight2D" parent="." index="9"]
+shadow_filter = 1
+
 [node name="Projectiles" type="Node" parent="." index="10"]
 
 [node name="AbilityTimer" type="Timer" parent="." index="11"]
@@ -48,9 +91,9 @@ one_shot = true
 [node name="AbilityCooldownTimer" type="Timer" parent="." index="12"]
 one_shot = true
 
-[node name="PointLight2D" parent="." index="13"]
-shadow_color = Color(0, 0, 0, 1)
-shadow_filter = 1
-shadow_filter_smooth = 2.0
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="13"]
+libraries = {
+"": SubResource("AnimationLibrary_8x361")
+}
 
 [connection signal="timeout" from="AbilityTimer" to="." method="_on_ability_timer_timeout"]

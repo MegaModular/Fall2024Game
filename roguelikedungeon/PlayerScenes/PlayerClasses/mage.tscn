@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://c8cpyjhenccen"]
+[gd_scene load_steps=13 format=3 uid="uid://c8cpyjhenccen"]
 
 [ext_resource type="PackedScene" uid="uid://c0bophwd8cvxk" path="res://PlayerScenes/PlayerClasses/base_ranged.tscn" id="1_u0jo5"]
 [ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/mage.gd" id="2_ot0oa"]
+[ext_resource type="Texture2D" uid="uid://drv4a2m2igftx" path="res://Art/Mage/mageSpritesheet.png" id="3_wvwy6"]
 
 [sub_resource type="Gradient" id="Gradient_kfbym"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -26,6 +27,43 @@ radius = 750.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_l0sou"]
 radius = 300.0
+
+[sub_resource type="Animation" id="Animation_mronk"]
+resource_name = "Attack"
+length = 1.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRotationHelper/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.1, 0.133333, 0.166667, 0.2, 0.233333, 0.266667, 0.3, 0.333333, 0.366667, 0.4, 0.433333, 0.466667, 0.5, 0.533333, 0.566667, 0.6, 0.633333, 0.666667, 0.7, 0.733333, 0.766667, 0.8, 0.833333, 0.866667, 0.9, 0.933333, 0.966667, 1, 1.03333, 1.06667, 1.1, 1.13333, 1.16667, 1.2, 1.23333, 1.26667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38]
+}
+
+[sub_resource type="Animation" id="Animation_wnwde"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRotationHelper/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s6arg"]
+_data = {
+"Attack": SubResource("Animation_mronk"),
+"RESET": SubResource("Animation_wnwde")
+}
 
 [node name="Mage" instance=ExtResource("1_u0jo5")]
 script = ExtResource("2_ot0oa")
@@ -60,8 +98,12 @@ scale_amount_max = 10.0
 color_ramp = SubResource("Gradient_6gt1p")
 color_initial_ramp = SubResource("Gradient_x7scb")
 
-[node name="Sprite2D" parent="." index="2"]
-modulate = Color(0.776179, 0.0144764, 0.536674, 1)
+[node name="Sprite2D" parent="SpriteRotationHelper" index="0"]
+rotation = 1.5708
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("3_wvwy6")
+hframes = 40
+frame = 1
 
 [node name="CollisionShape2D" parent="." index="3"]
 visible = false
@@ -109,6 +151,11 @@ shape = SubResource("CircleShape2D_l0sou")
 
 [node name="VisionRaycast" type="RayCast2D" parent="." index="17"]
 collision_mask = 8
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="18"]
+libraries = {
+"": SubResource("AnimationLibrary_s6arg")
+}
 
 [connection signal="mouse_entered" from="AbilityRange" to="." method="_on_ability_range_mouse_entered"]
 [connection signal="mouse_exited" from="AbilityRange" to="." method="_on_ability_range_mouse_exited"]

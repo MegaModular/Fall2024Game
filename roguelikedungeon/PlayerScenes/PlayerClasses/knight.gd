@@ -22,6 +22,8 @@ func _ready() -> void:
 	$ChargeArea/CollisionShape2D.disabled = true
 	moveOrder = 0
 	heroClass = "knight"
+	base_health += 100
+	base_health_regen += 10
 	super()
 
 func shieldsUp():
@@ -67,8 +69,8 @@ func whirlwind():
 
 func charge():
 	var cooldownTime = 20.0
-	var abilityDuration = 3.0
-	bonus_walk_speed += 500
+	var abilityDuration = 2.0
+	bonus_walk_speed += 200
 	lastAbilityCast = abilities[2]
 	lastAbilityLevel = level
 	print("Charge Cast" + str(self))
@@ -112,7 +114,8 @@ func _process(delta: float) -> void:
 			$AbilityCooldownTimer.set_paused(true)
 		return
 	elif $AbilityTimer.is_paused():
-		$AnimationPlayer.play()
+		if $AnimationPlayer.is_playing():
+			$AnimationPlayer.play()
 		$AbilityTimer.set_paused(false)
 		$AbilityCooldownTimer.set_paused(false)
 	super(delta)
@@ -122,10 +125,8 @@ func _process(delta: float) -> void:
 	else:
 		$SpriteRotationHelper.rotation = lerp_angle($SpriteRotationHelper.rotation, desiredRotation, 0.2)
 		if is_instance_valid(attackTarget):
-			#$SpriteRotationHelper.look_at(attackTarget.global_position)
 			desiredRotation = get_angle_to(attackTarget.global_position)
 		elif !$NavAgent.is_navigation_finished():
-			#$SpriteRotationHelper.look_at($NavAgent.target_position)
 			desiredRotation = get_angle_to($NavAgent.target_position)
 	
 	

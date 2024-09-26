@@ -14,8 +14,11 @@ var burnGuyEIA = []
 var burningGuy = null
 var tickTime = 0
 
+var desiredRotation : float = 0
+
 func _ready() -> void:
 	bonus_ability_damage += 50
+	base_health -= 25
 	heroClass = "mage"
 	moveOrder = 3
 	super()
@@ -27,7 +30,24 @@ func _input(event: InputEvent) -> void:
 var burnGuyPos : Vector2
 
 func _process(delta: float) -> void:
+	
+	if Globals.isPaused:
+		if !$LivingBombBurnDuration.is_paused():
+			$LivingBombBurnDuration.set_paused(true)
+		if !$AbilityCooldownTimer.is_paused():
+			$AbilityCooldownTimer.set_paused(true)
+		return
+	elif $LivingBombBurnDuration.is_paused():
+		$LivingBombBurnDuration.set_paused(false)
+		$AbilityCooldownTimer.set_paused(false)
 	super(delta)
+	
+	$SpriteRotationHelper.rotation = lerp_angle($SpriteRotationHelper.rotation, desiredRotation, 0.2)
+	if is_instance_valid(attackTarget):
+		desiredRotation = get_angle_to(attackTarget.global_position)
+	elif !$NavAgent.is_navigation_finished():
+		desiredRotation = get_angle_to($NavAgent.target_position)
+	
 	#Burns guy whos on fire. Checks to see if hes still alive and if not just makes the shit explode anyway.
 	if is_instance_valid(burningGuy):
 		burnGuyPos = burningGuy.global_position
@@ -71,6 +91,9 @@ func blizzard():
 	bliz.duration = 10.0
 	bliz.damageType = 1
 	bliz.position = get_global_mouse_position()
+	desiredRotation = get_angle_to(get_global_mouse_position())
+	$AnimationPlayer.play("Attack")
+	await get_tree().create_timer(0.4 * (1/(attack_speed/0.5))).timeout
 	$"../../ClassProjectiles".add_child(bliz)
 
 func chainLightning():
@@ -86,18 +109,23 @@ func chainLightning():
 		cl.targets = burnGuyEIA
 		$AbilityCooldownTimer.start()
 		add_child(cl)
+		desiredRotation = get_angle_to(get_global_mouse_position())
+		$AnimationPlayer.play("Attack")
 		return
-	$AbilityCooldownTimer.set_wait_time(1)
+	$AbilityCooldownTimer.set_wait_time(0.2)
 
 func livingBomb():
 	var cooldownTime = 10.0
 	lastAbilityCast = abilities[0]
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
+	desiredRotation = get_angle_to(get_global_mouse_position())
+	$AnimationPlayer.play("Attack")
 	var proj = Globals.projectileReference.instantiate()
 	proj.direction = (get_global_mouse_position() - position).normalized()
 	proj.projectileType = "LivingBomb"
-	proj.position = position
+	proj.position = position + (get_global_mouse_position() - position).normalized() * 20
+	await get_tree().create_timer(0.4 * (1/(attack_speed/0.5))).timeout
 	$Projectiles.add_child(proj)
 
 func shoot():
@@ -105,7 +133,10 @@ func shoot():
 	var basicMagicAttack = Globals.projectileReference.instantiate()
 	basicMagicAttack.direction = (attackTarget.position - position).normalized()
 	basicMagicAttack.projectileType = "Magic"
-	basicMagicAttack.position = position
+	basicMagicAttack.position = position + (attackTarget.position - position).normalized() * 20
+	$AnimationPlayer.set_speed_scale(attack_speed/0.5)
+	$AnimationPlayer.play("Attack")
+	await get_tree().create_timer(0.4 * (1/(attack_speed/0.5))).timeout
 	$Projectiles.add_child(basicMagicAttack)
 
 func _on_contact(body, _arrowPos, arrowType):

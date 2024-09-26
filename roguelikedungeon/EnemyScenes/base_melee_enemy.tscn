@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://3e6wwpjes7wg"]
+
+[ext_resource type="PackedScene" uid="uid://dkvup5cg1gfm6" path="res://EnemyScenes/base_enemy.tscn" id="1_5s0hv"]
+[ext_resource type="Script" path="res://EnemyScenes/base_melee_enemy.gd" id="2_2j62q"]
+
+[node name="base_melee_enemy" instance=ExtResource("1_5s0hv")]
+script = ExtResource("2_2j62q")
+
+[node name="AttackTimer" type="Timer" parent="." index="8"]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="AttackTimer" to="." method="_on_timer_timeout"]

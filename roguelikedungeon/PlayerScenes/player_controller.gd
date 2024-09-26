@@ -117,6 +117,7 @@ func _process(delta):
 		else:
 			quickBandageFix += 1
 			if quickBandageFix > 120:
+				quickBandageFix = 0
 				Globals.mouseInEnemyArea = 0
 
 #Logic for number keys 1-4 to select heroes. 5 to select all, double tap to focus camera on them too.

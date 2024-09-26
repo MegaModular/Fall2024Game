@@ -11,7 +11,8 @@ extends RigidBody2D
 @export var base_armor = 0.0
 @export var base_magic_resist = 0.0
 @export var base_dodge_chance = 0.0
-@export var base_speed = 200
+@export var base_speed = 100
+@export var base_attack_damage = 10
 
 @onready var playerReference = $"../../Player/Heroes"
 @onready var targetParticlesScene = preload("res://Particles/target_particles.tscn")
@@ -23,6 +24,7 @@ var armor
 var magic_resist
 var dodge_chance
 var walk_speed
+var attack_damage
 
 var mouseInArea = false
 
@@ -46,6 +48,7 @@ func _ready():
 	armor = base_armor
 	magic_resist = base_magic_resist
 	dodge_chance = base_dodge_chance
+	attack_damage = base_attack_damage
 	updateHealthBar()
 	$NavigationAgent2D.debug_enabled = false
 
@@ -189,6 +192,7 @@ func _on_attack_range_body_entered(body: Node2D) -> void:
 	if body.is_in_group("unit"):
 		targetInRange = true
 		target = body
+
 func _on_attack_range_body_exited(body: Node2D) -> void:
 	if body == target:
 		targetInRange = false

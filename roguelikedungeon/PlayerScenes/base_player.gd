@@ -113,6 +113,34 @@ func heal(amount):
 	health += amount
 	clamp(health, 0, max_health)
 
+func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
+	var text = Globals.damageTextReference.instantiate()
+	var x = randf_range(0,1)
+	if x < dodge_chance/100:
+		text.damageAmount = "Dodged"
+		text.position = position
+		$"../../ParticleHolder".add_child(text)
+		return
+	
+	if type == 0:
+		damage *= 1.0 - armor/100.0
+		text.damageType = 0
+	if type == 1:
+		damage *= 1 - magic_resist/100.0
+		text.damageType = 1
+	if type == 2:
+		text.damageType = 2
+	
+	damage *= randf_range(0.8, 1.2)
+	damage = snapped(damage, 1)
+	
+	health -= damage;
+
+	text.damageAmount = damage
+	text.position = position
+	$"../../../ParticleHolder".add_child(text)
+	update_health_bar()
+
 func update_health_bar() -> void:
 	var healthBar = $Control/Control/HealthBar
 	
@@ -190,10 +218,23 @@ var storedVelocity = Vector2.ZERO
 var recentlyUnpaused : bool = false
 
 func _physics_process(delta: float):
-		
+	if Globals.isPaused:
+		recentlyUnpaused = true
+		set_linear_damp(9999)
+		if !$AttackCooldownTimer.is_paused():
+			$AttackCooldownTimer.set_paused(true)
+		return
+	#When unpaused, restore velocity
+	elif recentlyUnpaused:
+		set_linear_damp(1.5)
+		if $AttackCooldownTimer.is_paused():
+			$AttackCooldownTimer.set_paused(false)
+		recentlyUnpaused = false
+	
 	#do base movement if path exists and no current target to attackMove to.
 	if !navigation_agent.is_navigation_finished():
-		state = "moving"
+		if !state == "attacking":
+			state = "moving"
 		set_linear_damp(1.5)
 		var current_agent_position: Vector2 = global_position
 		var next_path_position: Vector2 = navigation_agent.get_next_path_position()
@@ -208,7 +249,7 @@ func _physics_process(delta: float):
 	if frameCount % 4 != moveOrder:
 		return
 	
-	
+	#Attack if a target can exist and not moving
 	if navigation_agent.is_navigation_finished():
 		state = "alert"
 		set_linear_damp(slowDownDamping)
@@ -216,23 +257,7 @@ func _physics_process(delta: float):
 			attackTarget = get_closest_unit(potentialTargets)
 			state = "attacking"
 	#Stores velocity if paused
-	if Globals.isPaused:
-		recentlyUnpaused = true
-		if storedVelocity == Vector2.ZERO:
-			storedVelocity = linear_velocity
-			set_linear_damp(9999)
-		if !$AttackCooldownTimer.is_paused():
-			$AttackCooldownTimer.set_paused(true)
-		return
-	#When unpaused, restore velocity
-	elif storedVelocity != Vector2.ZERO:
-		apply_impulse(linear_velocity)
-		set_linear_damp(1.5)
-		storedVelocity = Vector2.ZERO
-	if recentlyUnpaused:
-		if $AttackCooldownTimer.is_paused():
-			$AttackCooldownTimer.set_paused(false)
-		recentlyUnpaused = false
+
 	
 	#if attack-moving, attack Enemy as they enter range.
 	if attackMoveLocation != Vector2.ZERO:
@@ -267,7 +292,7 @@ func _isBodySelected():
 	return isSelected
 
 func selectionLogic():
-	if Input.is_action_pressed("lmb"):
+	if Input.is_action_just_pressed("lmb"):
 		if Input.is_action_pressed("shift"):
 			if mouseInArea: 
 				Select()

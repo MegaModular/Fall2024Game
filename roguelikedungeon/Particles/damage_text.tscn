@@ -11,6 +11,7 @@ shadow_color = Color(0, 0, 0, 0.517647)
 shadow_offset = Vector2(2, 1)
 
 [node name="DamageText" type="Node2D"]
+z_index = 1
 skew = 0.349066
 script = ExtResource("1_uhmkd")
 

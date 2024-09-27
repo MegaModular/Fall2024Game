@@ -26,6 +26,19 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event is not InputEventMouse:
 		$VisionRaycast.target_position = get_local_mouse_position()
+	if isSelected && !Globals.isPaused:
+		#Ability Input Handling
+		if abilitySelected == abilities[0]:
+			if Input.is_action_just_pressed("r") && $AbilityCooldownTimer.is_stopped() && mouseInRange && !$VisionRaycast.is_colliding():
+				blizzard()
+				$AbilityCooldownTimer.start()
+		if abilitySelected == abilities[1]:
+			if Input.is_action_just_pressed("r") && $AbilityCooldownTimer.is_stopped():
+				livingBomb()
+				$AbilityCooldownTimer.start()
+		if abilitySelected == abilities[2]:
+			if Input.is_action_just_pressed("r") && $AbilityCooldownTimer.is_stopped() && !$VisionRaycast.is_colliding():
+					chainLightning()
 
 var burnGuyPos : Vector2
 
@@ -64,21 +77,6 @@ func _process(delta: float) -> void:
 		if tickTime >= 30:
 			burningGuy.applyDamage(0.05 * ability_damage, 1)
 			tickTime = 0
-
-	
-	if isSelected && !Globals.isPaused:
-		#Ability Input Handling
-		if abilitySelected == abilities[0]:
-			if Input.is_action_just_pressed("r") && $AbilityCooldownTimer.is_stopped() && mouseInRange && !$VisionRaycast.is_colliding():
-				blizzard()
-				$AbilityCooldownTimer.start()
-		if abilitySelected == abilities[1]:
-			if Input.is_action_just_pressed("r") && $AbilityCooldownTimer.is_stopped():
-				livingBomb()
-				$AbilityCooldownTimer.start()
-		if abilitySelected == abilities[2]:
-			if Input.is_action_just_pressed("r") && $AbilityCooldownTimer.is_stopped() && !$VisionRaycast.is_colliding():
-					chainLightning()
 
 func blizzard():
 	var cooldownTime = 20.0

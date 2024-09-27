@@ -22,7 +22,6 @@ func _process(_delta: float) -> void:
 			return
 		if $NavAgent.is_navigation_finished() && is_instance_valid(attackTarget):
 			path_to(attackTarget.position)
-			set_linear_damp(1.5)
 
 #stop, start attacking. Handles cooldown and whatnot. Animation will be added here.
 func attack():

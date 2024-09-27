@@ -129,7 +129,10 @@ func _process(delta: float) -> void:
 		elif !$NavAgent.is_navigation_finished():
 			desiredRotation = get_angle_to($NavAgent.target_position)
 	
-	
+	if !$AbilityTimer.is_stopped():
+		$Control/Control/AbilityDurationBar.value = $AbilityTimer.time_left
+
+func _input(_event: InputEvent) -> void:
 	if isSelected && !Globals.isPaused:
 		#Ability Input Handling
 		if abilitySelected == abilities[0]:
@@ -144,10 +147,6 @@ func _process(delta: float) -> void:
 			if Input.is_action_just_pressed("q") && $AbilityCooldownTimer.is_stopped():
 				charge()
 				$AbilityCooldownTimer.start()
-	
-	if !$AbilityTimer.is_stopped():
-		$Control/Control/AbilityDurationBar.value = $AbilityTimer.time_left
-	
 
 #Called when ability ends (for non-instant ones)
 func _on_ability_timer_timeout() -> void:

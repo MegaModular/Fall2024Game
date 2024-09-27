@@ -31,6 +31,20 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event is not InputEventMouse:
 		$BombRaycast.target_position = get_local_mouse_position()
+	if isSelected && !Globals.isPaused:
+		#Ability Input Handling
+		if abilitySelected == abilities[0]:
+			if Input.is_action_just_pressed("w") && $AbilityCooldownTimer.is_stopped() && ableToBomb():
+				bomb()
+				$AbilityCooldownTimer.start()
+		if abilitySelected == abilities[1]:
+			if Input.is_action_just_pressed("w") && $AbilityCooldownTimer.is_stopped():
+				ninjaManeuvers()
+				$AbilityCooldownTimer.start()
+		if abilitySelected == abilities[2]:
+			if Input.is_action_just_pressed("w") && $AbilityCooldownTimer.is_stopped() && enemiesInHitArea.has(attackTarget):
+				megaKick()
+				$AbilityCooldownTimer.start()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -52,21 +66,6 @@ func _process(delta: float) -> void:
 		desiredRotation = get_angle_to(attackTarget.global_position)
 	elif !$NavAgent.is_navigation_finished():
 		desiredRotation = get_angle_to($NavAgent.target_position)
-	
-	if isSelected && !Globals.isPaused:
-		#Ability Input Handling
-		if abilitySelected == abilities[0]:
-			if Input.is_action_just_pressed("w") && $AbilityCooldownTimer.is_stopped() && ableToBomb():
-				bomb()
-				$AbilityCooldownTimer.start()
-		if abilitySelected == abilities[1]:
-			if Input.is_action_just_pressed("w") && $AbilityCooldownTimer.is_stopped():
-				ninjaManeuvers()
-				$AbilityCooldownTimer.start()
-		if abilitySelected == abilities[2]:
-			if Input.is_action_just_pressed("w") && $AbilityCooldownTimer.is_stopped() && enemiesInHitArea.has(attackTarget):
-				megaKick()
-				$AbilityCooldownTimer.start()
 	
 	if bombInAir:
 		bombReference.position = lerp(bombReference.position, bombDesired, 5 * delta)

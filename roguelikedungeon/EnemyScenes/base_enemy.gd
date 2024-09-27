@@ -1,4 +1,4 @@
-extends RigidBody2D
+extends CharacterBody2D
 
 #Do target selection here, then make the base melee child and base range child. 
 #Then, be able to derive new classes from each, with varying stats and whatnot.
@@ -29,7 +29,6 @@ var attack_damage
 var mouseInArea = false
 
 var direction = Vector2.ZERO
-var velocity
 
 var target = null
 var targetInRange : bool = false
@@ -119,7 +118,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if Globals.isPaused:
 		return
-	self.global_position = self.global_position.move_toward($NavigationAgent2D.get_next_path_position(), walk_speed * delta)
+
 	#When unpaused, restore velocity
 	#elif storedVelocity != Vector2.ZERO:
 	#	apply_impulse(linear_velocity)
@@ -142,8 +141,8 @@ func _physics_process(delta: float) -> void:
 	frameCount += 1
 	#direction = self.position.direction_to($NavigationAgent2D.get_next_path_position())
 	#velocity = direction * walk_speed
-	#apply_force(velocity) 
-	
+	velocity = position.direction_to($NavigationAgent2D.get_next_path_position()) * walk_speed
+	move_and_slide()
 
 
 

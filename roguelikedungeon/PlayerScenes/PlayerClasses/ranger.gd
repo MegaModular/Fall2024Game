@@ -39,6 +39,13 @@ func _process(delta: float) -> void:
 	elif !$NavAgent.is_navigation_finished():
 		desiredRotation = get_angle_to($NavAgent.target_position)
 	
+	
+
+	
+	if !$AbilityTimer.is_stopped():
+		$Control/Control/AbilityDurationBar.value = $AbilityTimer.time_left
+
+func _input(_event: InputEvent) -> void:
 	if isSelected && !Globals.isPaused:
 		#Ability Input Handling
 		if abilitySelected == abilities[0]:
@@ -53,10 +60,6 @@ func _process(delta: float) -> void:
 			if Input.is_action_just_pressed("e") && $AbilityCooldownTimer.is_stopped():
 				fireArrow()
 				$AbilityCooldownTimer.start()
-
-	
-	if !$AbilityTimer.is_stopped():
-		$Control/Control/AbilityDurationBar.value = $AbilityTimer.time_left
 
 func rapidFire():
 	print("RapidFire Cast" + str(self))
@@ -84,12 +87,12 @@ func powerShot():
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
 	basicArrow.direction = (get_global_mouse_position() - position).normalized()
 	basicArrow.projectileType = "PowerShot"
-	basicArrow.position = position + (attackTarget.position - position).normalized() * 20
+	basicArrow.position = position + (get_global_mouse_position() - position).normalized() * 20
 	desiredRotation = get_angle_to(get_global_mouse_position())
 	await get_tree().create_timer(0.5).timeout
 	$Projectiles.add_child(basicArrow)
 	$AnimationPlayer.play("Attack")
-	apply_impulse(-basicArrow.direction * 500)
+	velocity += Vector2(-basicArrow.direction * 500)
 
 func fireArrow():
 	var cooldownTime = 15.0
@@ -99,7 +102,7 @@ func fireArrow():
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
 	basicArrow.direction = (get_global_mouse_position() - position).normalized()
 	basicArrow.projectileType = "FireArrow"
-	basicArrow.position = position + (attackTarget.position - position).normalized() * 20
+	basicArrow.position = position + (get_global_mouse_position() - position).normalized() * 20
 	$Projectiles.add_child(basicArrow)
 	desiredRotation = get_angle_to(get_global_mouse_position())
 	$AnimationPlayer.play("Attack")

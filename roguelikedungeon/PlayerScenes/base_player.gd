@@ -1,4 +1,4 @@
-extends RigidBody2D
+extends CharacterBody2D
 
 @export var level = 1
 
@@ -75,7 +75,6 @@ var mouseInArea : bool = false
 @onready var selectionBox = $Control/Panel
 
 var location : Vector2
-var velocity = Vector2.ZERO
 
 var attackTarget = null
 var potentialTargets = []
@@ -88,6 +87,8 @@ var frameCount = 0
 
 var moveOrder = 0
 
+var lastHealthUpdate
+
 func _ready():
 	update_stats()
 	navigation_agent.simplify_path = true
@@ -96,17 +97,20 @@ func _ready():
 	navigation_agent.debug_enabled = false
 
 
+
+
 func _process(delta):
 	if Globals.isPaused:
 		return
 	selectionLogic()
 	#$Label.set_text("Target = " +  str(attackTarget))
 	#$"State".text = state 
-
-	update_health_bar()
 	
 	#health regen
 	health += health_regen / 5.0 * delta
+	if abs(lastHealthUpdate - health) > 5:
+		update_health_bar()
+
 
 func heal(amount):
 	health += amount
@@ -158,7 +162,8 @@ func update_health_bar() -> void:
 	fill_stylebox.border_width_right = 5
 	fill_stylebox.corner_radius_bottom_left = 3
 	fill_stylebox.corner_radius_top_left = 3
-
+	
+	lastHealthUpdate = health
 # Apply it as a theme override for the fill part
 	healthBar.add_theme_stylebox_override("fill", fill_stylebox)
 
@@ -215,17 +220,15 @@ func attack_move_to(loc: Vector2):
 
 var storedVelocity = Vector2.ZERO
 var recentlyUnpaused : bool = false
-
-func _physics_process(delta: float):
+func _physics_process(_delta: float):
 	if Globals.isPaused:
 		recentlyUnpaused = true
-		set_linear_damp(9999)
+		velocity = Vector2.ZERO
 		if !$AttackCooldownTimer.is_paused():
 			$AttackCooldownTimer.set_paused(true)
 		return
 	#When unpaused, restore velocity
 	elif recentlyUnpaused:
-		set_linear_damp(1.5)
 		if $AttackCooldownTimer.is_paused():
 			$AttackCooldownTimer.set_paused(false)
 		recentlyUnpaused = false
@@ -234,11 +237,8 @@ func _physics_process(delta: float):
 	if !navigation_agent.is_navigation_finished():
 		if !state == "attacking":
 			state = "moving"
-		set_linear_damp(1.5)
-		var next_path_position: Vector2 = navigation_agent.get_next_path_position()
-		#print(current_agent_position.direction_to(next_path_position))
-		#velocity = current_agent_position.direction_to(next_path_position) * walk_speed
-		self.position = self.position.move_toward(next_path_position, delta * walk_speed)
+		velocity = position.direction_to(navigation_agent.get_next_path_position()) * walk_speed
+		move_and_slide()
 		#apply_force(velocity)
 	#stop at the end of path, and if there is an available target in range then automatically start attacking.
 
@@ -250,7 +250,6 @@ func _physics_process(delta: float):
 	#Attack if a target can exist and not moving
 	if navigation_agent.is_navigation_finished():
 		state = "alert"
-		set_linear_damp(slowDownDamping)
 		if !potentialTargets.is_empty() && attackTarget == null:
 			attackTarget = get_closest_unit(potentialTargets)
 			state = "attacking"

@@ -19,7 +19,7 @@ var minimumGenDistance = 30
 var minAutoConnectDistance = 80
 
 #100 - double monster density
-var additionalMonsterDensity = 500
+var additionalMonsterDensity = 200
 
 #S - 8
 #M - 10
@@ -27,11 +27,12 @@ var additionalMonsterDensity = 500
 #XL - 25
 #XXL - 40
 #XXXL - 60
-var numberOfRooms = 15
+var numberOfRooms = 25
 #double the size is the generated area.
 #S-L: 75
-#XL-XXXL - 120
-const MAXDUNGEONSIZE = 75
+#XL : 100
+#XXL-XXXL - 120
+const MAXDUNGEONSIZE = 100
 
 #lower, faster. Don't use number less than 2.
 var crossRoomSize = 3

@@ -27,12 +27,12 @@ ProgressBar/styles/background = SubResource("StyleBoxFlat_7t2i2")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_7a86p")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_st4gf"]
-radius = 600.0
+radius = 800.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8arfb"]
 radius = 100.0
 
-[node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
+[node name="Enemy" type="Area2D" groups=["enemy"]]
 collision_layer = 5
 collision_mask = 5
 script = ExtResource("1_ylkj4")
@@ -78,6 +78,7 @@ show_percentage = false
 [node name="DetectRange" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectRange"]
+visible = false
 shape = SubResource("CircleShape2D_st4gf")
 
 [node name="AttackRange" type="Area2D" parent="."]

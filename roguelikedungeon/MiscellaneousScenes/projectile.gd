@@ -50,9 +50,11 @@ func _on_body_entered(body: Node2D) -> void:
 			return
 		queue_free()
 	else:
-		if body.is_in_group("unit"):
+		if body.is_in_group("unit") && is_instance_valid(playerReference):
 			playerReference._on_contact(body)
 			queue_free()
+			return
+		elif !is_instance_valid(playerReference):
 			return
 		if body.is_in_group("enemy"):
 			return

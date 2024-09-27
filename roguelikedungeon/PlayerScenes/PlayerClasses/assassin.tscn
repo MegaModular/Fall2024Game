@@ -86,9 +86,6 @@ texture = ExtResource("3_b1tpq")
 hframes = 40
 frame = 1
 
-[node name="CollisionShape2D" parent="." index="2"]
-visible = true
-
 [node name="NavAgent" parent="." index="3"]
 time_horizon_obstacles = 1.0
 
@@ -108,7 +105,6 @@ offset_left = -22.0
 offset_top = 54.0
 offset_right = 18.0
 offset_bottom = 77.0
-text = ""
 
 [node name="PointLight2D" parent="." index="11"]
 shadow_filter = 1
@@ -128,6 +124,7 @@ shape = SubResource("CircleShape2D_qbkql")
 [node name="BombExplosionRange" type="Area2D" parent="." index="15"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BombExplosionRange" index="0"]
+visible = false
 shape = SubResource("CircleShape2D_f74hb")
 
 [node name="BombRaycast" type="RayCast2D" parent="." index="16"]

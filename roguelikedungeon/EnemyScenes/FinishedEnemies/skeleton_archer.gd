@@ -17,4 +17,4 @@ func shoot():
 	get_parent().add_child(arrow)
 
 func _on_contact(body):
-	target.applyDamage(attack_damage, 0)
+	body.applyDamage(attack_damage, 0)

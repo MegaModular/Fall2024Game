@@ -33,21 +33,30 @@ func _process(delta: float) -> void:
 	position += velocity
 
 func _on_body_entered(body: Node2D) -> void:
-	if projectileType == "PowerShot":
+	if isPlayerOwned:
+		if projectileType == "PowerShot":
+			if body.is_in_group("enemy"):
+				playerReference._on_contact(body, self.position, projectileType)
+				return
+			elif body.is_in_group("unit"):
+				return
+			else:
+				queue_free()
+		
 		if body.is_in_group("enemy"):
 			playerReference._on_contact(body, self.position, projectileType)
-			return
-		elif body.is_in_group("unit"):
-			return
-		else:
 			queue_free()
-	
-	if body.is_in_group("enemy"):
-		playerReference._on_contact(body, self.position, projectileType)
+		if body.is_in_group("unit"):
+			return
 		queue_free()
-	if body.is_in_group("unit"):
-		return
-	queue_free()
+	else:
+		if body.is_in_group("unit"):
+			playerReference._on_contact(body)
+			queue_free()
+			return
+		if body.is_in_group("enemy"):
+			return
+		queue_free()
 
 func _on_timer_timeout() -> void:
 	queue_free()

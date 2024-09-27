@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://dcg13x7h0vp5c"]
+
+[ext_resource type="PackedScene" uid="uid://cnmmwqk36qag8" path="res://EnemyScenes/base_ranged_enemy.tscn" id="1_22mnt"]
+[ext_resource type="Script" path="res://EnemyScenes/FinishedEnemies/skeleton_archer.gd" id="2_d4q50"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0gito"]
+bg_color = Color(0.6, 0.6, 0.6, 0.235294)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bdx3t"]
+bg_color = Color(0.607843, 0.560784, 0, 1)
+border_width_right = 10
+border_color = Color(0.6, 0.6, 0.6, 0.235294)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_bottom_left = 3
+anti_aliasing_size = 0.01
+
+[node name="SkeletonArcher" instance=ExtResource("1_22mnt")]
+script = ExtResource("2_d4q50")
+
+[node name="NavigationAgent2D" parent="." index="2"]
+avoidance_enabled = true
+
+[node name="HealthBar" parent="Control" index="0"]
+theme = null
+theme_override_styles/background = SubResource("StyleBoxFlat_0gito")
+theme_override_styles/fill = SubResource("StyleBoxFlat_bdx3t")

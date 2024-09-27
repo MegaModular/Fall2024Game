@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dkvup5cg1gfm6"]
+[gd_scene load_steps=10 format=3 uid="uid://dkvup5cg1gfm6"]
 
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="1_m6vlh"]
 [ext_resource type="Script" path="res://EnemyScenes/base_enemy.gd" id="1_ylkj4"]
@@ -9,21 +9,22 @@ radius = 30.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_ykwv8"]
 radius = 50.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0gito"]
-bg_color = Color(0.6, 0.6, 0.6, 0.235294)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7t2i2"]
+bg_color = Color(0.6, 0.6, 0.6, 0.0784314)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bdx3t"]
-bg_color = Color(0.607843, 0.560784, 0, 1)
-border_width_right = 10
-border_color = Color(0.6, 0.6, 0.6, 0.235294)
-border_blend = true
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7a86p"]
 corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
-anti_aliasing_size = 0.01
+
+[sub_resource type="Theme" id="Theme_hi57v"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_7t2i2")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_7a86p")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_st4gf"]
 radius = 800.0
@@ -51,7 +52,6 @@ texture = ExtResource("1_m6vlh")
 path_postprocessing = 1
 simplify_path = true
 simplify_epsilon = 20.0
-avoidance_enabled = true
 radius = 30.0
 
 [node name="MouseDetection" type="Area2D" parent="."]
@@ -67,13 +67,13 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="HealthBar" type="ProgressBar" parent="Control"]
+visible = false
 layout_mode = 0
 offset_left = -46.0
 offset_top = -61.0
 offset_right = 46.0
 offset_bottom = -44.0
-theme_override_styles/background = SubResource("StyleBoxFlat_0gito")
-theme_override_styles/fill = SubResource("StyleBoxFlat_bdx3t")
+theme = SubResource("Theme_hi57v")
 value = 50.0
 show_percentage = false
 

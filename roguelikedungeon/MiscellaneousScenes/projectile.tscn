@@ -31,6 +31,7 @@ wait_time = 10.0
 autostart = true
 
 [node name="PowerShotParticles" type="CPUParticles2D" parent="."]
+visible = false
 position = Vector2(16, 0)
 amount = 200
 lifetime = 0.5
@@ -43,6 +44,7 @@ color_ramp = SubResource("Gradient_4njn2")
 color_initial_ramp = SubResource("Gradient_jp48b")
 
 [node name="FireArrowParticles" type="CPUParticles2D" parent="."]
+visible = false
 position = Vector2(16, 0)
 amount = 200
 lifetime = 0.5

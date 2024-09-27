@@ -14,12 +14,13 @@ func _process(delta: float) -> void:
 	super(delta)
 	if $NavigationAgent2D.is_navigation_finished() && ableToAttack && targetInRange:
 		shoot()
+		$AttackTimer.start()
+		ableToAttack = false
 	return
 
 func shoot():
 	#print("Override this function")
-	ableToAttack = false
-	$AttackTimer.start()
+	print("This should be overriden")
 
 func _on_attack_timer_timeout() -> void:
 	ableToAttack = true

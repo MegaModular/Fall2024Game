@@ -34,11 +34,12 @@ var velocity
 var target = null
 var targetInRange : bool = false
 
-var pathUpdateFrames = 15
+var pathUpdateFrames = 20
 
 var frameCount = 0
 
 func _ready():
+	pathUpdateFrames += randi_range(100, 200)
 	set_physics_process(false)
 	set_process(false)
 	Globals.numEnemies += 1
@@ -94,12 +95,13 @@ func applyStun(time : float):
 
 func _process(delta):
 	if Globals.isPaused:
-		return	
+		return
 	if stunTime > 0:
 		stunTime -= delta
 		return
-	
-	
+
+
+func _input(event):
 	#Target Selection Code, from player.
 	if Input.is_action_just_pressed("rmb") && mouseInArea:
 		for hero in playerReference.get_children():
@@ -115,11 +117,7 @@ var storedVelocity = Vector2.ZERO
 func _physics_process(delta: float) -> void:
 	if stunTime > 0:
 		return
-		#Stores velocity if paused
 	if Globals.isPaused:
-	#	if storedVelocity == Vector2.ZERO:
-	#		storedVelocity = linear_velocity
-	#		set_linear_damp(9999)
 		return
 	self.global_position = self.global_position.move_toward($NavigationAgent2D.get_next_path_position(), walk_speed * delta)
 	#When unpaused, restore velocity
@@ -132,7 +130,6 @@ func _physics_process(delta: float) -> void:
 	if  frameCount % pathUpdateFrames == 0:
 		if is_instance_valid(target) and targetInRange:
 			$NavigationAgent2D.target_position = position
-			frameCount += 1
 			return
 		if target != null && $NavigationAgent2D.is_navigation_finished():
 			$NavigationAgent2D.target_position = target.global_position
@@ -160,6 +157,7 @@ func _on_mouse_detection_mouse_shape_exited(_shape_idx: int) -> void:
 	Globals.mouseInEnemyArea -= 1
 
 func updateHealthBar():
+	return
 	var healthBar = $Control/HealthBar
 	
 	healthBar.max_value = base_health
@@ -172,13 +170,9 @@ func updateHealthBar():
 	var colorGreen = 400
 	colorGreen = lerp(0, 400, healthBarPercent)
 	colorRed = lerp(255, 0, healthBarPercent)
-	var fill_stylebox = StyleBoxFlat.new()
+	var fill_stylebox = $Control/HealthBar.get_theme_stylebox("fill")
 	fill_stylebox.bg_color = Color(colorRed/255, colorGreen/255, 0)
-	fill_stylebox.border_width_right = 5
-	fill_stylebox.corner_radius_bottom_left = 3
-	fill_stylebox.corner_radius_top_left = 3
-
-# Apply it as a theme override for the fill part
+	
 	healthBar.add_theme_stylebox_override("fill", fill_stylebox)
 
 

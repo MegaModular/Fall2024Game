@@ -7,7 +7,7 @@ extends CharacterBody2D
 @export var level = 1
 
 #Game Variables
-@export var base_health = 100.0
+@export var base_health = 50.0
 @export var base_armor = 0.0
 @export var base_magic_resist = 0.0
 @export var base_dodge_chance = 0.0
@@ -16,6 +16,8 @@ extends CharacterBody2D
 
 @onready var playerReference = $"../../Player/Heroes"
 @onready var targetParticlesScene = preload("res://Particles/target_particles.tscn")
+@onready var deathParticleScene = preload("res://Particles/enemyDeathParticles.tscn")
+
 
 var stunTime : float = 0.0
 
@@ -87,6 +89,9 @@ func applyDamage(damage : float, type): #0 - Physical, 1 - Magic, 2 - True
 		if Globals.mouseInEnemyArea > 0 && mouseInArea:
 			Globals.mouseInEnemyArea = 0
 		Globals.numEnemies -= 1
+		var dp = deathParticleScene.instantiate()
+		dp.position = self.global_position
+		$"../../ParticleHolder".add_child(dp)
 		queue_free()
 	updateHealthBar()
 
@@ -191,11 +196,3 @@ func _on_attack_range_body_entered(body: Node2D) -> void:
 func _on_attack_range_body_exited(body: Node2D) -> void:
 	if body == target:
 		targetInRange = false
-
-
-func _on_detect_range_body_exited(body: Node2D) -> void:
-	if body == target:
-		set_physics_process(false)
-		set_process(false)
-		visible = false
-		target = null

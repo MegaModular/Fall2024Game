@@ -94,7 +94,7 @@ func _ready():
 	navigation_agent.simplify_path = false
 	navigation_agent.path_desired_distance = 30.0
 	navigation_agent.target_desired_distance = 30.0
-	navigation_agent.debug_enabled = true
+	navigation_agent.debug_enabled = false
 
 
 

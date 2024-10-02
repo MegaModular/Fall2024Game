@@ -97,6 +97,5 @@ offset_bottom = -35.0
 [connection signal="mouse_shape_entered" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_entered"]
 [connection signal="mouse_shape_exited" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_exited"]
 [connection signal="body_entered" from="DetectRange" to="." method="_on_detect_range_body_entered"]
-[connection signal="body_exited" from="DetectRange" to="." method="_on_detect_range_body_exited"]
 [connection signal="body_entered" from="AttackRange" to="." method="_on_attack_range_body_entered"]
 [connection signal="body_exited" from="AttackRange" to="." method="_on_attack_range_body_exited"]

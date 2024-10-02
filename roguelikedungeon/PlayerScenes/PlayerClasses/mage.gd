@@ -1,7 +1,24 @@
 extends "res://PlayerScenes/PlayerClasses/base_ranged.gd"
 
-
 const abilities = ["Blizzard", "Living Bomb", "Chain Lightning"]
+#Base stats
+var mageBonusAbilityDamage = 25
+var mageBonusAbilityDamageLevel = 25
+#AbiltiyModifiers
+#this damage * AP/100 , also total damage multiplied by this too.
+var blizzardBaseAbilityRatio = 4.0
+#damage * level, base
+var blizzardBaseDamage = 4.0
+
+var livingBombApRatio = 0.5
+var livingBombDamagePerLevel = 20
+var burnAPRatio = 0.05
+
+var chainLightningBaseDamage = 15
+var chainLightningDamageLevel = 10
+var chainLightningAPRatio = 0.25
+
+
 
 @onready var blizzardScene = preload("res://MiscellaneousScenes/blizzard_area.tscn")
 @onready var chainLightningScene = preload("res://MiscellaneousScenes/chain_lightning.tscn")
@@ -17,11 +34,15 @@ var tickTime = 0
 var desiredRotation : float = 0
 
 func _ready() -> void:
-	bonus_ability_damage += 50
-	base_health -= 25
+	base_ability_damage += mageBonusAbilityDamage
 	heroClass = "mage"
 	moveOrder = 3
 	super()
+
+func levelUp():
+	bonus_ability_damage += mageBonusAbilityDamageLevel
+	level += 1
+	update_stats()
 
 func _input(event: InputEvent) -> void:
 	if event is not InputEventMouse:
@@ -75,7 +96,7 @@ func _process(delta: float) -> void:
 			_on_living_bomb_burn_duration_timeout()
 			return
 		if tickTime >= 30:
-			burningGuy.applyDamage(0.05 * ability_damage, 1)
+			burningGuy.applyDamage(burnAPRatio * ability_damage, 1)
 			tickTime = 0
 
 func blizzard():
@@ -85,7 +106,7 @@ func blizzard():
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
 	var bliz = blizzardScene.instantiate()
 	update_stats()
-	bliz.fireDamage = ((2 * level) + 2 * ability_damage/100) * (1 + (0.005 * ability_damage))
+	bliz.fireDamage = ((blizzardBaseDamage * level) + blizzardBaseAbilityRatio * ability_damage/100) * (1 + (blizzardBaseAbilityRatio/1000 * ability_damage))
 	bliz.duration = 10.0
 	bliz.damageType = 1
 	bliz.position = get_global_mouse_position()
@@ -96,7 +117,7 @@ func blizzard():
 
 func chainLightning():
 	print("Chain Lightning Called")
-	var cooldownTime = 20.0
+	var cooldownTime = 10.0
 	lastAbilityCast = abilities[0]
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
@@ -145,10 +166,10 @@ func _on_contact(body, _arrowPos, arrowType):
 		burningGuy = body
 
 	
-	body.applyDamage(attack_damage + (ability_damage/100), 1)
+	body.applyDamage(attack_damage * (1 + ability_damage/100), 1)
 
 func on_lightning_hit(body):
-	body.applyDamage((25 * level) + (ability_damage), 1)
+	body.applyDamage((chainLightningBaseDamage + (chainLightningDamageLevel * level)) + (chainLightningAPRatio * ability_damage), 1)
 	body.applyStun(5)
 	var lp = lightningParticlesScene.instantiate()
 	lp.position = body.position
@@ -169,7 +190,7 @@ func _on_living_bomb_burn_duration_timeout() -> void:
 	burningGuy = null
 	await get_tree().create_timer(0.2).timeout
 	for enemy in burnGuyEIA:
-		enemy.applyDamage((50 * level) + (2 * ability_damage), 1)
+		enemy.applyDamage(((livingBombDamagePerLevel * level) + (livingBombApRatio * ability_damage)) * (1 + ability_damage/1000), 1)
 	
 
 

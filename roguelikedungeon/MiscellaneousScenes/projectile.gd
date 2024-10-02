@@ -19,7 +19,7 @@ func _ready() -> void:
 	$PowerShotParticles.emitting = false
 	$FireArrowParticles.emitting = false
 	if projectileType == "PowerShot":
-		speed *= 2.5
+		speed *= 2.25
 		$PowerShotParticles.emitting = true
 	elif projectileType == "FireArrow":
 		$FireArrowParticles.emitting = true

@@ -44,14 +44,15 @@ func performAttack(obj):
 	if is_instance_valid(obj) && enemiesInHitArea.has(obj):
 		if heroClass == "assassin":
 			obj.applyDamage(attack_damage * 0.65, 0)
+			heal(attack_damage * 0.65 * omnivamp/100)
 		else:
 			obj.applyDamage(attack_damage, 0)
-		heal(attack_damage * omnivamp/100)
+			heal(attack_damage * omnivamp/100)
 		if heroClass == "assassin":
 			await get_tree().create_timer(0.2 * (1/(attack_speed/0.5))).timeout
 			if is_instance_valid(obj):
 				obj.applyDamage(attack_damage * 0.65, 0)
-				heal(attack_damage * omnivamp/100)
+				heal(attack_damage * 0.65 * omnivamp/100)
 	#print("Attack")
 	return
 

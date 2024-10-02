@@ -6,6 +6,20 @@ const abilities = ["RapidFire", "PowerShot", "FireArrow"]
 
 @onready var fireAreaReference = preload("res://MiscellaneousScenes/fire_area.tscn")
 @onready var powerShotParticleReference = preload("res://Particles/power_shot_hit_particles.tscn")
+#Base stats
+var rangerBaseAttackDamage = 5
+var rangerBonusAttackDamageLevel = 5
+var rangerBaseAttackSpeed = 0.5
+var rangerBonusAttackSpeedLevel = 0.25
+
+#Ability Modifiers
+var rapidFireAttackSpeedLevel = 0.25
+var rapidFireBaseAttackSpeed = 1
+
+var fireAreaExplosionDamageLevel = 10
+var fireAreaBurnDamage = 0.25
+
+var powerShotDamageRatio = 4.0
 
 var selectedAbility
 
@@ -14,12 +28,17 @@ var explosiveEIA = []
 var desiredRotation : float = 0
 
 func _ready() -> void:
-	level = 1
 	moveOrder = 2  
-	base_health -= 25
-	bonus_attack_speed += 1
+	base_attack_speed += rangerBaseAttackSpeed
+	base_attack_damage += rangerBaseAttackDamage
 	heroClass = "ranger"
 	super()
+
+func levelUp():
+	bonus_attack_speed += rangerBonusAttackSpeedLevel
+	bonus_attack_damage += rangerBonusAttackDamageLevel
+	level += 1
+	update_stats()
 
 func _process(delta: float) -> void:
 	if Globals.isPaused:
@@ -71,12 +90,11 @@ func rapidFire():
 	$Control/Control/AbilityDurationBar.max_value = abilityDuration
 	$Control/Control/AbilityDurationBar.visible = true
 	$AbilityTimer.set_wait_time(abilityDuration)
-	bonus_attack_speed += 0.5 * level
+	bonus_attack_speed += rapidFireBaseAttackSpeed + rapidFireAttackSpeedLevel * level
 	update_stats()
 	$AbilityTimer.start()
 	lastAbilityCast = abilities[0]
 	lastAbilityLevel = level
-
 
 #Waits for a second, then shoots the arrow and it has recoil.
 func powerShot():
@@ -124,11 +142,11 @@ func _on_contact(body, arrowPos, arrowType):
 		var fireArea = fireAreaReference.instantiate()
 		fireArea.position = arrowPos
 		fireArea.duration = 5
-		fireArea.fireDamage = 0.5 + (0.25 * level) * attack_damage
+		fireArea.fireDamage = (fireAreaBurnDamage * level) * attack_damage
 		fireArea.damageType = 0
 		$"../../ClassProjectiles".add_child(fireArea)
 	if arrowType == "PowerShot":
-		body.applyDamage(2 * attack_damage + 50 * level, 0)
+		body.applyDamage(powerShotDamageRatio * attack_damage + 50 * level, 0)
 		var powerShotParticles = powerShotParticleReference.instantiate()
 		powerShotParticles.position = arrowPos
 		$"../../ClassProjectiles".add_child(powerShotParticles)
@@ -138,14 +156,13 @@ func _on_contact(body, arrowPos, arrowType):
 func _on_ability_timer_timeout() -> void:
 	#Rapidfire
 	if lastAbilityCast == abilities[0]:
-		bonus_attack_speed -= 0.5 * level
+		bonus_attack_speed -= rapidFireBaseAttackSpeed + rapidFireAttackSpeedLevel * level
 		$Control/Control/AbilityDurationBar.visible = false
 		update_stats()
 	if lastAbilityCast == abilities[1]:
 		return
 	#Fire arrow
 	if lastAbilityCast == abilities[2]:
-		bonus_attack_speed -= 100.0
 		update_stats()
 		lastAbilityLevel = level
 	#Whirlwind

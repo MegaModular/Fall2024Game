@@ -7,9 +7,9 @@ extends CharacterBody2D
 
 #Game Variables
 #damage applied on every attack, physical. 
-@export var base_attack_damage = 20.0
+@export var base_attack_damage = 10.0
 #ability damage multiplier
-@export var base_ability_damage = 100.0
+@export var base_ability_damage = 0.0
 #basic attack speed in attacks per second
 @export var base_attack_speed = 0.5
 #base max health

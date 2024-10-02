@@ -91,10 +91,10 @@ var lastHealthUpdate
 
 func _ready():
 	update_stats()
-	navigation_agent.simplify_path = true
+	navigation_agent.simplify_path = false
 	navigation_agent.path_desired_distance = 30.0
 	navigation_agent.target_desired_distance = 30.0
-	navigation_agent.debug_enabled = false
+	navigation_agent.debug_enabled = true
 
 
 

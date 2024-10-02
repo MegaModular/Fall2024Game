@@ -41,6 +41,7 @@ func _ready():
 	pathUpdateFrames += randi_range(100, 200)
 	set_physics_process(false)
 	set_process(false)
+	visible = false
 	Globals.numEnemies += 1
 	#print(playerReference.get_children())
 	walk_speed = base_speed
@@ -179,6 +180,7 @@ func _on_detect_range_body_entered(body: Node2D) -> void:
 	if body.is_in_group("unit"):
 		set_physics_process(true)
 		set_process(true)
+		visible = true
 		target = body
 
 func _on_attack_range_body_entered(body: Node2D) -> void:
@@ -189,3 +191,11 @@ func _on_attack_range_body_entered(body: Node2D) -> void:
 func _on_attack_range_body_exited(body: Node2D) -> void:
 	if body == target:
 		targetInRange = false
+
+
+func _on_detect_range_body_exited(body: Node2D) -> void:
+	if body == target:
+		set_physics_process(false)
+		set_process(false)
+		visible = false
+		target = null

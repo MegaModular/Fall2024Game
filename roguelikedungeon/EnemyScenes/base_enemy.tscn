@@ -27,7 +27,7 @@ ProgressBar/styles/background = SubResource("StyleBoxFlat_7t2i2")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_7a86p")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_st4gf"]
-radius = 600.0
+radius = 800.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8arfb"]
 radius = 100.0
@@ -38,6 +38,7 @@ collision_mask = 5
 script = ExtResource("1_ylkj4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_ynqm3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -78,11 +79,13 @@ show_percentage = false
 [node name="DetectRange" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectRange"]
+visible = false
 shape = SubResource("CircleShape2D_st4gf")
 
 [node name="AttackRange" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
+visible = false
 shape = SubResource("CircleShape2D_8arfb")
 
 [node name="Label" type="Label" parent="."]
@@ -94,5 +97,6 @@ offset_bottom = -35.0
 [connection signal="mouse_shape_entered" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_entered"]
 [connection signal="mouse_shape_exited" from="MouseDetection" to="." method="_on_mouse_detection_mouse_shape_exited"]
 [connection signal="body_entered" from="DetectRange" to="." method="_on_detect_range_body_entered"]
+[connection signal="body_exited" from="DetectRange" to="." method="_on_detect_range_body_exited"]
 [connection signal="body_entered" from="AttackRange" to="." method="_on_attack_range_body_entered"]
 [connection signal="body_exited" from="AttackRange" to="." method="_on_attack_range_body_exited"]

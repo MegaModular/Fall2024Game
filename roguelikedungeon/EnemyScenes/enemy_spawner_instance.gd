@@ -5,7 +5,7 @@ var maxEnemiesSpawned = 8
 
 var isElite : bool = false
 
-var spread = 50
+var spread = 10
 
 var spawnedEnemy
 

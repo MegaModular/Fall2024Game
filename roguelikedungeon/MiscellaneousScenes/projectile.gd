@@ -4,8 +4,9 @@ extends Area2D
 #and the position where it impacts.
 #Flys straight. at speed pixels/s
 
-var isPlayerOwned : bool = true
+@export var isPlayerOwned : bool = true
 var projectileType = "Arrow" #"Magic", #"FireArrow", #"PowerShot, #"LivingBomb"
+@export var doKillArrow : bool = true
 
 var direction = Vector2.RIGHT
 var speed : float = 1000.0
@@ -41,14 +42,26 @@ func _on_body_entered(body: Node2D) -> void:
 			elif body.is_in_group("unit"):
 				return
 			else:
-				queue_free()
+				if doKillArrow:
+					queue_free()
+					return
+				visible = false
+				speed = 0
 		
 		if body.is_in_group("enemy"):
 			playerReference._on_contact(body, self.position, projectileType)
-			queue_free()
+			if doKillArrow:
+				queue_free()
+				return
+			visible = false
+			speed = 0
 		if body.is_in_group("unit"):
 			return
-		queue_free()
+		if doKillArrow:
+			queue_free()
+			return
+		visible = false
+		speed = 0
 	else:
 		if body.is_in_group("unit") && is_instance_valid(playerReference):
 			playerReference._on_contact(body)
@@ -58,7 +71,15 @@ func _on_body_entered(body: Node2D) -> void:
 			return
 		if body.is_in_group("enemy"):
 			return
-		queue_free()
+		if doKillArrow:
+			queue_free()
+			return
+		visible = false
+		speed = 0
 
 func _on_timer_timeout() -> void:
-	queue_free()
+	if doKillArrow:
+		queue_free()
+		return
+	visible = false
+	speed = 0

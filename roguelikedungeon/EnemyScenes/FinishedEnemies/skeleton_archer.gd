@@ -3,6 +3,7 @@ extends "res://EnemyScenes/base_ranged_enemy.gd"
 @onready var projectileScene = preload("res://MiscellaneousScenes/projectile.tscn")
 
 
+var arrowDefaultSpeed = 1000.0
 
 func _ready() -> void:
 	super()

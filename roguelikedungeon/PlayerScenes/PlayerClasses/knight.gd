@@ -172,7 +172,7 @@ func _on_ability_timer_timeout() -> void:
 		$ChargeArea/CollisionShape2D.disabled = true
 		$Control/Control/AbilityDurationBar.visible = false
 		disableAttack = false
-		bonus_walk_speed -= 500
+		bonus_walk_speed -= 200
 		update_stats()
 
 func _on_whirlwind_area_body_entered(body: Node2D) -> void:

@@ -22,9 +22,6 @@ anti_aliasing_size = 0.01
 [node name="SkeletonArcher" instance=ExtResource("1_22mnt")]
 script = ExtResource("2_d4q50")
 
-[node name="NavigationAgent2D" parent="." index="2"]
-avoidance_enabled = true
-
 [node name="HealthBar" parent="Control" index="0"]
 theme = null
 theme_override_styles/background = SubResource("StyleBoxFlat_0gito")

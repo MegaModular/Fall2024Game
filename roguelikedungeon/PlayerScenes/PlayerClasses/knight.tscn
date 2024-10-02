@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bletf0epogj4o" path="res://PlayerScenes/PlayerClasses/base_melee.tscn" id="1_g5wlx"]
 [ext_resource type="Script" path="res://PlayerScenes/PlayerClasses/knight.gd" id="2_o6a1e"]
-[ext_resource type="Texture2D" uid="uid://cm8evkm77svbk" path="res://Art/KnightExport/knightSprites.png" id="3_bb0h4"]
+[ext_resource type="Texture2D" uid="uid://cm8evkm77svbk" path="res://Art/Knight/knightSprites.png" id="3_bb0h4"]
 
 [sub_resource type="Curve" id="Curve_joagn"]
 _data = [Vector2(0, 0.727749), 0.0, 0.0, 0, 0, Vector2(0.0653595, 0.778796), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -132,6 +132,9 @@ texture = ExtResource("3_bb0h4")
 hframes = 40
 frame = 1
 
+[node name="CollisionShape2D" parent="." index="4"]
+visible = true
+
 [node name="NavAgent" parent="." index="5"]
 time_horizon_obstacles = 1.0
 
@@ -151,7 +154,6 @@ offset_left = -22.0
 offset_top = 54.0
 offset_right = 18.0
 offset_bottom = 77.0
-text = ""
 
 [node name="PointLight2D" parent="." index="13"]
 shadow_filter = 1

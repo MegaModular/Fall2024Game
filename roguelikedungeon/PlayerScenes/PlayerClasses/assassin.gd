@@ -130,6 +130,7 @@ func _on_bomb_fuse_timeout() -> void:
 	$BombExplosionRange/CollisionShape2D.disabled = false
 	$BombExplosionRange.global_position = bombReference.position
 	await get_tree().create_timer(0.1).timeout
+	bombEIA = cleanArray(bombEIA)
 	for enemy in bombEIA:
 		var damage = (bombDamageLevel * level) + attack_damage
 		enemy.applyDamage(damage, 0)

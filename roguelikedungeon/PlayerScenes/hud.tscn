@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b6hh0d3vpkh5p"]
+[gd_scene load_steps=11 format=3 uid="uid://b6hh0d3vpkh5p"]
 
 [ext_resource type="Script" path="res://PlayerScenes/hud.gd" id="1_bfnic"]
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="2_nwivv"]
@@ -9,12 +9,6 @@ bg_color = Color(0.6, 0.6, 0.6, 0.196078)
 [sub_resource type="LabelSettings" id="LabelSettings_46087"]
 font_size = 128
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwpwm"]
-bg_color = Color(1, 0.334278, 0.345842, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_ni1nh"]
-font_size = 64
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_14iet"]
 bg_color = Color(0.350817, 0.258179, 2.40654e-07, 1)
 
@@ -23,6 +17,15 @@ font_size = 64
 
 [sub_resource type="LabelSettings" id="LabelSettings_naod2"]
 font_size = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwpwm"]
+bg_color = Color(1, 0.334278, 0.345842, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ni1nh"]
+font_size = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pexex"]
+bg_color = Color(0.103744, 0.103744, 0.103744, 1)
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_bfnic")
@@ -56,23 +59,6 @@ offset_top = 414.0
 offset_right = 674.0
 offset_bottom = 512.0
 text = "Unpause"
-
-[node name="InventoryMenu" type="CanvasLayer" parent="."]
-visible = false
-
-[node name="Panel" type="Panel" parent="InventoryMenu"]
-offset_left = 960.0
-offset_right = 1920.0
-offset_bottom = 1080.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_hwpwm")
-
-[node name="Label" type="Label" parent="InventoryMenu"]
-offset_left = 1017.0
-offset_top = 40.0
-offset_right = 1112.0
-offset_bottom = 63.0
-text = "Inventory :D"
-label_settings = SubResource("LabelSettings_ni1nh")
 
 [node name="SkillMenu" type="CanvasLayer" parent="."]
 visible = false
@@ -263,6 +249,83 @@ text = "<Ability1>"
 [node name="Sprite2D" type="Sprite2D" parent="SkillMenu/Hero4"]
 position = Vector2(103, 266)
 texture = ExtResource("2_nwivv")
+
+[node name="InventoryMenu" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Panel" type="Panel" parent="InventoryMenu"]
+offset_left = 960.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hwpwm")
+
+[node name="Label" type="Label" parent="InventoryMenu"]
+offset_left = 1017.0
+offset_top = 40.0
+offset_right = 1112.0
+offset_bottom = 63.0
+text = "Inventory :D"
+label_settings = SubResource("LabelSettings_ni1nh")
+
+[node name="Abilities" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="Control" type="Control" parent="Abilities"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="Abilities/Control"]
+offset_left = 9.0
+offset_top = 882.0
+offset_right = 814.0
+offset_bottom = 1082.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_pexex")
+
+[node name="Sprite2D" type="Sprite2D" parent="Abilities/Control"]
+position = Vector2(112, 995)
+texture = ExtResource("2_nwivv")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Abilities/Control"]
+position = Vector2(312, 995)
+texture = ExtResource("2_nwivv")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Abilities/Control"]
+position = Vector2(512, 995)
+texture = ExtResource("2_nwivv")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Abilities/Control"]
+position = Vector2(712, 995)
+texture = ExtResource("2_nwivv")
+
+[node name="Ability1Name" type="Label" parent="Abilities/Control"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 899.0
+offset_right = 97.0
+offset_bottom = 922.0
+
+[node name="Ability2Name" type="Label" parent="Abilities/Control"]
+layout_mode = 0
+offset_left = 248.0
+offset_top = 899.0
+offset_right = 297.0
+offset_bottom = 922.0
+
+[node name="Ability3Name" type="Label" parent="Abilities/Control"]
+layout_mode = 0
+offset_left = 448.0
+offset_top = 899.0
+offset_right = 497.0
+offset_bottom = 922.0
+
+[node name="Ability4Name" type="Label" parent="Abilities/Control"]
+layout_mode = 0
+offset_left = 648.0
+offset_top = 899.0
+offset_right = 697.0
+offset_bottom = 922.0
 
 [connection signal="pressed" from="QuitMenu/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="QuitMenu/Resume" to="." method="_on_resume_pressed"]

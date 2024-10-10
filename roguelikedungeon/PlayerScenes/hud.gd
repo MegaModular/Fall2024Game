@@ -135,3 +135,7 @@ func _Hero1ButtonHandling(toggled_on: bool, num: int, heroNum : int) -> void:
 		heroArrayReference[heroNum].abilitySelected = heroArrayReference[heroNum].abilities[num]
 		#Debug
 		#print(heroArrayReference[heroNum].abilitySelected)
+		$Abilities/Control/Ability1Name.set_text(heroArrayReference[0].abilitySelected)
+		$Abilities/Control/Ability2Name.set_text(heroArrayReference[1].abilitySelected)
+		$Abilities/Control/Ability3Name.set_text(heroArrayReference[2].abilitySelected)
+		$Abilities/Control/Ability4Name.set_text(heroArrayReference[3].abilitySelected)

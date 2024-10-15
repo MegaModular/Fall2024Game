@@ -11,8 +11,69 @@ var skillMenuShown : bool = false
 @onready var skill3 = $SkillMenu/Hero3
 @onready var skill4 = $SkillMenu/Hero4
 
+var time0 = 0
+var time1 = 0
+var time2 = 0
+var time3 = 0
+var pos0
+var pos1
+var pos2
+var pos3
+
 func _ready():
 	hideAllHUD()
+	pos0 = $Abilities/Control/Ability1Panel/Label.position
+	pos1 = $Abilities/Control/Ability2Panel/Label.position
+	pos2 = $Abilities/Control/Ability3Panel/Label.position
+	pos3 = $Abilities/Control/Ability4Panel/Label.position
+
+func _process(delta):
+	if Globals.isPaused:
+		return
+	
+	if time0 > 0:
+		if ceil(time0) <= 9:
+			$Abilities/Control/Ability1Panel/Label.position.x = pos0.x + 9
+		else:
+			$Abilities/Control/Ability1Panel/Label.position.x = pos0.x
+		time0 -= delta
+		$Abilities/Control/Ability1Panel.visible = true
+		$Abilities/Control/Ability1Panel/Label.set_text(str(ceil(time0)))
+	else:
+		$Abilities/Control/Ability1Panel.visible = false
+	
+	if time1 > 0:
+		if ceil(time1) <= 9:
+			$Abilities/Control/Ability2Panel/Label.position.x = pos1.x + 9
+		else:
+			$Abilities/Control/Ability2Panel/Label.position.x = pos1.x
+		time1 -= delta
+		$Abilities/Control/Ability2Panel.visible = true
+		$Abilities/Control/Ability2Panel/Label.set_text(str(ceil(time1)))
+	else:
+		$Abilities/Control/Ability2Panel.visible = false
+	
+	if time2 > 0:
+		if ceil(time2) <= 9:
+			$Abilities/Control/Ability3Panel/Label.position.x = pos2.x + 9
+		else:
+			$Abilities/Control/Ability3Panel/Label.position.x = pos2.x
+		time2 -= delta
+		$Abilities/Control/Ability3Panel.visible = true
+		$Abilities/Control/Ability3Panel/Label.set_text(str(ceil(time2)))
+	else:
+		$Abilities/Control/Ability3Panel.visible = false
+		
+	if time3 > 0:
+		if ceil(time3) <= 9:
+			$Abilities/Control/Ability4Panel/Label.position.x = pos3.x + 9
+		else:
+			$Abilities/Control/Ability4Panel/Label.position.x = pos3.x
+		time3 -= delta
+		$Abilities/Control/Ability4Panel.visible = true
+		$Abilities/Control/Ability4Panel/Label.set_text(str(ceil(time3)))
+	else:
+		$Abilities/Control/Ability4Panel.visible = false
 
 #Calllable Functions
 func isHUDShown() -> bool:
@@ -99,9 +160,7 @@ func writeSkillMenu():
 		skillButtons[0].set_text(heroArrayReference[3].abilities[0])
 		skillButtons[1].set_text(heroArrayReference[3].abilities[1])
 		skillButtons[2].set_text(heroArrayReference[3].abilities[2])
-	
-	
-	
+
 
 #Signal Functions
 func _on_quit_pressed() -> void:
@@ -139,3 +198,15 @@ func _Hero1ButtonHandling(toggled_on: bool, num: int, heroNum : int) -> void:
 		$Abilities/Control/Ability2Name.set_text(heroArrayReference[1].abilitySelected)
 		$Abilities/Control/Ability3Name.set_text(heroArrayReference[2].abilitySelected)
 		$Abilities/Control/Ability4Name.set_text(heroArrayReference[3].abilitySelected)
+
+#abilitiy is 0-3, for respective index of ability
+#Time is countdown in seconds.
+func startHudCooldown(ability, time):
+	if ability == 0:
+		time0 = time
+	if ability == 1:
+		time1 = time
+	if ability == 2:
+		time2 = time
+	if ability == 3:
+		time3 = time

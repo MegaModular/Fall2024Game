@@ -86,6 +86,7 @@ func rapidFire():
 	var abilityDuration = 10.0
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	#Both because this ability takes multiple seconds to expire.
+	hud.startHudCooldown(2, cooldownTime + abilityDuration)
 	$AbilityCooldownTimer.set_wait_time(cooldownTime + abilityDuration)
 	$Control/Control/AbilityDurationBar.max_value = abilityDuration
 	$Control/Control/AbilityDurationBar.visible = true
@@ -102,6 +103,7 @@ func powerShot():
 	lastAbilityCast = abilities[1]
 	var basicArrow = Globals.projectileReference.instantiate()
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
+	hud.startHudCooldown(2, cooldownTime)
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
 	basicArrow.direction = (get_global_mouse_position() - position).normalized()
 	basicArrow.projectileType = "PowerShot"
@@ -118,6 +120,7 @@ func fireArrow():
 	var basicArrow = Globals.projectileReference.instantiate()
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
+	hud.startHudCooldown(2, cooldownTime)
 	basicArrow.direction = (get_global_mouse_position() - position).normalized()
 	basicArrow.projectileType = "FireArrow"
 	basicArrow.position = position + (get_global_mouse_position() - position).normalized() * 20

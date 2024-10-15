@@ -108,6 +108,7 @@ func bomb():
 	print("bomb Thrown " + str(self))
 	var cooldownTime = 20.0
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
+	hud.startHudCooldown(1, cooldownTime)
 	#Both because this ability takes multiple seconds to expire.
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
 	lastAbilityCast = abilities[0]
@@ -144,6 +145,7 @@ func ninjaManeuvers():
 	var abilityDuration = 8.0
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	#Both because this ability takes multiple seconds to expire.
+	hud.startHudCooldown(1, cooldownTime + abilityDuration)
 	$AbilityCooldownTimer.set_wait_time(cooldownTime + abilityDuration)
 	$Control/Control/AbilityDurationBar.max_value = abilityDuration
 	$Control/Control/AbilityDurationBar.visible = true
@@ -163,6 +165,7 @@ func megaKick():
 	var cooldownTime = 10.0
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
+	hud.startHudCooldown(1, cooldownTime)
 	#var impulse = position.direction_to(attackTarget.position)
 	#attackTarget.velocity += (impulse * 200)
 	attackTarget.applyDamage(kickADRatio * attack_damage, 2)

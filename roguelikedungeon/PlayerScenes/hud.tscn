@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b6hh0d3vpkh5p"]
+[gd_scene load_steps=13 format=3 uid="uid://b6hh0d3vpkh5p"]
 
 [ext_resource type="Script" path="res://PlayerScenes/hud.gd" id="1_bfnic"]
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="2_nwivv"]
@@ -26,6 +26,17 @@ font_size = 64
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pexex"]
 bg_color = Color(0.103744, 0.103744, 0.103744, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xmcsx"]
+bg_color = Color(0.0177324, 0.0177324, 0.0177324, 0.670588)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="LabelSettings" id="LabelSettings_2046a"]
+font_size = 32
+font_color = Color(0.683077, 0.683077, 0.683077, 1)
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_bfnic")
@@ -277,6 +288,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Panel" type="Panel" parent="Abilities/Control"]
+layout_mode = 0
 offset_left = 9.0
 offset_top = 882.0
 offset_right = 814.0
@@ -326,6 +338,74 @@ offset_left = 648.0
 offset_top = 899.0
 offset_right = 697.0
 offset_bottom = 922.0
+
+[node name="Ability1Panel" type="Panel" parent="Abilities/Control"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 931.0
+offset_right = 176.0
+offset_bottom = 1059.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xmcsx")
+
+[node name="Label" type="Label" parent="Abilities/Control/Ability1Panel"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 45.0
+offset_right = 86.0
+offset_bottom = 90.0
+text = "60"
+label_settings = SubResource("LabelSettings_2046a")
+
+[node name="Ability2Panel" type="Panel" parent="Abilities/Control"]
+layout_mode = 0
+offset_left = 248.0
+offset_top = 931.0
+offset_right = 376.0
+offset_bottom = 1059.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xmcsx")
+
+[node name="Label" type="Label" parent="Abilities/Control/Ability2Panel"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 45.0
+offset_right = 86.0
+offset_bottom = 90.0
+text = "60"
+label_settings = SubResource("LabelSettings_2046a")
+
+[node name="Ability3Panel" type="Panel" parent="Abilities/Control"]
+layout_mode = 0
+offset_left = 448.0
+offset_top = 931.0
+offset_right = 576.0
+offset_bottom = 1059.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xmcsx")
+
+[node name="Label" type="Label" parent="Abilities/Control/Ability3Panel"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 45.0
+offset_right = 86.0
+offset_bottom = 90.0
+text = "60"
+label_settings = SubResource("LabelSettings_2046a")
+
+[node name="Ability4Panel" type="Panel" parent="Abilities/Control"]
+layout_mode = 0
+offset_left = 648.0
+offset_top = 931.0
+offset_right = 776.0
+offset_bottom = 1059.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xmcsx")
+
+[node name="Label" type="Label" parent="Abilities/Control/Ability4Panel"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 45.0
+offset_right = 86.0
+offset_bottom = 90.0
+text = "60"
+label_settings = SubResource("LabelSettings_2046a")
 
 [connection signal="pressed" from="QuitMenu/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="QuitMenu/Resume" to="." method="_on_resume_pressed"]

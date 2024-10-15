@@ -73,6 +73,7 @@ var mouseInArea : bool = false
 
 @onready var navigation_agent = $NavAgent
 @onready var selectionBox = $Control/Panel
+@onready var hud = $"../../Camera/HUD"
 
 var location : Vector2
 

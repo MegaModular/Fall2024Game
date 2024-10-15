@@ -104,6 +104,7 @@ func blizzard():
 	lastAbilityCast = abilities[0]
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
+	hud.startHudCooldown(3, cooldownTime)
 	var bliz = blizzardScene.instantiate()
 	update_stats()
 	bliz.fireDamage = ((blizzardBaseDamage * level) + blizzardBaseAbilityRatio * ability_damage/100) * (1 + (blizzardBaseAbilityRatio/1000 * ability_damage))
@@ -121,6 +122,7 @@ func chainLightning():
 	lastAbilityCast = abilities[0]
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
+	hud.startHudCooldown(3, cooldownTime)
 	$BurningGuyExplosionRange.global_position = get_global_mouse_position()
 	await get_tree().create_timer(0.1).timeout
 	var cl = chainLightningScene.instantiate()
@@ -138,6 +140,7 @@ func livingBomb():
 	lastAbilityCast = abilities[0]
 	cooldownTime -= cooldownTime * cooldown_reduction/ 100
 	$AbilityCooldownTimer.set_wait_time(cooldownTime)
+	hud.startHudCooldown(3, cooldownTime)
 	desiredRotation = get_angle_to(get_global_mouse_position())
 	$AnimationPlayer.play("Attack")
 	var proj = Globals.projectileReference.instantiate()

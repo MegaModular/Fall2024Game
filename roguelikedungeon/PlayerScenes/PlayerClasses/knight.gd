@@ -76,6 +76,7 @@ func shieldsUp():
 	bonus_health_regen += shieldsUpRegen * level
 	update_stats()
 	$AbilityTimer.start()
+	hud.startHudCooldown(0, cooldownTime + abilityDuration)
 	lastAbilityCast = abilities[0]
 	lastAbilityLevel = level
 
@@ -95,6 +96,7 @@ func whirlwind():
 	$Control/Control/AbilityDurationBar.max_value = abilityDuration
 	$Control/Control/AbilityDurationBar.visible = true
 	$AbilityTimer.set_wait_time(abilityDuration)
+	hud.startHudCooldown(0, cooldownTime + abilityDuration)
 	
 	$WhirlwindDamageTimer.set_wait_time(1.0/5.0)
 	update_stats()
@@ -115,6 +117,7 @@ func charge():
 	$Control/Control/AbilityDurationBar.visible = true
 	$ChargeArea/CollisionShape2D.disabled = false
 	cooldownTime -= cooldownTime * cooldown_reduction / 100
+	hud.startHudCooldown(0, cooldownTime + abilityDuration)
 	$AbilityCooldownTimer.set_wait_time(cooldownTime + abilityDuration)
 	$AbilityTimer.set_wait_time(abilityDuration)
 	update_stats()

@@ -19,9 +19,6 @@ var spawnedEnemy
 func _ready() -> void:
 	randomize()
 	var enemy
-	if isElite:
-		return
-	
 	spawnedEnemy = get_random_enemy()
 	for i in range(randi_range(minEnemiesSpawned, maxEnemiesSpawned)):
 		if spawnedEnemy == 0:
@@ -29,7 +26,12 @@ func _ready() -> void:
 		else:
 			enemy = skeletonArcher.instantiate()
 		enemy.position = self.global_position + Vector2(randf_range(-spread, spread), randf_range(-spread,spread))
+		if isElite and i == 0:
+			enemy.isElite = true
+			enemy.set_modulate(Color(0, 0, 1, 1))
 		enemiesHolder.add_child(enemy)
+		
+			
 		#enemy.apply_impulse(Vector2(randf_range(0, 200), randf_range(0,200)))
 	queue_free()
 

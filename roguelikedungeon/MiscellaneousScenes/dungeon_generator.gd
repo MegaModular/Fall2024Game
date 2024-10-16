@@ -316,6 +316,8 @@ func populateRooms():
 			if randf_range(0, 1) < 0.005 + (0.005 * additionalMonsterDensity/100):
 				var enemySpawner = enemySpawnerScene.instantiate()
 				enemySpawner.position = $TileMapLayer.map_to_local(cell)
+				if randf_range(0, 1) < 1:
+					enemySpawner.isElite = true
 				add_child(enemySpawner)
 	
 	return

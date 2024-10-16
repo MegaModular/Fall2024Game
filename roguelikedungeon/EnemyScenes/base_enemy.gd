@@ -4,6 +4,7 @@ extends CharacterBody2D
 #Then, be able to derive new classes from each, with varying stats and whatnot.
 #These will be able to damage player too, but not from this script.
 
+@export var isElite = false
 @export var level = 1
 
 #Game Variables
@@ -52,6 +53,10 @@ func _ready():
 	magic_resist = base_magic_resist
 	dodge_chance = base_dodge_chance
 	attack_damage = base_attack_damage
+	if isElite:
+		health = base_health * 3
+		attack_damage = base_attack_damage * 1.5
+		$Label.set_text("Elite")
 	updateHealthBar()
 	$NavigationAgent2D.debug_enabled = false
 

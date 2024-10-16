@@ -12,7 +12,7 @@ var velocity = Vector2.ZERO
 var randDirectionVector = Vector2.ZERO
 
 func _ready():
-	print(targets)
+	#print(targets)
 	if !targets.is_empty():
 		target = targets[0]
 		return

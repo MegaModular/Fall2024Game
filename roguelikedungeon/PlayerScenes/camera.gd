@@ -1,7 +1,7 @@
 extends Camera2D
 
 #Touchables
-var camMoveSpeed = 50.0
+var camMoveSpeed = 40.0
 #border around camera that can be used for the mouse to move the camera
 var cursorMovementSize = 100
 
@@ -14,26 +14,30 @@ var desiredPos = position
 
 var centerLoc = position
 
+var speedMultiplier = 0 #0-1, for smoothing.
+var speedRampUpTime = 0.1
+
 const SCREENSIZE = Vector2(1920, 1080)
 
-func _process(delta: float) -> void:
-	
-	
+
+#Try implementing this with offset instead of position.
+func _physics_process(delta: float) -> void:
+	$Control/Label.text = str(position) + str(Vector2(limit_left, limit_bottom)) + str(Vector2(limit_right, limit_top))
 	if Globals.isPaused:
 		return
 	
 	if Input.is_action_pressed("space"):
-		velocity = Vector2.ZERO
+		#velocity = Vector2.ZERO
 		desiredPos = calculate_center(true)
 	
-	if desiredPos.distance_to(position) > 0.3:
+	if desiredPos.distance_to(position) > 5:
 		position = lerp(position, desiredPos, 0.5)
-		return
 	
 	mousePos = get_local_mouse_position()
 	#print(mousePos)
 	dir = Vector2.ZERO
-
+	
+	
 	if Input.is_action_pressed("up") or mousePos.y < -SCREENSIZE.y / 2 + cursorMovementSize:
 		dir += Vector2(0, -1)
 	if Input.is_action_pressed("down") or mousePos.y > SCREENSIZE.y / 2 - cursorMovementSize:
@@ -43,22 +47,45 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("right") or mousePos.x > SCREENSIZE.x / 2 - cursorMovementSize:
 		dir += Vector2(1, 0)
 	
+	#Speeds up if moving cam.
+	if dir != Vector2.ZERO:
+		speedMultiplier += speedRampUpTime
+	elif speedMultiplier != 0:
+		speedMultiplier -= speedRampUpTime
+	#Clamps the multiplier.
+	speedMultiplier = clamp(speedMultiplier, 0, 1)
+	
+	#updates limits based on location of units.
 	centerLoc = calculate_center(false)
-	limit_left = centerLoc.x - (SCREENSIZE.x/1.5)
-	limit_right = centerLoc.x + (SCREENSIZE.x/1.5)
-	limit_top = centerLoc.y - (SCREENSIZE.y/1.5)
-	limit_bottom = centerLoc.y + (SCREENSIZE.y/1.5)
-	print(limit_left)
-	print(limit_right)
+	limit_left = centerLoc.x - (SCREENSIZE.x)
+	limit_right = centerLoc.x + (SCREENSIZE.x)
+	limit_top = centerLoc.y - (SCREENSIZE.y)
+	limit_bottom = centerLoc.y + (SCREENSIZE.y)
 	
-	#velocity += dir * camMoveSpeed * delta
+	
+	
+	velocity += dir * camMoveSpeed * delta
 	#velocity = lerp(velocity, Vector2.ZERO, 0.1)
-	if position.x == limit_left || position.x == limit_right:
-		velocity.x = 0
-	position += dir * camMoveSpeed
-	desiredPos += velocity
+	#position += dir * camMoveSpeed * delta * speedMultiplier
+	#if !isCameraOnEdge():
+	position += velocity;
+	desiredPos = position
+	#if isCameraOnEdge():
+	#	print("Camera is out of bounds")
+		#velocity = Vector2.ZERO
 	
-	
+	#position = clamp(position, Vector2(limit_left/2, limit_top/2), Vector2(limit_right/2, limit_bottom/2))
+	position.x = clamp(position.x, limit_left/2, limit_right/2)
+	position.y = clamp(position.y, limit_top/2, limit_bottom/2)
+	velocity = lerp(velocity, Vector2.ZERO, 0.1)
+
+#returns true if camera is close to border.
+func isCameraOnEdge() -> bool:
+	if position.x <= limit_left or position.x >= limit_right:
+		return true
+	if position.y >= limit_bottom or position.y <= limit_top:
+		return true
+	return false
 
 #Calculates the center location of all selected players. Returns empty Vector2 if nothing selected.
 func calculate_center(forSelected : bool):

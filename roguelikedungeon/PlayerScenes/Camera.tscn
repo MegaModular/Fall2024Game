@@ -13,6 +13,7 @@ offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="Control"]
 z_index = 100
+layout_mode = 0
 offset_left = 110.0
 offset_top = 90.0
 offset_right = 170.0

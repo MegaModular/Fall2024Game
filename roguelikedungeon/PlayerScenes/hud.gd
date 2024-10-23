@@ -161,7 +161,9 @@ func writeSkillMenu():
 		skillButtons[1].set_text(heroArrayReference[3].abilities[1])
 		skillButtons[2].set_text(heroArrayReference[3].abilities[2])
 
-
+func writeInvMenu():
+	var knightText  = $InventoryMenu/Control/Stats
+	#knightText.set_text("AD : ")
 #Signal Functions
 func _on_quit_pressed() -> void:
 	get_tree().quit()

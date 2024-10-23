@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b6hh0d3vpkh5p"]
+[gd_scene load_steps=17 format=3 uid="uid://b6hh0d3vpkh5p"]
 
 [ext_resource type="Script" path="res://PlayerScenes/hud.gd" id="1_bfnic"]
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="2_nwivv"]
@@ -24,6 +24,8 @@ bg_color = Color(0.512606, 0.289556, 1.92523e-07, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ni1nh"]
 font_size = 64
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ofvj2"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -46,6 +48,10 @@ border_width_bottom = 10
 border_color = Color(0.12, 0.12, 0.12, 1)
 corner_radius_top_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_unjj3"]
+line_spacing = 0.0
+font_size = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pexex"]
 bg_color = Color(0.103744, 0.103744, 0.103744, 1)
@@ -332,6 +338,14 @@ position = Vector2(298, 73)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_k6fd1")
 hframes = 40
+
+[node name="Stats" type="Label" parent="InventoryMenu/Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Stats
+5"
+label_settings = SubResource("LabelSettings_unjj3")
 
 [node name="Control2" type="Control" parent="InventoryMenu"]
 layout_mode = 3

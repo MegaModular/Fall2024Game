@@ -86,6 +86,6 @@ func calculate_center(forSelected : bool):
 		num += 1.0
 	return storedposition / num 
 
-
+#used centering the camera
 func focusOn(a_position):
 	desiredPos = a_position

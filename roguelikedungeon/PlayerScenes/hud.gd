@@ -1,6 +1,10 @@
 #Most of this script is called outside this, in playerController.gd
+#This contains all the logic for updating the HUD to display various things
 
 extends CanvasLayer
+
+var heroCount
+var heroArrayReference
 
 var quitMenuShown : bool = false
 var invMenuShown : bool = false
@@ -20,7 +24,11 @@ var pos1
 var pos2
 var pos3
 
+
+
 func _ready():
+	heroCount = $"../../Heroes".get_child_count()
+	heroArrayReference = $"../../Heroes".get_children()
 	hideAllHUD()
 	pos0 = $Abilities/Control/Ability1Panel/Label.position
 	pos1 = $Abilities/Control/Ability2Panel/Label.position
@@ -84,6 +92,7 @@ func isHUDShown() -> bool:
 func showINV():
 	$InventoryMenu.visible = true
 	invMenuShown = true
+	writeInvMenu()
 
 func hideINV():
 	$InventoryMenu.visible = false
@@ -116,7 +125,17 @@ func hideSKILL():
 	skillMenuShown = false
 	$SkillMenu.visible = false
 
-	
+#returns text to be used for inputting into a string.
+func writeStats(heroNum : int) -> String:
+	var hero = heroArrayReference[heroNum]
+	hero.update_stats()
+	var text = str("Health : " + str(int(hero.health)) + "/" + str(int(hero.max_health)) + "\nArmor : " + str(hero.armor)
+	+ "\nMagic Resist : " + str(hero.magic_resist) + "\nDodge Chance : "+ str(hero.dodge_chance)
+	+ "\nAttack Damage : " + str(hero.attack_damage) + "\nAbility Damage : " + str(hero.ability_damage)
+	+ "\nAttack Speed : " + str(hero.attack_speed) + "\nCooldown Reduction : " + str(hero.cooldown_reduction)
+	+ "\nHealth Regen : " + str(hero.health_regen) + "\nWalk Speed : " + str(hero.walk_speed)
+	+ "\nOmnivamp : " + str(hero.omnivamp))
+	return text
 
 #Dynamically updates the skill menu. AAAAAAAAAAAAAAAAA
 func writeSkillMenu():
@@ -126,8 +145,7 @@ func writeSkillMenu():
 	skill3.visible = false
 	skill4.visible = false
 	#Makes the menu visible.
-	var heroCount = $"../../Heroes".get_child_count()
-	var heroArrayReference = $"../../Heroes".get_children()
+
 	if heroCount > 0:
 		skill1.visible = true
 		var skillButtons  = [$SkillMenu/Hero1/CheckButton, $SkillMenu/Hero1/CheckButton2, $SkillMenu/Hero1/CheckButton3]
@@ -163,7 +181,14 @@ func writeSkillMenu():
 
 func writeInvMenu():
 	var knightText  = $InventoryMenu/Control/Stats
-	#knightText.set_text("AD : ")
+	knightText.set_text(writeStats(0))
+	var assassinText = $InventoryMenu/Control2/Stats
+	assassinText.set_text(writeStats(1))
+	var rangerText = $InventoryMenu/Control3/Stats
+	rangerText.set_text(writeStats(2))
+	var mageText = $InventoryMenu/Control4/Stats
+	mageText.set_text(writeStats(3))
+
 #Signal Functions
 func _on_quit_pressed() -> void:
 	get_tree().quit()

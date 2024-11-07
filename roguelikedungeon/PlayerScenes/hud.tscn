@@ -1,8 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://b6hh0d3vpkh5p"]
+[gd_scene load_steps=20 format=3 uid="uid://b6hh0d3vpkh5p"]
 
 [ext_resource type="Script" path="res://PlayerScenes/hud.gd" id="1_bfnic"]
 [ext_resource type="Texture2D" uid="uid://k02j37cmj8lf" path="res://icon.svg" id="2_nwivv"]
 [ext_resource type="Texture2D" uid="uid://cm8evkm77svbk" path="res://Art/Knight/knightSprites.png" id="3_k6fd1"]
+[ext_resource type="Texture2D" uid="uid://dxe14xag0pt7b" path="res://Art/Assassin/AssassinSpriteSheet.png" id="4_paj7a"]
+[ext_resource type="Texture2D" uid="uid://do3xer418ddei" path="res://Art/Ranger/rangerSprites.png" id="5_hr7ik"]
+[ext_resource type="Texture2D" uid="uid://drv4a2m2igftx" path="res://Art/Mage/mageSpritesheet.png" id="6_fv4vo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_303yp"]
 bg_color = Color(0.6, 0.6, 0.6, 0.196078)
@@ -51,7 +54,7 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="LabelSettings" id="LabelSettings_unjj3"]
 line_spacing = 0.0
-font_size = 12
+font_size = 20
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pexex"]
 bg_color = Color(0.103744, 0.103744, 0.103744, 1)
@@ -341,8 +344,10 @@ hframes = 40
 
 [node name="Stats" type="Label" parent="InventoryMenu/Control"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 56.0
+offset_bottom = 46.0
 text = "Stats
 5"
 label_settings = SubResource("LabelSettings_unjj3")
@@ -355,6 +360,40 @@ offset_top = 164.0
 offset_right = 1524.0
 offset_bottom = 204.0
 
+[node name="Border" type="Panel" parent="InventoryMenu/Control2"]
+offset_left = 1.0
+offset_right = 372.0
+offset_bottom = 371.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ofvj2")
+
+[node name="SpritePanel" type="Control" parent="InventoryMenu/Control2"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BorderBackground" type="Panel" parent="InventoryMenu/Control2/SpritePanel"]
+layout_mode = 0
+offset_left = 230.0
+offset_right = 372.0
+offset_bottom = 141.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dcfal")
+
+[node name="Img" type="Sprite2D" parent="InventoryMenu/Control2/SpritePanel"]
+position = Vector2(298, 73)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_paj7a")
+hframes = 40
+
+[node name="Stats" type="Label" parent="InventoryMenu/Control2"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 56.0
+offset_bottom = 46.0
+text = "Stats
+5"
+label_settings = SubResource("LabelSettings_unjj3")
+
 [node name="Control3" type="Control" parent="InventoryMenu"]
 layout_mode = 3
 anchors_preset = 0
@@ -363,6 +402,40 @@ offset_top = 602.0
 offset_right = 1063.0
 offset_bottom = 642.0
 
+[node name="Border" type="Panel" parent="InventoryMenu/Control3"]
+offset_left = 1.0
+offset_right = 372.0
+offset_bottom = 371.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ofvj2")
+
+[node name="SpritePanel" type="Control" parent="InventoryMenu/Control3"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BorderBackground" type="Panel" parent="InventoryMenu/Control3/SpritePanel"]
+layout_mode = 0
+offset_left = 230.0
+offset_right = 372.0
+offset_bottom = 141.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dcfal")
+
+[node name="Img" type="Sprite2D" parent="InventoryMenu/Control3/SpritePanel"]
+position = Vector2(298, 73)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_hr7ik")
+hframes = 20
+
+[node name="Stats" type="Label" parent="InventoryMenu/Control3"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 56.0
+offset_bottom = 46.0
+text = "Stats
+5"
+label_settings = SubResource("LabelSettings_unjj3")
+
 [node name="Control4" type="Control" parent="InventoryMenu"]
 layout_mode = 3
 anchors_preset = 0
@@ -370,6 +443,40 @@ offset_left = 1484.0
 offset_top = 602.0
 offset_right = 1524.0
 offset_bottom = 642.0
+
+[node name="Border" type="Panel" parent="InventoryMenu/Control4"]
+offset_left = 1.0
+offset_right = 372.0
+offset_bottom = 371.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ofvj2")
+
+[node name="SpritePanel" type="Control" parent="InventoryMenu/Control4"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BorderBackground" type="Panel" parent="InventoryMenu/Control4/SpritePanel"]
+layout_mode = 0
+offset_left = 230.0
+offset_right = 372.0
+offset_bottom = 141.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dcfal")
+
+[node name="Img" type="Sprite2D" parent="InventoryMenu/Control4/SpritePanel"]
+position = Vector2(298, 73)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_fv4vo")
+hframes = 40
+
+[node name="Stats" type="Label" parent="InventoryMenu/Control4"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 56.0
+offset_bottom = 46.0
+text = "Stats
+5"
+label_settings = SubResource("LabelSettings_unjj3")
 
 [node name="Abilities" type="CanvasLayer" parent="."]
 layer = 0

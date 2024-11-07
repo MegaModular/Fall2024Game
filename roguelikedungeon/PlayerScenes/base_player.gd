@@ -196,6 +196,7 @@ func update_stats() -> void:
 	walk_speed += bonus_walk_speed
 	omnivamp += bonus_omnivamp
 	
+	health = clamp(health, 0, max_health)
 	attack_speed = clamp(attack_speed, 0.25, 5)
 	update_health_bar()
 	$State.text = heroClass.capitalize()

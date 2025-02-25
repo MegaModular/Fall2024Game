@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://EnemyScenes/base_enemy.gd" id="1_ylkj4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ynqm3"]
-radius = 30.0
+radius = 24.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ykwv8"]
 radius = 50.0
@@ -37,14 +37,13 @@ collision_layer = 5
 collision_mask = 5
 script = ExtResource("1_ylkj4")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-shape = SubResource("CircleShape2D_ynqm3")
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.955793, 0.732945, 0.196415, 1)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_m6vlh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ynqm3")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 path_postprocessing = 1
